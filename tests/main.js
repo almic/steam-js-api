@@ -1,9 +1,9 @@
-const api = require ('./app.js')
+const api = require ('./../app.js')
 
 const assert = require('assert')
 const util = require('util')
 
-const key = require('./env.json').key
+const key = require('./../env.json').key
 const steamID = '76561198099490962'
 
 async function test(name, func) {

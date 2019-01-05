@@ -1,4 +1,4 @@
-const LOCATIONS = require('./locations-min.json')
+const LOCATIONS = require('./json/locations-min.json')
 const https = require('https')
 
 var urls = {

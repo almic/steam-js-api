@@ -1,7 +1,5 @@
-wiki/
+utils/
+tests/
 
-locations.json
-wiki.json
-
-locs.js
-wiki_builder.js
+json/locations.json
+json/locations.js

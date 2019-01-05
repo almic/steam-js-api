@@ -1,59 +1,59 @@
 {
     "IPlayerServices": {
-        "desc": "Specifically playtime, owned games, badges, and Steam level. For player summaries, bans and friend list, go to [ISteamUser](/ISteamUser)",
+        "desc": "Specifically playtime, owned games, badges, and Steam level. For player summaries, bans and friend list, go to [ISteamUser](ISteamUser)",
         "GetRecentlyPlayedGames": {
             "desc": "Get information about games the user has played within the last 2 weeks.",
             "function": "getRecentlyPlayedGames",
             "parameters": {
                 "steamID": {
-                    "type": "string",
+                    "type": "String",
                     "desc": "Steam ID of the user, as a string"
                 },
                 "count": {
-                    "type": "integer",
+                    "type": "Integer",
                     "desc": "Number of recently played games to return. Unset or 0 will return all recently played games",
                     "default": 0
                 }
             },
             "result": {
                 "count": {
-                    "type": "integer",
+                    "type": "Integer",
                     "desc": "Number of returned games"
                 },
                 "games": {
-                    "type": "array-objects",
+                    "type": "Array",
                     "desc": "Array of objects containing information about recently played games",
                     "object": {
                         "name": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Full name of the game"
                         },
                         "appid": {
-                            "type": "integer",
+                            "type": "Integer",
                             "desc": "Steam internal app id, always unique"
                         },
                         "playtime": {
-                            "type": "integer",
+                            "type": "Integer",
                             "desc": "Total game playtime in minutes"
                         },
                         "playtime_recent": {
-                            "type": "integer",
+                            "type": "Integer",
                             "desc": "Game playtime in minutes over the last 2 weeks"
                         },
                         "url_store": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Basic url to store page, url is not canonical (name is not in url)"
                         },
                         "url_store_header": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Basic url to header image for Steam store page, url stays the same but the resulting image can change frequently"
                         },
                         "url_app_logo": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Url to app logo, seems to always be 184x69 pixels and never changes"
                         },
                         "url_app_icon": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Url to app icon, seems to always be 32x32 pixels and never changes"
                         }
                     }
@@ -87,63 +87,63 @@
             }
         },
         "GetOwnedGames": {
-            "desc": "Retrieve a list of all games the user has ever bought or installed (free-to-play). This list is seemingly not sorted in any way at all. This will likely not match the user's current library, as some may have installed a free-to-play game, never played it, and then uninstalled it. Even then, that free-to-play game will forever be included as an \"owned game.\" Despite the Web API claiming that free-to-play games are excluded by default, and may be included if specified, this isn't true and free-to-play games will ALWAYS be returned no matter what you try to tell the Web API. Trust me, I tried and `include_played_free_games` does literally nothing. Sadly there is no way to tell if any of the returned games are free-to-play with this API on it's own, so you'll either have to use another API to check, or keep track of all appIDs of free-to-play games. Thanks Volvo...",
+            "desc": "Retrieve a list of all games the user has ever bought or installed (free-to-play). This list is seemingly not sorted in any way at all. This will likely not match the user's current library, as some may have installed a free-to-play game, never played it, and then uninstalled it. Even then, that free-to-play game will forever be included as an \"owned game.\"\r\n\r\nDespite the Web API claiming that free-to-play games are excluded by default, and may be included if specified, this isn't true and free-to-play games will ALWAYS be returned no matter what you try to tell the Web API. Trust me, I tried and `include_played_free_games` does literally nothing. Sadly there is no way to tell if any of the returned games are free-to-play with this API on it's own, so you'll either have to use another API to check, or keep track of all appIDs of free-to-play games. Thanks Volvo...",
             "function": "getOwnedGames",
             "parameters": {
                 "steamID": {
-                    "type": "string",
+                    "type": "String",
                     "desc": "Steam ID of the user, as a string"
                 },
                 "appIDs": {
-                    "type": "array",
+                    "type": "Array",
                     "desc": "Array of integer appIDs (or just one integer, no array necessary) to specifically retrieve, set to null to get all owned games",
                     "default": null
                 },
                 "moreInfo": {
-                    "type": "boolean",
+                    "type": "Boolean",
                     "desc": "Set to true to get more info: name, image urls",
                     "default": false
                 }
             },
             "result": {
                 "count": {
-                    "type": "integer",
+                    "type": "Integer",
                     "desc": "Number of returned games"
                 },
                 "games": {
-                    "type": "array-objects",
+                    "type": "Array",
                     "desc": "Array of objects containing information about owned games",
                     "object": {
                         "name": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Full name of the game, only returned if `moreInfo` is `true`"
                         },
                         "appid": {
-                            "type": "integer",
+                            "type": "Integer",
                             "desc": "Steam internal app id, always unique"
                         },
                         "playtime": {
-                            "type": "integer",
+                            "type": "Integer",
                             "desc": "Total game playtime in minutes"
                         },
                         "playtime_recent": {
-                            "type": "integer",
+                            "type": "Integer",
                             "desc": "Game playtime in minutes over the last 2 weeks"
                         },
                         "url_store": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Basic url to store page, url is not canonical (name is not in url)"
                         },
                         "url_store_header": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Basic url to header image for Steam store page, url stays the same but the resulting image can change frequently, only returned if `moreInfo` is `true`"
                         },
                         "url_app_logo": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Url to app logo, seems to always be 184x69 pixels and never changes, only returned if `moreInfo` is `true`"
                         },
                         "url_app_icon": {
-                            "type": "string",
+                            "type": "String",
                             "desc": "Url to app icon, seems to always be 32x32 pixels and never changes, only returned if `moreInfo` is `true`"
                         }
                     }

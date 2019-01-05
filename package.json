@@ -4,7 +4,7 @@
   "description": "Simple Javascript API wrapper for Steam Web API and CSGO.",
   "main": "app.js",
   "scripts": {
-    "test": "npm tests/main"
+    "test": "node tests/main.js"
   },
   "repository": {
     "type": "git",

@@ -22,6 +22,8 @@ function printObject(obj, depth) {
         if (prop.hasOwnProperty('object')) {
             data += printObject(prop.object, depth + 1)
         }
+        d = depth - 1
+        while (d > 0) { data += '>'; d-- }
         data += '>  \r\n'
     }
 
@@ -82,7 +84,7 @@ for (page in wiki) {
         data += `### Result\r\n\r\n${printObject(section.result)}\r\n`
         data += '### Example\r\n\r\n```javascript\r\n'
         data += `const api = require('steam-js-api')\r\n`
-        data += `api.setKet('{{YOUR KEY}}')\r\n`
+        data += `api.setKey('{{YOUR KEY}}')\r\n`
         data += '\r\n'
         data += `${section.example_call}.then(result => {\r\n`
         data += `    console.log(result.data)\r\n`

@@ -175,6 +175,167 @@
                     }
                 ]
             }
+        },
+        "GetSteamLevel": {
+            "desc": "Get the current Steam Level of the user, and absolutely nothing more.",
+            "function": "getSteamLevel",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                }
+            },
+            "result": {
+                "level": {
+                    "type": "Integer",
+                    "desc": "Steam level of the user"
+                }
+            },
+            "example_call": "getSteamLevel('76561198099490962')",
+            "example_data": {
+                "level": 71
+            }
+        },
+        "GetBadges": {
+            "desc": "Get all badges the user currently has, and some detailed level information.",
+            "function": "getBadges",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                }
+            },
+            "result": {
+                "level": {
+                    "type": "Integer",
+                    "desc": "Steam level of the user"
+                },
+                "xp": {
+                    "type": "Integer",
+                    "desc": "Total XP the Steam user has"
+                },
+                "level_xp": {
+                    "type": "Integer",
+                    "desc": "The XP requirement for the user's current Steam level"
+                },
+                "next_level_xp": {
+                    "type": "Integer",
+                    "desc": "The XP requirement for the next Steam level"
+                },
+                "badges": {
+                    "type": "Object",
+                    "desc": "Badges by types",
+                    "object": {
+                        "game": {
+                            "type": "Object",
+                            "desc": "Game badges listed by appids",
+                            "object": {
+                                "appid": {
+                                    "type": "Integer",
+                                    "desc": "Steam internal app id, always unique"
+                                },
+                                "level": {
+                                    "type": "Integer",
+                                    "desc": "Level of the badge, could be any positive integer, or 0 if only the foil badge was unlocked"
+                                },
+                                "earned": {
+                                    "type": "Integer",
+                                    "desc": "Time the badge was initially level 1, in seconds since the epoch, could be 0 if only the foil badge was unlocked"
+                                },
+                                "xp": {
+                                    "type": "Integer",
+                                    "desc": "Amount of XP the badge is worth, could be 0 if only the foil badge was unlocked"
+                                },
+                                "scarcity": {
+                                    "type": "Integer",
+                                    "desc": "The total number of Steam users with a badge level equal to or higher than this badge level, could be 0 if only the foil badge was unlocked"
+                                },
+                                "foil": {
+                                    "type": "Object",
+                                    "desc": "The foil badge information, could be 0 if the user has not unlocked the foil version. Contains the `level`, `earned`, `xp` and `scarcity` properties"
+                                }
+                            }
+                        },
+                        "event": {
+                            "type": "Object",
+                            "desc": "Limited time event badges, listed by event tag names. Other than the new `name` property, the badges are identical in structure to game badges",
+                            "object": {
+                                "name": {
+                                    "type": "String",
+                                    "desc": "Full name of the badge"
+                                }
+                            }
+                        },
+                        "special": {
+                            "type": "Object",
+                            "desc": "Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appid` or `foil` property"
+                        }
+                    }
+                }
+            },
+            "example_call": "getBadges('76561198099490962')",
+            "example_data": {
+                "level": 71,
+                "xp": 29042,
+                "level_xp": 28800,
+                "next_level_xp": 29600,
+                "badges": {
+                    "game": {
+                        "730": {
+                            "appid": 730,
+                            "level": 5,
+                            "earned": 1466352436,
+                            "xp": 500,
+                            "scarcity": 2794555,
+                            "foil": 0
+                        },
+                        "506670": {
+                            "appid": 506670,
+                            "level": 5,
+                            "earned": 1495724426,
+                            "xp": 500,
+                            "scarcity": 23664,
+                            "foil": 0
+                        }
+                    },
+                    "event": {
+                        "summer-2016": {
+                            "name": "2016: Summer Sale",
+                            "appid": 480730,
+                            "level": 1,
+                            "earned": 1467080364,
+                            "xp": 100,
+                            "scarcity": 990954,
+                            "foil": 0
+                        },
+                        "awards-2017": {
+                            "name": "2017: Steam Awards",
+                            "appid": 762800,
+                            "level": 22,
+                            "earned": 1517712529,
+                            "xp": 2200,
+                            "scarcity": 13291,
+                            "foil": 0
+                        }
+                    },
+                    "special": {
+                        "games": {
+                            "name": "Owned Games",
+                            "level": 127,
+                            "earned": 1547050916,
+                            "xp": 356,
+                            "scarcity": 4750842
+                        },
+                        "years": {
+                            "name": "Years of Service",
+                            "level": 5,
+                            "earned": 1374542223,
+                            "xp": 250,
+                            "scarcity": 68071999
+                        }
+                    }
+                }
+            }
         }
     }
 }

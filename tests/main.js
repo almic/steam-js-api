@@ -7,11 +7,11 @@ const key = require('./../env.json').key
 const steamID = '76561198099490962'
 
 async function test(name, func) {
-    console.log(`Running ${name}...`)
+    console.log('\x1b[33mRunning \x1b[36m%s\x1b[0m', name)
     let duration = process.uptime()
     try {
         await func()
-        console.log(`Test ${name} passed (${Math.floor((process.uptime() - duration) * 100)}ms)\n`)
+        console.log('\x1b[32mTest \x1b[36m%s\x1b[32m passed (' + Math.floor((process.uptime() - duration) * 100) + 'ms)\x1b[0m\n', name)
     } catch (e) {
         console.error('\x1b[31m%s\x1b[0m', `Test ${name} failed with error:\n${e.stack}`)
     }
@@ -55,6 +55,44 @@ async function run() {
                 }
                 assert.ok(game.name, `Expected name for game ${game.appid}, got ${JSON.stringify(game.name)} instead`)
             }
+        })
+
+        await test('getSteamLevel', async function() {
+            api.setKey(key)
+
+            let result = await api.getSteamLevel(steamID)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+            assert.ok(result.data.level, `Expected positive level, result was ${result.data.level}`)
+        })
+
+        await test('getBadges', async function () {
+            api.setKey(key)
+
+            let result = await api.getBadges(steamID)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let player = result.data
+
+            assert.ok(player.level, `Expected positive level, result was ${player.level}`)
+            assert.ok(player.badges, `Expected 'truthy' badges object, result was ${player.badges}`)
+
+            let badges = player.badges
+
+            assert.ok(badges.game, `Expected 'truthy' game object, result was ${badges.game}`)
+            assert.ok(badges.game[730], `Expected app id '730' to be in game object, result was ${badges.game[730]}`)
+            assert.strictEqual(badges.game[730].appid, 730, `Expected app id '730' to be in the '730' object, result was ${badges.game[730].appid}`)
+
+            assert.ok(badges.event, `Expected 'truthy' event object, result was ${badges.event}`)
+            assert.ok(badges.event['winter-2018'], `Expected 'winter-2018' to be in event object, result was ${badges.event['winter-2018']}`)
+            assert.strictEqual(badges.event['winter-2018'].appid, 991980, `Expected app id '991980' to be in 'winter-2018' object, result was ${badges.event['winter-2018'].appid}`)
+
+            assert.ok(badges.special, `Expected 'truthy' special object, result was ${badges.special}`)
+            assert.ok(badges.special.years, `Expected 'years' to be in special object, result was ${badges.special.years}`)
+            assert.strictEqual(badges.special.years.earned, 1374542223, `Expected earned time of '1374542223' in years object, result was ${badges.special.years.earned}`)
         })
 
     } catch (e) {

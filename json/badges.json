@@ -1,0 +1,248 @@
+{
+    "special": [
+        {},
+        {
+            "id": 1,
+            "name": "Years of Service",
+            "tag": "years",
+            "desc": "Automatically levels up every year, representing the age of the Steam account."
+        },
+        {
+            "id": 2,
+            "name": "Community Leader",
+            "tag": "community",
+            "desc": "Given for doing generic Steam community stuff. There are 25 specific tasks, completing more levels up the badge."
+        },
+        {
+            "id": 3,
+            "name": "The Potato Sack",
+            "tag": "potato",
+            "desc": "Awarded to those who bought specific indie games and completed various tasks in each game. Upon earning all potatoes, players were given their final 36th potato, and got the Potato Sack badge."
+        },
+        {
+            "id": 4,
+            "name": "The Great Steam Treasure Hunt",
+            "tag": "treasure-hunt",
+            "desc": "Earned by completing various tasks in specific games from December 6th to the 17th. Those who completed all 28 tasks were given the TF2 Hat of Undeniable Wealth And Respect and the highest badge level."
+        },
+        {
+            "id": 5,
+            "name": "Steam Summer Camp",
+            "tag": "summer-camp",
+            "desc": "Granted for finishing multiple objectives across specific games between June 30th and July 9th. There were 76 objectives total, for 76 earnable tickets."
+        },
+        {
+            "id": 6,
+            "name": "Steam Holiday Sale 2011",
+            "tag": "holiday-2011",
+            "desc": "Awarded for earning up to 78 achievements during the December 2011 sale, all from a variety of tasks in certain games."
+        },
+        {
+            "id": 7,
+            "name": "Steam Summer Sale 2012",
+            "tag": "summer-2012",
+            "desc": "Standing out from all past badges, this was earned by completing 7 tasks, five related to voting, one for buying a discounted game, and one for joining the Summer Sale Group."
+        },
+        {
+            "id": 8,
+            "name": "Steam Holiday Sale 2012",
+            "tag": "holiday-2012",
+            "desc": "Given to players for completing any of 6 tasks. It's very different from all previous badges, as it doesn't level up based on the number of tasks completed."
+        },
+        {
+            "id": 9,
+            "name": "Steam Community Translator",
+            "tag": "translator",
+            "desc": "Awarded to those who've made significant contributions to the Steam Community Translation effort. It's still possible to earn this badge, although exact number of contributions needed is unknown."
+        },
+        {
+            "id": 10,
+            "name": "Steam Community Moderator",
+            "tag": "moderator",
+            "desc": "Earned by becoming a volunteer moderator in the Steam Community."
+        },
+        {
+            "id": 11,
+            "name": "Valve Employee",
+            "tag": "valve",
+            "desc": "Given to all Valve Employees."
+        },
+        {
+            "id": 12,
+            "name": "Steamworks Developer",
+            "tag": "developer",
+            "desc": "A mysterious badge that no longer exists... maybe someday it will come back?"
+        },
+        {
+            "id": 13,
+            "name": "Owned Games",
+            "tag": "games",
+            "desc": "Automatically levels up when purchasing games."
+        },
+        {
+            "id": 14,
+            "name": "Trading Card Beta Tester",
+            "tag": "card-beta-tester",
+            "desc": "Granted by crafting a badge while trading cards were still in beta."
+        },
+        {
+            "id": 15,
+            "name": "Steam Hardware Beta Participant",
+            "tag": "hardware-beta-tester",
+            "desc": "Given to those who participated in the Steam Hardware Beta test."
+        },
+        {
+            "id": 16,
+            "name": "Steam Summer Adventure 2014 - Red Team",
+            "tag": "summer-2014-red",
+            "desc": "One of 5 badges awarded to those who participated in the trading card wars."
+        },
+        {
+            "id": 17,
+            "name": "Steam Summer Adventure 2014 - Blue Team",
+            "tag": "summer-2014-blue",
+            "desc": "One of 5 badges awarded to those who participated in the trading card wars."
+        },
+        {
+            "id": 18,
+            "name": "Steam Summer Adventure 2014 - Pink Team",
+            "tag": "summer-2014-pink",
+            "desc": "One of 5 badges awarded to those who participated in the trading card wars."
+        },
+        {
+            "id": 19,
+            "name": "Steam Summer Adventure 2014 - Green Team",
+            "tag": "summer-2014-green",
+            "desc": "One of 5 badges awarded to those who participated in the trading card wars."
+        },
+        {
+            "id": 20,
+            "name": "Steam Summer Adventure 2014 - Purple Team",
+            "tag": "summer-2014-purple",
+            "desc": "One of 5 badges awarded to those who participated in the trading card wars."
+        },
+        {
+            "id": 21,
+            "name": "Gem Maker",
+            "tag": "gems",
+            "desc": "A three tier badge, most Steam users have level 1, gained by creating gems from an item. Level 2 was awarded to those who participated in the 2014 Holiday Auction, and level 3 to those who won a prize."
+        },
+        {
+            "id": 22,
+            "name": "Holiday Profile Recipient",
+            "tag": "holiday-profile",
+            "desc": "Awarded to the winners of the 2014 Holiday Profile item, which is no longer usable but still in the inventories of the winners. This badge is worth 5000 XP, the highest single level badge ever on Steam."
+        },
+        {
+            "id": 23,
+            "name": "Monster Summer",
+            "tag": "monster-summer",
+            "desc": "The first sale badge gained by crafting limited time cards, which could only be earned through crafting other badges, buying games, or directly from the community market."
+        },
+        {
+            "id": 24,
+            "name": "Red Herring",
+            "tag": "red-herring",
+            "desc": "A mysterious and unique badge obtained by doing a very specific thing: Go to Ikaruga on the Steam Store, type 'search', hit enter, and type '1v7531'. Can no longer be obtained, to my own dismay."
+        },
+        {
+            "id": 25,
+            "name": "Steam Awards Nomination Committee 2016",
+            "tag": "awards-2016",
+            "desc": "Earned by active participation in the 2016 Steam Awards. There were four tasks, each leveling up the badge to a max of level 4, all centered around trivial tasks in the Steam Awards."
+        },
+        {
+            "id": 26,
+            "name": "Sticker Completionist",
+            "tag": "sticker-completionist",
+            "desc": "No information available. What? Why is there no wiki about this? I spent about 30 minutes and couldn't even find the images of all the badge levels!"
+        },
+        {
+            "id": 27,
+            "name": "Steam Awards Nomination Committee 2017",
+            "tag": "awards-2017",
+            "desc": "Earned by active participation in the 2017 Steam Awards. There were four tasks, each leveling up the badge to a max of level 4, all centered around trivial tasks in the Steam Awards."
+        },
+        {
+            "id": 28,
+            "name": "Spring Cleaning Event 2018",
+            "tag": "spring-cleaning",
+            "desc": "Awarded to those who played specific games. The idea was to encourage more playtime and to buy some new games, as each task focused heavily on games you or a friend already owned."
+        },
+        {
+            "id": 29,
+            "name": "Salien",
+            "tag": "salien",
+            "desc": "Gained by playing the Salien game, playable during the 2018 Summer Sale. The max badge level is 6, earned by reaching level 21 in the game. It is worth noting that it was pretty much physically impossible to get past level 2 without scripting the game. Seriously Valve?"
+        },
+        {
+            "id": 30,
+            "name": "Retired Community Moderator",
+            "tag": "moderator-retired",
+            "desc": "Awarded to longtime moderators who have made significant contributions to the Steam Community."
+        },
+        {
+            "id": 31,
+            "name": "Steam Awards Nomination Committee 2018",
+            "tag": "awards-2018",
+            "desc": "Earned by active participation in the 2018 Steam Awards. There were four tasks, each leveling up the badge to a max of level 4, all centered around trivial tasks in the Steam Awards."
+        },
+        {},
+        {
+            "id": 33,
+            "name": "Winter 2018 Knick-Knack Collector",
+            "tag": "knick-knack-2018",
+            "desc": "Gained by 'consuming' knick-knacks during the 2018 Winter sale, earned by opening various gifts each day from the 'Cozy Cottage of Surprises' which also revealed new special items for the featured game on that day."
+        }
+    ],
+    "event": {
+        "245070": {
+            "name": "2013: Summer Getaway",
+            "tag": "summer-2013"
+        },
+        "267420": {
+            "name": "2013: Holiday Sale",
+            "tag": "holiday-2013"
+        },
+        "303700": {
+            "name": "2014: Summer Adventure",
+            "tag": "summer-2014"
+        },
+        "335590": {
+            "name": "2014: Holiday Sale",
+            "tag": "holiday-2014"
+        },
+        "368020": {
+            "name": "2015: Monster Summer Sale",
+            "tag": "summer-2015"
+        },
+        "425280": {
+            "name": "2015: Holiday Sale",
+            "tag": "holiday-2015"
+        },
+        "480730": {
+            "name": "2016: Summer Sale",
+            "tag": "summer-2016"
+        },
+        "566020": {
+            "name": "2016: Steam Awards",
+            "tag": "awards-2016"
+        },
+        "639900": {
+            "name": "2017: Summer Sale",
+            "tag": "summer-2017"
+        },
+        "762800": {
+            "name": "2017: Steam Awards",
+            "tag": "awards-2017"
+        },
+        "876740": {
+            "name": "2018: Intergalactic Summer",
+            "tag": "summer-2018"
+        },
+        "991980": {
+            "name": "2018: Winter Sale",
+            "tag": "winter-2018"
+        }
+    }
+}

@@ -8,6 +8,8 @@ Specifically playtime, owned games, badges, and Steam level. For player summarie
 | :--- | :--- |
 | [GetRecentlyPlayedGames](#GetRecentlyPlayedGames) | Get information about games the user has played within the last 2 weeks. |
 | [GetOwnedGames](#GetOwnedGames) | Retrieve a list of all games the user has ever bought or installed (free-to-play). |
+| [GetSteamLevel](#GetSteamLevel) | Get the current Steam Level of the user, and absolutely nothing more. |
+| [GetBadges](#GetBadges) | Get all badges the user currently has, and some detailed level information. |
 
 <br />
 
@@ -68,7 +70,7 @@ Get information about games the user has played within the last 2 weeks.
 
 ```javascript
 const api = require('steam-js-api')
-api.setKet('{{YOUR KEY}}')
+api.setKey('{{YOUR KEY}}')
 
 getRecentlyPlayedGames('76561198099490962', 2).then(result => {
     console.log(result.data)
@@ -170,7 +172,7 @@ Despite the Web API claiming that free-to-play games are excluded by default, an
 
 ```javascript
 const api = require('steam-js-api')
-api.setKet('{{YOUR KEY}}')
+api.setKey('{{YOUR KEY}}')
 
 getOwnedGames('76561198099490962', [730, 264710], true).then(result => {
     console.log(result.data)
@@ -204,6 +206,185 @@ This would display an object that looks a lot like this one:
             "url_app_icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg"
         }
     ]
+}
+```
+
+## GetSteamLevel
+<sub>[[to top of page]](#IPlayerServices)</sub>
+
+Get the current Steam Level of the user, and absolutely nothing more.
+### Syntax
+`getSteamLevel(steamID)`
+### Parameters
+
+`steamID` *required*
+> Type: `String`  
+>  
+> Steam ID of the user, as a string
+
+
+### Result
+
+> **Integer `level`**  
+> Steam level of the user  
+>  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+getSteamLevel('76561198099490962').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "level": 71
+}
+```
+
+## GetBadges
+<sub>[[to top of page]](#IPlayerServices)</sub>
+
+Get all badges the user currently has, and some detailed level information.
+### Syntax
+`getBadges(steamID)`
+### Parameters
+
+`steamID` *required*
+> Type: `String`  
+>  
+> Steam ID of the user, as a string
+
+
+### Result
+
+> **Integer `level`**  
+> Steam level of the user  
+>  
+> **Integer `xp`**  
+> Total XP the Steam user has  
+>  
+> **Integer `level_xp`**  
+> The XP requirement for the user's current Steam level  
+>  
+> **Integer `next_level_xp`**  
+> The XP requirement for the next Steam level  
+>  
+> **Object `badges`**  
+> Badges by types  
+>> **Object `game`**  
+>> Game badges listed by appids  
+>>> **Integer `appid`**  
+>>> Steam internal app id, always unique  
+>>  
+>>> **Integer `level`**  
+>>> Level of the badge, could be any positive integer, or 0 if only the foil badge was unlocked  
+>>  
+>>> **Integer `earned`**  
+>>> Time the badge was initially level 1, in seconds since the epoch, could be 0 if only the foil badge was unlocked  
+>>  
+>>> **Integer `xp`**  
+>>> Amount of XP the badge is worth, could be 0 if only the foil badge was unlocked  
+>>  
+>>> **Integer `scarcity`**  
+>>> The total number of Steam users with a badge level equal to or higher than this badge level, could be 0 if only the foil badge was unlocked  
+>>  
+>>> **Object `foil`**  
+>>> The foil badge information, could be 0 if the user has not unlocked the foil version. Contains the `level`, `earned`, `xp` and `scarcity` properties  
+>>  
+>  
+>> **Object `event`**  
+>> Limited time event badges, listed by event tag names. Other than the new `name` property, the badges are identical in structure to game badges  
+>>> **String `name`**  
+>>> Full name of the badge  
+>>  
+>  
+>> **Object `special`**  
+>> Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appid` or `foil` property  
+>  
+>  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+getBadges('76561198099490962').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "level": 71,
+    "xp": 29042,
+    "level_xp": 28800,
+    "next_level_xp": 29600,
+    "badges": {
+        "game": {
+            "730": {
+                "appid": 730,
+                "level": 5,
+                "earned": 1466352436,
+                "xp": 500,
+                "scarcity": 2794555,
+                "foil": 0
+            },
+            "506670": {
+                "appid": 506670,
+                "level": 5,
+                "earned": 1495724426,
+                "xp": 500,
+                "scarcity": 23664,
+                "foil": 0
+            }
+        },
+        "event": {
+            "summer-2016": {
+                "name": "2016: Summer Sale",
+                "appid": 480730,
+                "level": 1,
+                "earned": 1467080364,
+                "xp": 100,
+                "scarcity": 990954,
+                "foil": 0
+            },
+            "awards-2017": {
+                "name": "2017: Steam Awards",
+                "appid": 762800,
+                "level": 22,
+                "earned": 1517712529,
+                "xp": 2200,
+                "scarcity": 13291,
+                "foil": 0
+            }
+        },
+        "special": {
+            "games": {
+                "name": "Owned Games",
+                "level": 127,
+                "earned": 1547050916,
+                "xp": 356,
+                "scarcity": 4750842
+            },
+            "years": {
+                "name": "Years of Service",
+                "level": 5,
+                "earned": 1374542223,
+                "xp": 250,
+                "scarcity": 68071999
+            }
+        }
+    }
 }
 ```
 

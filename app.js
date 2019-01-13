@@ -1,4 +1,5 @@
 const LOCATIONS = require('./json/locations-min.json')
+const BADGES = require('./json/badges.json')
 const https = require('https')
 
 var urls = {
@@ -17,6 +18,22 @@ function requireKey() {
 
 function validateSteamID(steamID) {
     return /^76561[0-9]{12}$/.test(steamID)
+}
+
+function badgeUpdate(original, update) {
+    if (!original) {
+        return update
+    }
+
+    for (prop in update) {
+        // If the `original` is "falsey" then we should update the value according to `update`
+        // As this is for a specific use, a deep update is not needed
+        if (!original[prop]) {
+            original[prop] = update[prop]
+        }
+    }
+
+    return original
 }
 
 function doRequest(uri, resolve, reject) {
@@ -261,6 +278,180 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
 
 }
 
+function getSteamLevel(steamID, callback) {
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!validateSteamID(steamID)) {
+            let result = {error: 'Steam ID does not appear valid'}
+
+            if (reject) reject(result)
+            else resolve(result)
+        }
+
+        request('IPlayerService/GetSteamLevel/v1', {key: _key, steamid: steamID}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
+                resolve({data: {level: result.data.response.player_level}})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
+function getBadges(steamID, callback) {
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!validateSteamID(steamID)) {
+            let result = {error: 'Steam ID does not appear valid'}
+
+            if (reject) reject(result)
+            else resolve(result)
+        }
+
+        request('IPlayerService/GetBadges/v1', {key: _key, steamid: steamID}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
+                result = result.data.response
+                let data = {
+                    level: result.player_level,
+                    xp: result.player_xp,
+                    level_xp: result.player_xp_needed_current_level,
+                    next_level_xp: result.player_xp + result.player_xp_needed_to_level_up,
+                    badges: {
+                        game: {},
+                        event: {},
+                        special: {}
+                    }
+                }
+
+                for (index in result.badges) {
+                    let badge = result.badges[index]
+
+                    if (badge.hasOwnProperty('appid')) {
+                        if (BADGES.event.hasOwnProperty(badge.appid)) {
+                            // Steam event badge
+                            let event = BADGES.event[badge.appid]
+                            if (badge.border_color) {
+                                // Foil version, update incase normal already added
+                                data.badges.event[event.tag] = badgeUpdate(data.badges.event[event.tag], {
+                                    name: event.name,
+                                    appid: badge.appid,
+                                    level: 0,
+                                    earned: 0,
+                                    xp: 0,
+                                    scarcity: 0,
+                                    foil: {
+                                        level: badge.level,
+                                        earned: badge.completion_time,
+                                        xp: badge.xp,
+                                        scarcity: badge.scarcity
+                                    }
+                                })
+
+                            } else {
+                                // Normal version, update incase foil already added
+                                data.badges.event[event.tag] = badgeUpdate(data.badges.event[event.tag], {
+                                    name: event.name,
+                                    appid: badge.appid,
+                                    level: badge.level,
+                                    earned: badge.completion_time,
+                                    xp: badge.xp,
+                                    scarcity: badge.scarcity,
+                                    foil: 0
+                                })
+                            }
+                        } else {
+                            // Game badge
+                            if (badge.border_color) {
+                                // Foil version, update
+                                data.badges.game[badge.appid] = badgeUpdate(data.badges.game[badge.appid], {
+                                    appid: badge.appid,
+                                    level: 0,
+                                    earned: 0,
+                                    xp: 0,
+                                    scarcity: 0,
+                                    foil: {
+                                        level: badge.level,
+                                        earned: badge.completion_time,
+                                        xp: badge.xp,
+                                        scarcity: badge.scarcity
+                                    }
+                                })
+                            } else {
+                                // Normal version, update
+                                data.badges.game[badge.appid] = badgeUpdate(data.badges.game[badge.appid], {
+                                    appid: badge.appid,
+                                    level: badge.level,
+                                    earned: badge.completion_time,
+                                    xp: badge.xp,
+                                    scarcity: badge.scarcity,
+                                    foil: 0
+                                })
+                            }
+                        }
+                    } else {
+                        // Special Steam badge
+                        let special = BADGES.special[badge.badgeid]
+                        data.badges.special[special.tag] = {
+                            name: special.name,
+                            level: badge.level,
+                            earned: badge.completion_time,
+                            xp: badge.xp,
+                            scarcity: badge.scarcity
+                        }
+                    }
+                }
+
+                resolve({data})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
 
 const api = {}
 api.setKey = setKey
@@ -268,5 +459,7 @@ api.request = request
 
 api.getRecentlyPlayedGames = getRecentlyPlayedGames
 api.getOwnedGames = getOwnedGames
+api.getSteamLevel = getSteamLevel
+api.getBadges = getBadges
 
 module.exports = api

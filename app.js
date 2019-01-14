@@ -453,6 +453,250 @@ function getBadges(steamID, callback) {
     }
 }
 
+function getBadgeProgress(steamID, badgeID, callback) {
+
+    let badges = {
+        'community': 2,
+        'summer-2012': 7,
+        'holiday-2012': 8,
+        'hardware-beta': 15,
+        'awards-2016': 25,
+        'awards-2017': 27,
+        'awards-2018': 31,
+        'spring-cleaning': 28
+    }
+
+    if (typeof badgeID === 'function') {
+        callback = badgeID
+        badgeID = 'community'
+    } else if (!badgeID) {
+        badgeID = 'community'
+    }
+
+    if (typeof badgeID === 'string') {
+        if (badges.hasOwnProperty(badgeID)) {
+            badgeID = badges[badgeID]
+        } else {
+            let result = {error: 'Requested badge does not correlate to a task-based badge.'}
+            if (reject) reject(result)
+            else resolve(result)
+        }
+    } else if (!badges.values().includes(badgeID)){
+        let result = {error: 'Requested badge does not correlate to a task-based badge.'}
+        if (reject) reject(result)
+        else resolve(result)
+    }
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!validateSteamID(steamID)) {
+            let result = {error: 'Steam ID does not appear valid'}
+
+            if (reject) reject(result)
+            else resolve(result)
+        }
+
+        request('IPlayerService/GetCommunityBadgeProgress/v1', {key: _key, steamid: steamID, badgeid: badgeID}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
+                result = result.data.response
+
+                let data = {
+                    quests: {},
+                    count: 0,
+                    completed: 0
+                }
+
+                for (index in result.quests) {
+                    let quest = result.quests[index]
+                    data.quests[quest.questid] = {
+                        name: 'unknown',
+                        completed: quest.completed
+                    }
+
+                    data.count++
+                    if (quest.completed) data.completed++
+                }
+
+                resolve({data})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
+function getFriendList(steamID, sorted, callback) {
+
+    if (typeof sorted === 'function') {
+        callback = sorted
+        sorted = false
+    } else if (!sorted) {
+        sorted = false
+    } else {
+        sorted = true
+    }
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!validateSteamID(steamID)) {
+            let result = {error: 'Steam ID does not appear valid'}
+
+            if (reject) reject(result)
+            else resolve(result)
+        }
+
+        request('ISteamUser/GetFriendList/v1', {key: _key, steamid: steamID}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('friendslist')){
+                result = result.data.friendslist
+
+                let data = {
+                    count: 0
+                }
+
+                let fns = []
+
+                for (index in result.friends) {
+                    let f = result.friends[index]
+
+                    fns[index] = {
+                        steamID: f.steamid,
+                        since: f.friend_since
+                    }
+
+                    data.count++
+                }
+
+                data.friends = sorted ? fns.sort((a, b) => (a.since > b.since) ? 1 : ((b.since > a.since) ? -1 : 0)) : fns
+
+                resolve({data})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
+function getPlayerBans(steamIDs, callback) {
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!Array.isArray(steamIDs)) {
+            steamIDs = [steamIDs]
+        }
+
+        let ids = ""
+
+        for (index in steamIDs) {
+            let steamID = steamIDs[index]
+            if (!validateSteamID(steamID)) {
+                let result = {error: `Steam ID "${steamID}" does not appear valid`}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+            ids += steamID + ','
+        }
+
+        ids = ids.slice(0,-1)
+
+        request('ISteamUser/GetPlayerBans/v1', {key: _key, steamids: ids}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('players')){
+                result = result.data
+
+                let data = {
+                    count: 0,
+                    players: {}
+                }
+
+                for (index in result.players) {
+                    let p = result.players[index]
+
+                    // TODO: improve 'economy' ban message. A string is returned, and I don't know what possible values are
+
+                    data.players[p.SteamId] = {
+                        community: p.CommunityBanned,
+                        economy: p.EconomyBan,
+                        vac: p.VACBanned,
+                        bans: p.NumberOfVACBans + p.NumberOfGameBans,
+                        vacBans: p.NumberOfVACBans,
+                        gameBans: p.NumberOfGameBans,
+                        lastBan: p.DaysSinceLastBan
+                    }
+
+                    data.count++
+                }
+
+                resolve({data})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
 const api = {}
 api.setKey = setKey
 api.request = request
@@ -461,5 +705,8 @@ api.getRecentlyPlayedGames = getRecentlyPlayedGames
 api.getOwnedGames = getOwnedGames
 api.getSteamLevel = getSteamLevel
 api.getBadges = getBadges
+api.getBadgeProgress = getBadgeProgress
+api.getFriendList = getFriendList
+api.getPlayerBans = getPlayerBans
 
 module.exports = api

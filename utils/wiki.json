@@ -336,6 +336,193 @@
                     }
                 }
             }
+        },
+        "GetCommunityBadgeProgress": {
+            "desc": "Returns the badge progress for specific task-based badges.",
+            "function": "getBadgeProgress",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                },
+                "badgeID": {
+                    "type": "String",
+                    "desc": "Badge ID, could also be the true integer value of the badge ID. Valid values for this are currently `community`, `summer-2012`, `holiday-2012`, `hardware-beta`, `awards-2016`, `awards-2017`, `awards-2018` and `spring-cleaning`.",
+                    "default": "community"
+                }
+            },
+            "result": {
+                "quests": {
+                    "type": "Object",
+                    "desc": "Object of quests, listed by quest ids",
+                    "object": {
+                        "name": {
+                            "type": "String",
+                            "desc": "Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest ids to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!"
+                        },
+                        "completed": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the task has been completed"
+                        }
+                    }
+                },
+                "count": {
+                    "type": "Integer",
+                    "desc": "Number of quests for this badge"
+                },
+                "completed": {
+                    "type": "Integer",
+                    "desc": "Number of completed quests for this badge"
+                }
+            },
+            "example_call": "getBadges('76561198099490962', 'community')",
+            "example_data": {
+                "quests": {
+                    "260": {
+                        "name": "unknown",
+                        "completed": false
+                    },
+                    "261": {
+                        "name": "unknown",
+                        "completed": false
+                    },
+                    "262": {
+                        "name": "unknown",
+                        "completed": false
+                    },
+                    "263": {
+                        "name": "unknown",
+                        "completed": false
+                    }
+                },
+                "count": 4,
+                "completed": 0
+            }
+        }
+    },
+    "ISteamUser": {
+        "desc": "Returns more detailed information about user profiles; summaries, bans, friends. For Steam level, badges, games, and playtime, go to [IPlayerServices](IPlayerServices)",
+        "GetFriendList": {
+            "desc": "Gets the friends of the Steam user, if public.",
+            "function": "getFriendList",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                },
+                "sorted": {
+                    "type": "Boolean",
+                    "desc": "Enable sorting by friending time, with the oldest friends at the top of the resulting list",
+                    "default": false
+                }
+            },
+            "result": {
+                "count": {
+                    "type": "Integer",
+                    "desc": "Number of friends"
+                },
+                "friends": {
+                    "type": "Array",
+                    "desc": "Array of friend objects, sorted if the `sorted` paramter is `true`",
+                    "object": {
+                        "steamID": {
+                            "type": "String",
+                            "desc": "Steam ID of the friend"
+                        },
+                        "since": {
+                            "type": "Integer",
+                            "desc": "Time the friend was added, in seconds since the epoch"
+                        }
+                    }
+                }
+            },
+            "example_call": "getFriendList('76561198099490962', true)",
+            "example_data": {
+                "count": 4,
+                "friends": [
+                    {
+                        "steamID": "76561198064527259",
+                        "since": 1374546543
+                    },
+                    {
+                        "steamID": "76561198073477368",
+                        "since": 1385304477
+                    },
+                    {
+                        "steamID": "76561198055109162",
+                        "since": 1415236183
+                    },
+                    {
+                        "steamID": "76561198190833690",
+                        "since": 1475462732
+                    }
+                ]
+            }
+        },
+        "GetPlayerBans": {
+            "desc": "Retrieves ban information on the provided Steam IDs. Notice that is PLURAL. You can get information on multiple Steam IDs at once, however Steam may internally limit the max number of Steam IDs you can query at once.",
+            "function": "getPlayerBans",
+            "parameters": {
+                "steamIDs": {
+                    "type": "Array",
+                    "desc": "Array of Steam ID strings, or just one, no array necessary"
+                }
+            },
+            "result": {
+                "count": {
+                    "type": "Integer",
+                    "desc": "Number of returned profiles, useful for checking if any Steam IDs were ignored or cropped from the final result"
+                },
+                "players": {
+                    "type": "Object",
+                    "desc": "Ban objects listed by Steam ID",
+                    "object": {
+                        "community": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the account has a community ban"
+                        },
+                        "economy": {
+                            "type": "String",
+                            "desc": "What type of economy ban the account has. These are often temporary. Sadly, I don't know the possible values of this. If you have account restrictions, or know someone who does, please reach out to me so I can finish development on this part."
+                        },
+                        "vac": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the account has a VAC ban. It may be possible for a single account to have multiple VAC bans, but I personally doubt it as VAC normally bans across ALL VAC secure games."
+                        },
+                        "bans": {
+                            "type": "Integer",
+                            "desc": "Total number of bans on the account; VAC + Game bans"
+                        },
+                        "vacBans": {
+                            "type": "Integer",
+                            "desc": "Number of VAC bans on the account"
+                        },
+                        "gameBans": {
+                            "type": "Integer",
+                            "desc": "Number of Game bans on the account. Game bans are not VAC bans, they are manually given to a player by the developer of the game they got banned on."
+                        },
+                        "lastBan": {
+                            "type": "Integer",
+                            "desc": "Number of days since the last ban was given to the account, a value of `0` indicates the account recieved a ban *today*"
+                        }
+                    }
+                }
+            },
+            "example_call": "getPlayerBans('76561198099490962')",
+            "example_data": {
+                "count": 1,
+                "players": {
+                    "76561198099490962": {
+                        "community": false,
+                        "economy": "none",
+                        "vac": false,
+                        "bans": 0,
+                        "vacBans": 0,
+                        "gameBans": 0,
+                        "lastBan": 0
+                    }
+                }
+            }
         }
     }
 }

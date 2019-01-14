@@ -86,7 +86,7 @@ for (page in wiki) {
         data += `const api = require('steam-js-api')\r\n`
         data += `api.setKey('{{YOUR KEY}}')\r\n`
         data += '\r\n'
-        data += `${section.example_call}.then(result => {\r\n`
+        data += `api.${section.example_call}.then(result => {\r\n`
         data += `    console.log(result.data)\r\n`
         data += '}).catch(console.error)\r\n'
         data += '```\r\n\r\n'

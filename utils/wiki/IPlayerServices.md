@@ -10,6 +10,7 @@ Specifically playtime, owned games, badges, and Steam level. For player summarie
 | [GetOwnedGames](#GetOwnedGames) | Retrieve a list of all games the user has ever bought or installed (free-to-play). |
 | [GetSteamLevel](#GetSteamLevel) | Get the current Steam Level of the user, and absolutely nothing more. |
 | [GetBadges](#GetBadges) | Get all badges the user currently has, and some detailed level information. |
+| [GetCommunityBadgeProgress](#GetCommunityBadgeProgress) | Returns the badge progress for specific task-based badges. |
 
 <br />
 
@@ -72,7 +73,7 @@ Get information about games the user has played within the last 2 weeks.
 const api = require('steam-js-api')
 api.setKey('{{YOUR KEY}}')
 
-getRecentlyPlayedGames('76561198099490962', 2).then(result => {
+api.getRecentlyPlayedGames('76561198099490962', 2).then(result => {
     console.log(result.data)
 }).catch(console.error)
 ```
@@ -174,7 +175,7 @@ Despite the Web API claiming that free-to-play games are excluded by default, an
 const api = require('steam-js-api')
 api.setKey('{{YOUR KEY}}')
 
-getOwnedGames('76561198099490962', [730, 264710], true).then(result => {
+api.getOwnedGames('76561198099490962', [730, 264710], true).then(result => {
     console.log(result.data)
 }).catch(console.error)
 ```
@@ -235,7 +236,7 @@ Get the current Steam Level of the user, and absolutely nothing more.
 const api = require('steam-js-api')
 api.setKey('{{YOUR KEY}}')
 
-getSteamLevel('76561198099490962').then(result => {
+api.getSteamLevel('76561198099490962').then(result => {
     console.log(result.data)
 }).catch(console.error)
 ```
@@ -316,7 +317,7 @@ Get all badges the user currently has, and some detailed level information.
 const api = require('steam-js-api')
 api.setKey('{{YOUR KEY}}')
 
-getBadges('76561198099490962').then(result => {
+api.getBadges('76561198099490962').then(result => {
     console.log(result.data)
 }).catch(console.error)
 ```
@@ -385,6 +386,82 @@ This would display an object that looks a lot like this one:
             }
         }
     }
+}
+```
+
+## GetCommunityBadgeProgress
+<sub>[[to top of page]](#IPlayerServices)</sub>
+
+Returns the badge progress for specific task-based badges.
+### Syntax
+`getBadgeProgress(steamID[, badgeID])`
+### Parameters
+
+`steamID` *required*
+> Type: `String`  
+>  
+> Steam ID of the user, as a string
+
+`badgeID`
+> Type: `String`  
+> Default: `community`  
+>  
+> Badge ID, could also be the true integer value of the badge ID. Valid values for this are currently `community`, `summer-2012`, `holiday-2012`, `hardware-beta`, `awards-2016`, `awards-2017`, `awards-2018` and `spring-cleaning`.
+
+
+### Result
+
+> **Object `quests`**  
+> Object of quests, listed by quest ids  
+>> **String `name`**  
+>> Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest ids to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!  
+>  
+>> **Boolean `completed`**  
+>> Whether or not the task has been completed  
+>  
+>  
+> **Integer `count`**  
+> Number of quests for this badge  
+>  
+> **Integer `completed`**  
+> Number of completed quests for this badge  
+>  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.getBadges('76561198099490962', 'community').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "quests": {
+        "260": {
+            "name": "unknown",
+            "completed": false
+        },
+        "261": {
+            "name": "unknown",
+            "completed": false
+        },
+        "262": {
+            "name": "unknown",
+            "completed": false
+        },
+        "263": {
+            "name": "unknown",
+            "completed": false
+        }
+    },
+    "count": 4,
+    "completed": 0
 }
 ```
 

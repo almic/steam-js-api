@@ -15,7 +15,7 @@ async function test(name, func) {
     let duration = process.uptime()
     try {
         await func()
-        console.log(' \x1b[32mPassed \x1b[36m%s\x1b[32m (' + Math.floor((process.uptime() - duration) * 100) + 'ms)\x1b[0m\n', name)
+        console.log(' \x1b[32mPassed \x1b[36m%s\x1b[32m (' + Math.floor((process.uptime() - duration) * 1000) + 'ms)\x1b[0m\n', name)
         passed++
     } catch (e) {
         console.error('   \x1b[31m%s\x1b[0m', `Test ${name} failed with error:\n${e.stack}\n`)
@@ -147,6 +147,49 @@ async function run() {
             assert.ok(!data.players[steamID].vac, `*Laughs nervously* what happened :'(`)
         })
 
+        await test('getPlayerSummaries', async function () {
+            api.setKey(key)
+
+            let result = await api.getPlayerSummaries(steamID)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.ok(data.count, `Expected positive player count, result was ${util.inspect(data)}`)
+            assert.ok(data.players, `Expected 'truthy' player array, result was ${util.inspect(data)}`)
+            assert.ok(data.players[steamID], `Expected one player in array, result was ${util.inspect(data.players)}`)
+
+            let player = data.players[steamID]
+
+            assert.ok(player.name, `Expected value 'name' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.realName, `Expected value 'realName' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.url, `Expected value 'url' in player object, result was ${util.inspect(player)}`)
+            assert.ok(typeof player.state === 'number', `Expected value 'state' to be a Number in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.stateString, `Expected value 'stateString' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.public, `Expected value 'public' to be true in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.comments, `Expected value 'comments' to be true in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.joined, `Expected value 'joined' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.offline, `Expected value 'offline' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.community, `Expected value 'community' to be true in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.group, `Expected value 'group' to be truthy in player object, result was ${util.inspect(player)}`)
+            assert.ok(typeof player.inGame === 'boolean', `Expected value 'inGame' to be a Boolean in player object, result was ${util.inspect(player)}`)
+            assert.ok(typeof player.appid === 'number', `Expected value 'appid' to be a Number in player object, result was ${util.inspect(player)}`)
+            assert.ok(typeof player.appName === 'string', `Expected value 'appName' to be a String in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.avatar, `Expected value 'avatar' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.avatar.small, `Expected value 'avatar.small' in player object, result was ${util.inspect(player.avatar)}`)
+            assert.ok(player.avatar.medium, `Expected value 'avatar.medium' in player object, result was ${util.inspect(player.avatar)}`)
+            assert.ok(player.avatar.large, `Expected value 'avatar.large' in player object, result was ${util.inspect(player.avatar)}`)
+            assert.ok(player.location, `Expected value 'location' in player object, result was ${util.inspect(player)}`)
+            assert.ok(player.location.country !== undefined, `Expected value 'location.country' to be defined in player object, result was ${util.inspect(player.location)}`)
+            assert.ok(player.location.state !== undefined, `Expected value 'location.state' to be defined in player object, result was ${util.inspect(player.location)}`)
+            assert.ok(player.location.city !== undefined, `Expected value 'location.city' to be defined in player object, result was ${util.inspect(player.location)}`)
+            assert.ok(player.location.countryCode !== undefined, `Expected value 'location.countryCode' to be defined in player object, result was ${util.inspect(player.location)}`)
+            assert.ok(player.location.stateCode !== undefined, `Expected value 'location.stateCode' to be defined in player object, result was ${util.inspect(player.location)}`)
+            assert.ok(player.location.cityCode !== undefined, `Expected value 'location.cityCode' to be defined in player object, result was ${util.inspect(player.location)}`)
+        })
+
     } catch (e) {
         console.error(e)
     }
@@ -158,7 +201,7 @@ async function main() {
 
     await run()
 
-    console.log('\x1b[36m%s\x1b[0m', `Ran ${count} tests, ${passed} passed. Run time ${Math.floor((process.uptime() - duration) * 100)}ms`)
+    console.log('\x1b[36m%s\x1b[0m', `Ran ${count} tests, ${passed} passed. Run time ${Math.floor((process.uptime() - duration) * 1000)}ms`)
 }
 
 main()

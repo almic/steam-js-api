@@ -1,5 +1,6 @@
 const LOCATIONS = require('./json/locations-min.json')
 const BADGES = require('./json/badges.json')
+const PERSONA = require('./json/persona.json')
 const https = require('https')
 
 var urls = {
@@ -697,16 +698,117 @@ function getPlayerBans(steamIDs, callback) {
     }
 }
 
+function getPlayerSummaries(steamIDs, callback) {
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!Array.isArray(steamIDs)) {
+            steamIDs = [steamIDs]
+        }
+
+        let ids = ""
+
+        for (index in steamIDs) {
+            let steamID = steamIDs[index]
+            if (!validateSteamID(steamID)) {
+                let result = {error: `Steam ID "${steamID}" does not appear valid`}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+            ids += steamID + ','
+        }
+
+        ids = ids.slice(0,-1)
+
+        request('ISteamUser/GetPlayerSummaries/v2', {key: _key, steamids: ids}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
+                result = result.data.response
+
+                let data = {
+                    count: 0,
+                    players: {}
+                }
+
+                for (index in result.players) {
+                    let p = result.players[index]
+
+                    data.players[p.steamid] = {
+                        name: p.personaname,
+                        realName: p.realname || false,
+                        url: p.profileurl,
+                        state: p.personastate,
+                        stateString: PERSONA.state[p.personastate],
+                        public: (p.communityvisibilitystate === 3 ? true : false),
+                        comments: (p.commentpermission === 1 ? true : false),
+                        joined: p.timecreated || 0,
+                        offline: p.lastlogoff,
+                        community: (p.profilestate === 1 ? true : false),
+                        group: (p.primaryclanid === 103582791429521408 ? false : p.primaryclanid),
+                        inGame: ((p.gameextrainfo || p.gameid) ? true : false),
+                        appid: (p.gameid ? Number(p.gameid) : 0),
+                        appName: (p.gameextrainfo ? p.gameextrainfo : ""),
+                        avatar: {
+                            small: p.avatar,
+                            medium: p.avatarmedium,
+                            large: p.avatarfull,
+                        },
+                        location: {
+                            country: (p.loccountrycode ? LOCATIONS[p.loccountrycode].name : false),
+                            state: (p.locstatecode ? LOCATIONS[p.loccountrycode].state[p.locstatecode].name : false),
+                            city: (p.loccityid ? LOCATIONS[p.loccountrycode].state[p.locstatecode].city[p.loccityid] : false),
+                            countryCode: (p.loccountrycode ? p.loccountrycode : false),
+                            stateCode: (p.locstatecode ? p.locstatecode : false),
+                            cityCode: (p.loccityid ? p.loccityid : false)
+                        }
+                    }
+
+                    data.count++
+                }
+
+                resolve({data})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
 const api = {}
 api.setKey = setKey
 api.request = request
 
+// IPlayerService
 api.getRecentlyPlayedGames = getRecentlyPlayedGames
 api.getOwnedGames = getOwnedGames
 api.getSteamLevel = getSteamLevel
 api.getBadges = getBadges
 api.getBadgeProgress = getBadgeProgress
+
+// ISteamUser
 api.getFriendList = getFriendList
 api.getPlayerBans = getPlayerBans
+api.getPlayerSummaries = getPlayerSummaries
 
 module.exports = api

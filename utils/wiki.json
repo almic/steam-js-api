@@ -523,6 +523,167 @@
                     }
                 }
             }
+        },
+        "GetPlayerSummaries": {
+            "desc": "Get basic community profile information from the Steam IDs. Notice that is PLURAL. You can get information on multiple Steam IDs at once, however Steam may internally limit the max number of Steam IDs you can query at once.",
+            "function": "getPlayerSummaries",
+            "parameters": {
+                "steamIDs": {
+                    "type": "Array",
+                    "desc": "Array of Steam ID strings, or just one, no array necessary"
+                }
+            },
+            "result": {
+                "count": {
+                    "type": "Integer",
+                    "desc": "Number of returned profiles, useful for checking if any Steam IDs were ignored or cropped from the final result"
+                },
+                "players": {
+                    "type": "Object",
+                    "desc": "Player objects listed by Steam ID",
+                    "object": {
+                        "name": {
+                            "type": "String",
+                            "desc": "Persona name, this is shown in games and on the website"
+                        },
+                        "realName": {
+                            "type": "String",
+                            "desc": "The \"real name\" set by the account, not guaranteed to actually be real. May be set to Boolean `false` if unset, useful for checking if a string is set before printing it"
+                        },
+                        "url": {
+                            "type": "String",
+                            "desc": "Community profile URL, may contain the Steam ID or be the custom vanity url set by the account"
+                        },
+                        "state": {
+                            "type": "Integer",
+                            "desc": "A value from 0-6; 0 - Offline, 1 - Online, 2 - Busy, 3 - Away, 4 - Snooze, 5 - Looking to Trade, 6 - Looking to Play"
+                        },
+                        "stateString": {
+                            "type": "String",
+                            "desc": "Mapped value of `state` to a string, see the `persona.json` file in `json` for values"
+                        },
+                        "public": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the profile is visible, if this is false then some interfaces may not work at all, and limited data is available through player summaries"
+                        },
+                        "comments": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the comments are set to public, if this is false then you won't be able to comment on the profile, and may also not be able to see comments"
+                        },
+                        "joined": {
+                            "type": "Integer",
+                            "desc": "Time the account was created, in seconds since the epoch. This is not available for private accounts, however you can easily use the Steam ID to guess the time the account was created anyway."
+                        },
+                        "offline": {
+                            "type": "Integer",
+                            "desc": "Time the account last went offline, in seconds since the epoch. This does not mean the player is currently offline, or when they *actually* went offline, just the last time their status changed to be offline."
+                        },
+                        "community": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the profile has a community profile set up. You should not allow accounts without a community profile to use your services."
+                        },
+                        "group": {
+                            "type": "Integer",
+                            "desc": "The primary group set by the user, if no group is set then this value is a Boolean `false` to avoid ambiguity"
+                        },
+                        "inGame": {
+                            "type": "Boolean",
+                            "desc": "If the user is currently in a game"
+                        },
+                        "appid": {
+                            "type": "Integer",
+                            "desc": "If `inGame` is true, then this is the app id of the game being played. If `inGame` is true and this value is 0, then the account is playing a non-Steam game."
+                        },
+                        "appName": {
+                            "type": "String",
+                            "desc": "If `inGame` is true, then this is most likely the name of the game being played. If `appid` is 0, this is the \"extra game info\" from the non-Steam game, and may not be an accurate representation of the true game name."
+                        },
+                        "avatar": {
+                            "type": "Object",
+                            "desc": "Holds the various urls for the avatar sizes",
+                            "object": {
+                                "small": {
+                                    "type": "String",
+                                    "desc": "URL for the 32x32 avatar"
+                                },
+                                "medium": {
+                                    "type": "String",
+                                    "desc": "URL for the 64x64 avatar"
+                                },
+                                "large": {
+                                    "type": "String",
+                                    "desc": "URL for the 184x184 avatar"
+                                }
+                            }
+                        },
+                        "location": {
+                            "type": "Object",
+                            "desc": "The public location of the account, should never be used for any real location authentication, as users can change this whenever and however they want",
+                            "object": {
+                                "country": {
+                                    "type": "String",
+                                    "desc": "Full English name of the country, is a Boolean `false` if not set by the account"
+                                },
+                                "state": {
+                                    "type": "String",
+                                    "desc": "Full English name of the state/ province/ city-state, is a Boolean `false` if not set by the account"
+                                },
+                                "city": {
+                                    "type": "String",
+                                    "desc": "Full English name of the city, is a Boolean `false` if not set by the account. Keep in mind some country states have only one possible city, and some have no city options at all."
+                                },
+                                "countryCode": {
+                                    "type": "String",
+                                    "desc": "The country code for the country, should adhere to world standards (i.e. United States code is `US`)"
+                                },
+                                "stateCode": {
+                                    "type": "String",
+                                    "desc": "The state code for the state, for some countries this is the official abbreviation (i.e. Alaska state code is `AK`) but for most this is just a random internal code"
+                                },
+                                "cityCode": {
+                                    "type": "Integer",
+                                    "desc": "The city code for the city, seems to be a completely unique id, otherwise this is not standardized and only for internal use"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "example_call": "getPlayerSummaries('76561198099490962')",
+            "example_data": {
+                "count": 1,
+                "players": {
+                    "76561198099490962": {
+                        "name": "Almic",
+                        "realName": "Mick Ashton",
+                        "url": "https://steamcommunity.com/id/almic/",
+                        "state": 1,
+                        "stateString": "online",
+                        "public": true,
+                        "comments": true,
+                        "joined": 1374542223,
+                        "offline": 1547510790,
+                        "community": true,
+                        "group": "103582791435315066",
+                        "inGame": true,
+                        "appid": 730,
+                        "appName": "Counter-Strike: Global Offensive",
+                        "avatar": {
+                            "small": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5.jpg",
+                            "medium": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5_medium.jpg",
+                            "large": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5_full.jpg"
+                        },
+                        "location": {
+                            "country": "United States",
+                            "state": "Alaska",
+                            "city": "Nome",
+                            "countryCode": "US",
+                            "stateCode": "AK",
+                            "cityCode": 69
+                        }
+                    }
+                }
+            }
         }
     }
 }

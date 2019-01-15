@@ -8,6 +8,7 @@ Returns more detailed information about user profiles; summaries, bans, friends.
 | :--- | :--- |
 | [GetFriendList](#GetFriendList) | Gets the friends of the Steam user, if public. |
 | [GetPlayerBans](#GetPlayerBans) | Retrieves ban information on the provided Steam IDs. |
+| [GetPlayerSummaries](#GetPlayerSummaries) | Get basic community profile information from the Steam IDs. |
 
 <br />
 
@@ -152,6 +153,154 @@ This would display an object that looks a lot like this one:
             "vacBans": 0,
             "gameBans": 0,
             "lastBan": 0
+        }
+    }
+}
+```
+
+## GetPlayerSummaries
+<sub>[[to top of page]](#ISteamUser)</sub>
+
+Get basic community profile information from the Steam IDs. Notice that is PLURAL. You can get information on multiple Steam IDs at once, however Steam may internally limit the max number of Steam IDs you can query at once.
+### Syntax
+`getPlayerSummaries(steamIDs)`
+### Parameters
+
+`steamIDs` *required*
+> Type: `Array`  
+>  
+> Array of Steam ID strings, or just one, no array necessary
+
+
+### Result
+
+> **Integer `count`**  
+> Number of returned profiles, useful for checking if any Steam IDs were ignored or cropped from the final result  
+>  
+> **Object `players`**  
+> Player objects listed by Steam ID  
+>> **String `name`**  
+>> Persona name, this is shown in games and on the website  
+>  
+>> **String `realName`**  
+>> The "real name" set by the account, not guaranteed to actually be real. May be set to Boolean `false` if unset, useful for checking if a string is set before printing it  
+>  
+>> **String `url`**  
+>> Community profile URL, may contain the Steam ID or be the custom vanity url set by the account  
+>  
+>> **Integer `state`**  
+>> A value from 0-6; 0 - Offline, 1 - Online, 2 - Busy, 3 - Away, 4 - Snooze, 5 - Looking to Trade, 6 - Looking to Play  
+>  
+>> **String `stateString`**  
+>> Mapped value of `state` to a string, see the `persona.json` file in `json` for values  
+>  
+>> **Boolean `public`**  
+>> Whether or not the profile is visible, if this is false then some interfaces may not work at all, and limited data is available through player summaries  
+>  
+>> **Boolean `comments`**  
+>> Whether or not the comments are set to public, if this is false then you won't be able to comment on the profile, and may also not be able to see comments  
+>  
+>> **Integer `joined`**  
+>> Time the account was created, in seconds since the epoch. This is not available for private accounts, however you can easily use the Steam ID to guess the time the account was created anyway.  
+>  
+>> **Integer `offline`**  
+>> Time the account last went offline, in seconds since the epoch. This does not mean the player is currently offline, or when they *actually* went offline, just the last time their status changed to be offline.  
+>  
+>> **Boolean `community`**  
+>> Whether or not the profile has a community profile set up. You should not allow accounts without a community profile to use your services.  
+>  
+>> **Integer `group`**  
+>> The primary group set by the user, if no group is set then this value is a Boolean `false` to avoid ambiguity  
+>  
+>> **Boolean `inGame`**  
+>> If the user is currently in a game  
+>  
+>> **Integer `appid`**  
+>> If `inGame` is true, then this is the app id of the game being played. If `inGame` is true and this value is 0, then the account is playing a non-Steam game.  
+>  
+>> **String `appName`**  
+>> If `inGame` is true, then this is most likely the name of the game being played. If `appid` is 0, this is the "extra game info" from the non-Steam game, and may not be an accurate representation of the true game name.  
+>  
+>> **Object `avatar`**  
+>> Holds the various urls for the avatar sizes  
+>>> **String `small`**  
+>>> URL for the 32x32 avatar  
+>>  
+>>> **String `medium`**  
+>>> URL for the 64x64 avatar  
+>>  
+>>> **String `large`**  
+>>> URL for the 184x184 avatar  
+>>  
+>  
+>> **Object `location`**  
+>> The public location of the account, should never be used for any real location authentication, as users can change this whenever and however they want  
+>>> **String `country`**  
+>>> Full English name of the country, is a Boolean `false` if not set by the account  
+>>  
+>>> **String `state`**  
+>>> Full English name of the state/ province/ city-state, is a Boolean `false` if not set by the account  
+>>  
+>>> **String `city`**  
+>>> Full English name of the city, is a Boolean `false` if not set by the account. Keep in mind some country states have only one possible city, and some have no city options at all.  
+>>  
+>>> **String `countryCode`**  
+>>> The country code for the country, should adhere to world standards (i.e. United States code is `US`)  
+>>  
+>>> **String `stateCode`**  
+>>> The state code for the state, for some countries this is the official abbreviation (i.e. Alaska state code is `AK`) but for most this is just a random internal code  
+>>  
+>>> **Integer `cityCode`**  
+>>> The city code for the city, seems to be a completely unique id, otherwise this is not standardized and only for internal use  
+>>  
+>  
+>  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.getPlayerSummaries('76561198099490962').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "count": 1,
+    "players": {
+        "76561198099490962": {
+            "name": "Almic",
+            "realName": "Mick Ashton",
+            "url": "https://steamcommunity.com/id/almic/",
+            "state": 1,
+            "stateString": "online",
+            "public": true,
+            "comments": true,
+            "joined": 1374542223,
+            "offline": 1547510790,
+            "community": true,
+            "group": "103582791435315066",
+            "inGame": true,
+            "appid": 730,
+            "appName": "Counter-Strike: Global Offensive",
+            "avatar": {
+                "small": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5.jpg",
+                "medium": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5_medium.jpg",
+                "large": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5_full.jpg"
+            },
+            "location": {
+                "country": "United States",
+                "state": "Alaska",
+                "city": "Nome",
+                "countryCode": "US",
+                "stateCode": "AK",
+                "cityCode": 69
+            }
         }
     }
 }

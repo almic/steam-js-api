@@ -1,0 +1,11 @@
+{
+    "state": {
+        "0": "offline",
+        "1": "online",
+        "2": "busy",
+        "3": "away",
+        "4": "snooze",
+        "5": "trading",
+        "6": "playing"
+    }
+}

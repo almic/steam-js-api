@@ -1,6 +1,6 @@
 # Special
 
-Custom functions that doesn't use the traditional Steam Web API stuff. As such, they are likely to change in functionality at some point in the future. For now these are safe to use in production, but be warned!
+Custom functions that don't use the traditional Steam Web API stuff. As such, they are likely to change in functionality at some point in the future. For now these are safe to use in production, but be warned!
 
 <br />
 

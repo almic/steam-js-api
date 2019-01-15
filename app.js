@@ -754,9 +754,9 @@ function getPlayerSummaries(steamIDs, callback) {
                         joined: p.timecreated || 0,
                         offline: p.lastlogoff,
                         community: (p.profilestate === 1 ? true : false),
-                        group: (p.primaryclanid === 103582791429521408 ? false : p.primaryclanid),
+                        group: (p.primaryclanid === "103582791429521408" ? false : p.primaryclanid),
                         inGame: ((p.gameextrainfo || p.gameid) ? true : false),
-                        appid: (p.gameid ? Number(p.gameid) : 0),
+                        appid: ((p.gameid && Number(p.gameid) < 1200000) ? Number(p.gameid) : 0),
                         appName: (p.gameextrainfo ? p.gameextrainfo : ""),
                         avatar: {
                             small: p.avatar,

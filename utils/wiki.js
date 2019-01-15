@@ -47,6 +47,8 @@ for (page in wiki) {
         data += `## ${section}\r\n<sub>[[to top of page]](#${pageName})</sub>\r\n\r\n`
         section = page[section]
         table += `${section.desc.slice(0, section.desc.indexOf('.') + 1)} |\r\n`
+        if (Boolean(section.noKey))
+            data += `**Does *NOT* require an API Key! Yay!**\r\n\r\n`
         data += `${section.desc}\r\n### Syntax\r\n\`${section.function}(`
 
         let params = section.parameters
@@ -84,7 +86,8 @@ for (page in wiki) {
         data += `### Result\r\n\r\n${printObject(section.result)}\r\n`
         data += '### Example\r\n\r\n```javascript\r\n'
         data += `const api = require('steam-js-api')\r\n`
-        data += `api.setKey('{{YOUR KEY}}')\r\n`
+        if (!Boolean(section.noKey))
+            data += `api.setKey('{{YOUR KEY}}')\r\n`
         data += '\r\n'
         data += `api.${section.example_call}.then(result => {\r\n`
         data += `    console.log(result.data)\r\n`

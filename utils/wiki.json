@@ -684,6 +684,155 @@
                     }
                 }
             }
+        },
+        "GetUserGroupList": {
+            "desc": "All the groups the account is a member of, this includes all game-related groups as well as community made groups.",
+            "function": "getUserGroups",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                }
+            },
+            "result": {
+                "groups": {
+                    "type": "Array",
+                    "desc": "Array of group id strings"
+                }
+            },
+            "example_call": "getUserGroups('76561198099490962')",
+            "example_data": {
+                "groups": [
+                    "3284297",
+                    "5165781",
+                    "5233424",
+                    "5647945",
+                    "5791388",
+                    "5793658",
+                    "8600182",
+                    "9958636",
+                    "25100141",
+                    "33392184",
+                    "33650713"
+                ]
+            }
+        },
+        "ResolveVanityURL": {
+            "desc": "Converts custom account and group names to an id. Please do not use the entire URL, instead extract the actual name from the custom url before calling this function. For Steam accounts, custom urls are `https://steamcommunity.com/id/{{VANITY NAME}}` and for groups is `https://steamcommunity.com/groups/{{VANITY NAME}}`\r\n\r\nDo not use the third type: game groups. From the surface it looks like official game groups are not accessible by normal methods, and only show up as outdated web pages with little to no content. Official game groups will probably be deprecated in due Valve time, or may be suddenly thrown at our faces. Either way, I wouldn't recommend using them at all right now, because like I said, you can't even access the group pages by normal methods.",
+            "function": "resolveName",
+            "parameters": {
+                "name": {
+                    "type": "String",
+                    "desc": "Custom name found in the url of the account or group"
+                },
+                "type": {
+                    "type": "String",
+                    "desc": "Type of name to be resolved, supported values are `user` and `group`. The integer values 1 and 2 can be passed instead.",
+                    "default": "user"
+                }
+            },
+            "result": {
+                "id": {
+                    "type": "String",
+                    "desc": "The full Steam ID for users, or the group id for groups"
+                }
+            },
+            "example_call": "resolveName('almic')",
+            "example_data": {
+                "id": "76561198099490962"
+            }
+        }
+    },
+    "Special": {
+        "desc": "Custom functions that doesn't use the traditional Steam Web API stuff. As such, they are likely to change in functionality at some point in the future. For now these are safe to use in production, but be warned!",
+        "GetGroupInfo": {
+            "noKey": true,
+            "desc": "Retrieve detailed information about a community group. Like player summaries but for groups!",
+            "function": "getGroupInfo",
+            "parameters": {
+                "id": {
+                    "type": "String",
+                    "desc": "Group 64-bit id, short id, or vanity url name. The 64-bit ID is used in just about all places on the Steam site, the vanity name only appears as the URL, and the short id is only visible to group admins and through the [GetUserGroupList](ISteamUser#GetUserGroupList) API. All of these work just the same, however you should favor the 64-bit id over the short id and name when you can."
+                },
+                "type": {
+                    "type": "String",
+                    "desc": "Type of id for the group, supported values are `gid` and `group`. Use `gid` for the number ids, and `group` for the vanity url name.",
+                    "default": "gid"
+                }
+            },
+            "result": {
+                "gid": {
+                    "type": "String",
+                    "desc": "Full group id number. Fun trivia, Steam seems to only use the last 32 bits internally. Check out the hexadecimal format of any gid!"
+                },
+                "name": {
+                    "type": "String",
+                    "desc": "Unique group name, locked on group creation. This is NOT THE VANITY URL, and as such DOES NOT WORK FOR GETTING GROUP INFO."
+                },
+                "vanityName": {
+                    "type": "String",
+                    "desc": "The unique group url name, can be changed at any time by group admins"
+                },
+                "summary": {
+                    "type": "String",
+                    "desc": "HTML code for the group description, since this comes from Steam it is safe to be rendered right on your own web pages, however keep in mind that all links are redirected to the Steam link filter"
+                },
+                "members": {
+                    "type": "Integer",
+                    "desc": "Total number of members in the group, slightly smaller than the true number due to private accounts not being included in this count"
+                },
+                "membersReal": {
+                    "type": "Integer",
+                    "desc": "True number of members in the group, although the regular `members` count is more accurate because it doesn't include all the private profiles"
+                },
+                "membersOnline": {
+                    "type": "Integer",
+                    "desc": "Number of members currently online"
+                },
+                "membersGame": {
+                    "type": "Integer",
+                    "desc": "Number of members playing a game"
+                },
+                "membersChat": {
+                    "type": "Integer",
+                    "desc": "Number of members in the group chat room"
+                },
+                "logo": {
+                    "type": "Object",
+                    "desc": "Holds the various urls for the group logo sizes",
+                    "object": {
+                        "small": {
+                            "type": "String",
+                            "desc": "URL for the 32x32 logo"
+                        },
+                        "medium": {
+                            "type": "String",
+                            "desc": "URL for the 64x64 logo"
+                        },
+                        "large": {
+                            "type": "String",
+                            "desc": "URL for the 184x184 logo"
+                        }
+                    }
+                }
+            },
+            "example_call": "getGroupInfo('103582791435315066')",
+            "example_data": {
+                "gid": "103582791435315066",
+                "name": "DINOSOWER1337",
+                "vanityName": "DINOSOWEROfficial",
+                "summary": "Welcome to the group anyone can wear the tag! not like I can stop em :)<br><br>There's only two types of players in dinosower. Cheaters and people who arent better than me.",
+                "members": 415842,
+                "membersReal": 453019,
+                "membersOnline": 24858,
+                "membersGame": 2695,
+                "membersChat": 429,
+                "logo": {
+                    "small": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ea/eafb277c3504bf10fe6d800d96ea074516a47f4e.jpg",
+                    "medium": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ea/eafb277c3504bf10fe6d800d96ea074516a47f4e_medium.jpg",
+                    "large": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ea/eafb277c3504bf10fe6d800d96ea074516a47f4e_full.jpg"
+                }
+            }
         }
     }
 }

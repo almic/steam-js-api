@@ -9,6 +9,8 @@ Returns more detailed information about user profiles; summaries, bans, friends.
 | [GetFriendList](#GetFriendList) | Gets the friends of the Steam user, if public. |
 | [GetPlayerBans](#GetPlayerBans) | Retrieves ban information on the provided Steam IDs. |
 | [GetPlayerSummaries](#GetPlayerSummaries) | Get basic community profile information from the Steam IDs. |
+| [GetUserGroupList](#GetUserGroupList) | All the groups the account is a member of, this includes all game-related groups as well as community made groups. |
+| [ResolveVanityURL](#ResolveVanityURL) | Converts custom account and group names to an id. |
 
 <br />
 
@@ -303,6 +305,104 @@ This would display an object that looks a lot like this one:
             }
         }
     }
+}
+```
+
+## GetUserGroupList
+<sub>[[to top of page]](#ISteamUser)</sub>
+
+All the groups the account is a member of, this includes all game-related groups as well as community made groups.
+### Syntax
+`getUserGroups(steamID)`
+### Parameters
+
+`steamID` *required*
+> Type: `String`  
+>  
+> Steam ID of the user, as a string
+
+
+### Result
+
+> **Array `groups`**  
+> Array of group id strings  
+>  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.getUserGroups('76561198099490962').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "groups": [
+        "3284297",
+        "5165781",
+        "5233424",
+        "5647945",
+        "5791388",
+        "5793658",
+        "8600182",
+        "9958636",
+        "25100141",
+        "33392184",
+        "33650713"
+    ]
+}
+```
+
+## ResolveVanityURL
+<sub>[[to top of page]](#ISteamUser)</sub>
+
+Converts custom account and group names to an id. Please do not use the entire URL, instead extract the actual name from the custom url before calling this function. For Steam accounts, custom urls are `https://steamcommunity.com/id/{{VANITY NAME}}` and for groups is `https://steamcommunity.com/groups/{{VANITY NAME}}`
+
+Do not use the third type: game groups. From the surface it looks like official game groups are not accessible by normal methods, and only show up as outdated web pages with little to no content. Official game groups will probably be deprecated in due Valve time, or may be suddenly thrown at our faces. Either way, I wouldn't recommend using them at all right now, because like I said, you can't even access the group pages by normal methods.
+### Syntax
+`resolveName(name[, type])`
+### Parameters
+
+`name` *required*
+> Type: `String`  
+>  
+> Custom name found in the url of the account or group
+
+`type`
+> Type: `String`  
+> Default: `user`  
+>  
+> Type of name to be resolved, supported values are `user` and `group`. The integer values 1 and 2 can be passed instead.
+
+
+### Result
+
+> **String `id`**  
+> The full Steam ID for users, or the group id for groups  
+>  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.resolveName('almic').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "id": "76561198099490962"
 }
 ```
 

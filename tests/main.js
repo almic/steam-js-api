@@ -18,7 +18,7 @@ async function test(name, func) {
         console.log(' \x1b[32mPassed \x1b[36m%s\x1b[32m (' + Math.floor((process.uptime() - duration) * 1000) + 'ms)\x1b[0m\n', name)
         passed++
     } catch (e) {
-        console.error('   \x1b[31m%s\x1b[0m', `Test ${name} failed with error:\n${e.stack}\n`)
+        console.error('   \x1b[31m%s\x1b[0m', `Test ${name} failed with error:\n${e.stack || util.inspect(e)}\n`)
     }
 }
 
@@ -166,7 +166,7 @@ async function run() {
             assert.ok(player.name, `Expected value 'name' in player object, result was ${util.inspect(player)}`)
             assert.ok(player.realName, `Expected value 'realName' in player object, result was ${util.inspect(player)}`)
             assert.ok(player.url, `Expected value 'url' in player object, result was ${util.inspect(player)}`)
-            assert.ok(typeof player.state === 'number', `Expected value 'state' to be a Number in player object, result was ${util.inspect(player)}`)
+            assert.strictEqual(typeof player.state, 'number', `Expected value 'state' to be a Number in player object, result was ${util.inspect(player)}`)
             assert.ok(player.stateString, `Expected value 'stateString' in player object, result was ${util.inspect(player)}`)
             assert.ok(player.public, `Expected value 'public' to be true in player object, result was ${util.inspect(player)}`)
             assert.ok(player.comments, `Expected value 'comments' to be true in player object, result was ${util.inspect(player)}`)
@@ -174,9 +174,9 @@ async function run() {
             assert.ok(player.offline, `Expected value 'offline' in player object, result was ${util.inspect(player)}`)
             assert.ok(player.community, `Expected value 'community' to be true in player object, result was ${util.inspect(player)}`)
             assert.ok(player.group, `Expected value 'group' to be truthy in player object, result was ${util.inspect(player)}`)
-            assert.ok(typeof player.inGame === 'boolean', `Expected value 'inGame' to be a Boolean in player object, result was ${util.inspect(player)}`)
-            assert.ok(typeof player.appid === 'number', `Expected value 'appid' to be a Number in player object, result was ${util.inspect(player)}`)
-            assert.ok(typeof player.appName === 'string', `Expected value 'appName' to be a String in player object, result was ${util.inspect(player)}`)
+            assert.strictEqual(typeof player.inGame, 'boolean', `Expected value 'inGame' to be a Boolean in player object, result was ${util.inspect(player)}`)
+            assert.strictEqual(typeof player.appid, 'number', `Expected value 'appid' to be a Number in player object, result was ${util.inspect(player)}`)
+            assert.strictEqual(typeof player.appName, 'string', `Expected value 'appName' to be a String in player object, result was ${util.inspect(player)}`)
             assert.ok(player.avatar, `Expected value 'avatar' in player object, result was ${util.inspect(player)}`)
             assert.ok(player.avatar.small, `Expected value 'avatar.small' in player object, result was ${util.inspect(player.avatar)}`)
             assert.ok(player.avatar.medium, `Expected value 'avatar.medium' in player object, result was ${util.inspect(player.avatar)}`)
@@ -188,6 +188,58 @@ async function run() {
             assert.ok(player.location.countryCode !== undefined, `Expected value 'location.countryCode' to be defined in player object, result was ${util.inspect(player.location)}`)
             assert.ok(player.location.stateCode !== undefined, `Expected value 'location.stateCode' to be defined in player object, result was ${util.inspect(player.location)}`)
             assert.ok(player.location.cityCode !== undefined, `Expected value 'location.cityCode' to be defined in player object, result was ${util.inspect(player.location)}`)
+        })
+
+        await test('getUserGroups', async function () {
+            api.setKey(key)
+
+            let result = await api.getUserGroups(steamID)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.ok(data.groups, `Expected 'truthy' groups array, result was ${util.inspect(data)}`)
+            assert.ok(data.groups[0], `Expected 'truthy' first group id, result was ${util.inspect(data)}`)
+        })
+
+        await test('resolveName', async function () {
+            api.setKey(key)
+
+            let result = await api.resolveName('almic')
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.strictEqual(data.id, steamID, `Expected resolved id to match '${steamID}', result was ${util.inspect(data)}`)
+        })
+
+        await test('getGroupInfo', async function () {
+            let result = await api.getGroupInfo('103582791435315066')
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.ok(data.gid, `Expected value 'gid' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.name, `Expected value 'name' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.vanityName, `Expected value 'vanityName' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.summary, `Expected value 'summary' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.members, `Expected value 'members' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.membersReal, `Expected value 'membersReal' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.membersOnline, `Expected value 'membersOnline' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.membersGame, `Expected value 'membersGame' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.membersChat, `Expected value 'membersChat' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.logo, `Expected value 'logo' in group object, result was ${util.inspect(data)}`)
+            assert.ok(data.logo.small, `Expected value 'logo.small' in group object, result was ${util.inspect(data.logo)}`)
+            assert.ok(data.logo.medium, `Expected value 'logo.medium' in group object, result was ${util.inspect(data.logo)}`)
+            assert.ok(data.logo.large, `Expected value 'logo.large' in group object, result was ${util.inspect(data.logo)}`)
+
+            console.log(util.inspect(data, 0, null, 1))
         })
 
     } catch (e) {

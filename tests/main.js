@@ -238,6 +238,67 @@ async function run() {
             assert.ok(data.logo.small, `Expected value 'logo.small' in group object, result was ${util.inspect(data.logo)}`)
             assert.ok(data.logo.medium, `Expected value 'logo.medium' in group object, result was ${util.inspect(data.logo)}`)
             assert.ok(data.logo.large, `Expected value 'logo.large' in group object, result was ${util.inspect(data.logo)}`)
+        })
+
+        await test('getGlobalAchievements', async function () {
+            let result = await api.getGlobalAchievements(730)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.ok(data.achievements, `Expected 'truthy' achievements object, result was ${util.inspect(data)}`)
+            assert.ok(data.achievements.KILLING_SPREE, `Expected 'KILLING_SPREE' in achievements object, result was ${util.inspect(data.achievements)}`)
+        })
+
+        await test('getCurrentPlayers', async function () {
+            let result = await api.getCurrentPlayers(730)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.strictEqual(typeof data.players, 'number', `Expected number of players, result was ${util.inspect(data)}`)
+        })
+
+        await test('getAchievements', async function () {
+            api.setKey(key)
+
+            let result = await api.getAchievements(steamID, 264710)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.strictEqual(typeof data.count, 'number', `Expected 'count' to be a number in data, result was ${util.inspect(data)}`)
+            assert.strictEqual(typeof data.name, 'string', `Expected 'name' to be a string in data, result was ${util.inspect(data)}`)
+            assert.ok(data.achievements, `Expected 'truthy' achievements object, result was ${util.inspect(data)}`)
+            assert.ok(data.achievements.BuildSeamoth, `Expected 'BuildSeamoth' to be in achievements object, result was ${util.inspect(data.achievements)}`)
+            assert.ok(data.achievements.BuildSeamoth.unlocked, `Expected 'BuildSeamoth' to be unlocked in achievements object, result was ${util.inspect(data.achievements.BuildSeamoth)}`)
+        })
+
+        await test('getGameSchema', async function () {
+            api.setKey(key)
+
+            let result = await api.getGameSchema(264710)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.strictEqual(typeof data.statCount, 'number', `Expected 'statCount' to be a number in data, result was ${util.inspect(data)}`)
+            assert.strictEqual(typeof data.achievementCount, 'number', `Expected 'achievementCount' to be a number in data, result was ${util.inspect(data)}`)
+            assert.strictEqual(typeof data.name, 'string', `Expected 'name' to be a string in data, result was ${util.inspect(data)}`)
+            assert.ok(data.achievements, `Expected 'truthy' achievements object, result was ${util.inspect(data)}`)
+            assert.ok(data.achievements.BuildSeamoth, `Expected 'BuildSeamoth' to be in achievements object, result was ${util.inspect(data.achievements)}`)
+            assert.ok(data.achievements.BuildSeamoth.displayName, `Expected 'BuildSeamoth' to have a display name in achievements object, result was ${util.inspect(data.achievements.BuildSeamoth)}`)
+            assert.ok(data.stats, `Expected 'truthy' stats object, result was ${util.inspect(data)}`)
+            assert.ok(data.stats.s1_AllTimeDepth, `Expected 's1_AllTimeDepth' to be in stats object, result was ${util.inspect(data.stats)}`)
+            assert.ok(data.stats.s1_AllTimeDepth.displayName, `Expected 's1_AllTimeDepth' to have a display name in stats object, result was ${util.inspect(data.stats.s1_AllTimeDepth)}`)
 
             console.log(util.inspect(data, 0, null, 1))
         })

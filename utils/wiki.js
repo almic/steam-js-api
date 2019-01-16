@@ -60,12 +60,14 @@ for (page in wiki) {
 
             if (params[param].hasOwnProperty('default')) {
                 data += '['
-                if (!count) data += ', '
                 opts++
             } else {
                 list += ` *required*`
             }
+
+            if (count) data += ', '
             data += param
+            count++
             param = params[param]
 
             list += `\r\n> Type: \`${param.type}\`  \r\n`

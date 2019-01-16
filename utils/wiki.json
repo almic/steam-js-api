@@ -743,6 +743,229 @@
             }
         }
     },
+    "ISteamUserStats": {
+        "desc": "Game statistics related APIs; achievements, scores, stats, etc.",
+        "GetGlobalAchievementPercentagesForApp": {
+            "noKey": true,
+            "desc": "The percentage of app owners with the specific achievements. Not a substitute for actual achievements in the game, as some games have \"ghost\" achievements that can appear in this API, but are not visible in the real achievement list, no longer attainable, or even deleted after initial creation. You can safely assume that any achievements with a 0% unlock rate are \"ghost\" achievements, and should not use them for statistics.",
+            "function": "getGlobalAchievements",
+            "parameters": {
+                "appid": {
+                    "type": "Integer",
+                    "desc": "Steam internal app id, can also be a string"
+                }
+            },
+            "result": {
+                "achievements": {
+                    "type": "Object",
+                    "desc": "Achievement percentages listed by API name. You should ignore any achievements with a 0% unlock rate, read above about \"ghost\" achievements."
+                }
+            },
+            "example_call": "getGlobalAchievements(730)",
+            "example_data": {
+                "achievements": {
+                    "GIVE_DAMAGE_LOW": 86.1,
+                    "KILL_ENEMY_RELOADING": 86.1,
+                    "UNSTOPPABLE_FORCE": 85.3,
+                    "KILL_ENEMY_LOW": 84.4,
+                    "WIN_ROUNDS_LOW": 83,
+                    "KILL_LOW_DAMAGE": 81.4,
+                    "EARN_MONEY_LOW": 80.3,
+                    "IMMOVABLE_OBJECT": 80.3,
+                    "": 0
+                }
+            }
+        },
+        "GetNumberOfCurrentPlayers": {
+            "noKey": true,
+            "desc": "The current number of online players for a specific game.",
+            "function": "getCurrentPlayers",
+            "parameters": {
+                "appid": {
+                    "type": "Integer",
+                    "desc": "Steam internal app id, can also be a string"
+                }
+            },
+            "result": {
+                "players": {
+                    "type": "Integer",
+                    "desc": "Total online players"
+                }
+            },
+            "example_call": "getCurrentPlayers(730)",
+            "example_data": {
+                "players": 569199
+            }
+        },
+        "GetPlayerAchievements": {
+            "desc": "Get game achievement completion stats for a player.",
+            "function": "getAchievements",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                },
+                "appid": {
+                    "type": "Integer",
+                    "desc": "Steam internal app id, can also be a string"
+                }
+            },
+            "result": {
+                "name": {
+                    "type": "String",
+                    "desc": "Full name of the game"
+                },
+                "count": {
+                    "type": "Integer",
+                    "desc": "Total number of achievements in the game"
+                },
+                "achievements": {
+                    "type": "Object",
+                    "desc": "Achievement objects listed by internal achievement name",
+                    "object": {
+                        "unlocked": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the achievement has been unlocked"
+                        },
+                        "time": {
+                            "type": "Integer",
+                            "desc": "Time the achievement was unlocked, in seconds since the epoch."
+                        }
+                    }
+                }
+            },
+            "example_call": "getAchievements('76561198099490962', 264710)",
+            "example_data": {
+                "name": "Subnautica",
+                "count": 4,
+                "achievements": {
+                    "DiveForTheVeryFirstTime": {
+                        "unlocked": true,
+                        "time": 1516378680
+                    },
+                    "RepairAuroraReactor": {
+                        "unlocked": false,
+                        "time": 0
+                    },
+                    "BuildSeamoth": {
+                        "unlocked": true,
+                        "time": 1516777135
+                    },
+                    "HatchCutefish": {
+                        "unlocked": false,
+                        "time": 0
+                    }
+                }
+            }
+        },
+        "GetSchemaForGame": {
+            "desc": "Retrieve detailed information about the stats and achievements for a game. Keep in mind that Steam doesn't seem to publicly display any stats other than achievements, despite it being tracked. Thanks Volvo.",
+            "function": "getGameSchema",
+            "parameters": {
+                "appid": {
+                    "type": "Integer",
+                    "desc": "Steam internal app id, can also be a string"
+                }
+            },
+            "result": {
+                "name": {
+                    "type": "String",
+                    "desc": "Full name of the game"
+                },
+                "statCount": {
+                    "type": "Integer",
+                    "desc": "Total number of tracked stats in the game"
+                },
+                "achievementCount": {
+                    "type": "Integer",
+                    "desc": "Total number of achievements in the game"
+                },
+                "stats": {
+                    "type": "Object",
+                    "desc": "Stat objects listed by internal stat name",
+                    "object": {
+                        "displayName": {
+                            "type": "String",
+                            "desc": "String representation of the stat, is NOT guaranteed to be different from the internal api name"
+                        },
+                        "default": {
+                            "type": "Integer",
+                            "desc": "The default value of the stat"
+                        }
+                    }
+                },
+                "achievements": {
+                    "type": "Object",
+                    "desc": "Achievement objects listed by internal achievement name",
+                    "object": {
+                        "displayName": {
+                            "type": "String",
+                            "desc": "String representation of the achievement, same as the name shown on individual achievement pages"
+                        },
+                        "description": {
+                            "type": "String",
+                            "desc": "String description of the achievement, will be empty if the achievement is hidden. This often describes exactly how to get the achievement, which is why hidden achievements do not return this in the api."
+                        },
+                        "hidden": {
+                            "type": "Boolean",
+                            "desc": "Whether or not the achievement is a secret (hidden) achievement"
+                        },
+                        "icon": {
+                            "type": "String",
+                            "desc": "The full url to the unlocked icon image"
+                        },
+                        "iconLocked": {
+                            "type": "String",
+                            "desc": "The full url to the locked icon image, seems to be standard that this is just the unlocked version in gray-scale color"
+                        }
+                    }
+                }
+            },
+            "example_call": "getGameSchema(264710)",
+            "example_data": {
+                "name": "Subnautica",
+                "statCount": 3,
+                "achievementCount": 3,
+                "stats": {
+                    "s1_AllTimeDepth": {
+                        "displayName": "Max all time depth",
+                        "default": 0
+                    },
+                    "s2_HasTank": {
+                        "displayName": "Player has crafted tank",
+                        "default": 0
+                    },
+                    "s3_FeedbackSubmit": {
+                        "displayName": "Player has submitted feedback",
+                        "default": 0
+                    }
+                },
+                "achievements": {
+                    "DiveForTheVeryFirstTime": {
+                        "displayName": "Getting Your Feet Wet",
+                        "description": "",
+                        "hidden": true,
+                        "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/89b61cdeb0e1b6d22532245ce394f00d0a4277e1.jpg",
+                        "iconLocked": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/680214ffd7727865ea404b897aecbc0f667a9377.jpg"
+                    },
+                    "RepairAuroraReactor": {
+                        "displayName": "Extinction Event Avoided",
+                        "description": "",
+                        "hidden": true,
+                        "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/1c59192a1e1ce720cd3dc77a1ea4e663f1f5516f.jpg",
+                        "iconLocked": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/680214ffd7727865ea404b897aecbc0f667a9377.jpg"
+                    },
+                    "HatchCutefish": {
+                        "displayName": "\"Man's Best Friend\"",
+                        "description": "",
+                        "hidden": true,
+                        "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/7e5b3420b69b9077e7d068dc6f9c646725577599.jpg",
+                        "iconLocked": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/680214ffd7727865ea404b897aecbc0f667a9377.jpg"
+                    }
+                }
+            }
+        }
+    },
     "Special": {
         "desc": "Custom functions that don't use the traditional Steam Web API stuff. As such, they are likely to change in functionality at some point in the future. For now these are safe to use in production, but be warned!",
         "GetGroupInfo": {

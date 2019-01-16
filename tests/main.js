@@ -299,8 +299,6 @@ async function run() {
             assert.ok(data.stats, `Expected 'truthy' stats object, result was ${util.inspect(data)}`)
             assert.ok(data.stats.s1_AllTimeDepth, `Expected 's1_AllTimeDepth' to be in stats object, result was ${util.inspect(data.stats)}`)
             assert.ok(data.stats.s1_AllTimeDepth.displayName, `Expected 's1_AllTimeDepth' to have a display name in stats object, result was ${util.inspect(data.stats.s1_AllTimeDepth)}`)
-
-            console.log(util.inspect(data, 0, null, 1))
         })
 
     } catch (e) {

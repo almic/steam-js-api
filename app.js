@@ -193,6 +193,12 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
         callback = appIDs
         appIDs = null
         moreInfo = true
+    } else if (typeof appIDs === 'boolean') {
+        if (typeof moreInfo === 'function') {
+            callback = moreInfo
+        }
+        moreInfo = appIDs
+        appIDs = null
     } else if (typeof moreInfo === 'function') {
         callback = moreInfo
         moreInfo = true
@@ -241,8 +247,7 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
                     for (index in result.games) {
                         let game = result.games[index]
                         if (!appIDs || appIDs && appIDs.includes(game.appid)) {
-                            data.count++
-                            data.games[index] = {
+                            data.games[data.count] = {
                                 name: game.name || undefined,
                                 appid: game.appid,
                                 playtime: game.playtime_forever,
@@ -251,11 +256,12 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
                             }
 
                             if (moreInfo) {
-                                data.games[index].url_store_header = urls.storeImg(game.appid)
-                                data.games[index].url_app_logo = urls.appImages(game.appid, game.img_logo_url)
-                                data.games[index].url_app_icon = urls.appImages(game.appid, game.img_icon_url)
+                                data.games[data.count].url_store_header = urls.storeImg(game.appid)
+                                data.games[data.count].url_app_logo = urls.appImages(game.appid, game.img_logo_url)
+                                data.games[data.count].url_app_icon = urls.appImages(game.appid, game.img_icon_url)
                             }
 
+                            data.count++
                             if (appIDs && data.count == appIDs.length) break
                         }
                     }

@@ -1,7 +1,9 @@
 utils/
 tests/
 
+json/specs/
 json/locations.json
 json/locations.js
+json/stats.json
 
 env.json

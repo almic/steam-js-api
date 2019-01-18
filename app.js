@@ -1,6 +1,7 @@
 const LOCATIONS = require('./json/locations-min.json')
 const BADGES = require('./json/badges.json')
 const PERSONA = require('./json/persona.json')
+const STATS = require('./json/stats-min.json')
 const https = require('https')
 
 var urls = {
@@ -35,6 +36,27 @@ function badgeUpdate(original, update) {
     }
 
     return original
+}
+
+// Helps with custom stats structures
+function addProp(o, s, v) {
+    if (s.length > 2) {
+        let k = s.shift()
+        if (!(k in o)) {
+            o[k] = addProp({}, s, v)
+        } else {
+            o[k] = addProp(o[k], s, v)
+        }
+    } else if (s.length == 2) {
+        let k = s.shift()
+        if (!(k in o)) {
+            o[k] = {}
+        }
+        o[k][s[0]] = v
+    } else {
+        o[s.shift()] = v
+    }
+    return o
 }
 
 function doRequest(uri, resolve, reject) {
@@ -1227,6 +1249,81 @@ function getGameSchema(appID, callback) {
     }
 }
 
+function getStats(steamID, appID, callback) {
+
+    function run(resolve, reject) {
+        requireKey()
+
+        if (!validateSteamID(steamID)) {
+            let result = {error: 'Steam ID does not appear valid'}
+
+            if (reject) reject(result)
+            else resolve(result)
+        }
+
+        request('ISteamUserStats/GetUserStatsForGame/v2', {key: _key, steamid: steamID, appid: appID}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('playerstats')){
+                result = result.data.playerstats
+
+                let data = {
+                    name: result.gameName,
+                    count: 0,
+                    stats: {}
+                }
+
+                if (STATS.hasOwnProperty(appID)) {
+                    // Custom structure defined
+                    for (index in result.stats) {
+                        let s = result.stats[index]
+                        if (STATS[appID][s.name]) {
+                            // Custom, add data
+                            data.stats = addProp(data.stats, STATS[appID][s.name].name.split('.'), s.value)
+                        } else {
+                            // Unspecified, place inside 'unknown' with original name
+                            if (!data.stats.unknown) {
+                                data.stats.unknown = {}
+                            }
+                            data.stats.unknown[s.name] = s.value
+                        }
+                        data.count++
+                    }
+                } else {
+                    // No custom structure defined, use basic structure
+                    for (index in result.stats) {
+                        let s = result.stats[index]
+                        data.stats[s.name] = s.value
+                        data.count++
+                    }
+                }
+
+                resolve({data})
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+
+                if (reject) reject(result)
+                else resolve(result)
+            }
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
 const api = {}
 api.setKey = setKey
 api.request = request
@@ -1250,6 +1347,7 @@ api.getGlobalAchievements = getGlobalAchievements
 api.getCurrentPlayers = getCurrentPlayers
 api.getAchievements = getAchievements
 api.getGameSchema = getGameSchema
+api.getStats = getStats
 
 // Special
 api.getGroupInfo = getGroupInfo

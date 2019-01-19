@@ -36,43 +36,41 @@ Retrieve detailed information about a community group. Like player summaries but
 
 > **String `gid`**  
 > Full group id number. Fun trivia, Steam seems to only use the last 32 bits internally. Check out the hexadecimal format of any gid!  
->  
+>
 > **String `name`**  
 > Unique group name, locked on group creation. This is NOT THE VANITY URL, and as such DOES NOT WORK FOR GETTING GROUP INFO.  
->  
+>
 > **String `vanityName`**  
 > The unique group url name, can be changed at any time by group admins  
->  
+>
 > **String `summary`**  
 > HTML code for the group description, since this comes from Steam it is safe to be rendered right on your own web pages, however keep in mind that all links are redirected to the Steam link filter  
->  
+>
 > **Integer `members`**  
 > Total number of members in the group, slightly smaller than the true number due to private accounts not being included in this count  
->  
+>
 > **Integer `membersReal`**  
 > True number of members in the group, although the regular `members` count is more accurate because it doesn't include all the private profiles  
->  
+>
 > **Integer `membersOnline`**  
 > Number of members currently online  
->  
+>
 > **Integer `membersGame`**  
 > Number of members playing a game  
->  
+>
 > **Integer `membersChat`**  
 > Number of members in the group chat room  
->  
+>
 > **Object `logo`**  
 > Holds the various urls for the group logo sizes  
 >> **String `small`**  
 >> URL for the 32x32 logo  
->  
+>
 >> **String `medium`**  
 >> URL for the 64x64 logo  
->  
+>
 >> **String `large`**  
 >> URL for the 184x184 logo  
->  
->  
 
 ### Example
 

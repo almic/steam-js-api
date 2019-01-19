@@ -33,7 +33,6 @@ The percentage of app owners with the specific achievements. Not a substitute fo
 
 > **Object `achievements`**  
 > Achievement percentages listed by API name. You should ignore any achievements with a 0% unlock rate, read above about "ghost" achievements.  
->  
 
 ### Example
 
@@ -83,7 +82,6 @@ The current number of online players for a specific game.
 
 > **Integer `players`**  
 > Total online players  
->  
 
 ### Example
 
@@ -126,19 +124,17 @@ Get game achievement completion stats for a player.
 
 > **String `name`**  
 > Full name of the game  
->  
+>
 > **Integer `count`**  
 > Total number of achievements in the game  
->  
+>
 > **Object `achievements`**  
 > Achievement objects listed by internal achievement name  
 >> **Boolean `unlocked`**  
 >> Whether or not the achievement has been unlocked  
->  
+>
 >> **Integer `time`**  
 >> Time the achievement was unlocked, in seconds since the epoch.  
->  
->  
 
 ### Example
 
@@ -196,40 +192,37 @@ Retrieve detailed information about the stats and achievements for a game. Keep 
 
 > **String `name`**  
 > Full name of the game  
->  
+>
 > **Integer `statCount`**  
 > Total number of tracked stats in the game  
->  
+>
 > **Integer `achievementCount`**  
 > Total number of achievements in the game  
->  
+>
 > **Object `stats`**  
 > Stat objects listed by internal stat name  
 >> **String `displayName`**  
 >> String representation of the stat, is NOT guaranteed to be different from the internal api name  
->  
+>
 >> **Integer `default`**  
 >> The default value of the stat  
->  
->  
+>
 > **Object `achievements`**  
 > Achievement objects listed by internal achievement name  
 >> **String `displayName`**  
 >> String representation of the achievement, same as the name shown on individual achievement pages  
->  
+>
 >> **String `description`**  
 >> String description of the achievement, will be empty if the achievement is hidden. This often describes exactly how to get the achievement, which is why hidden achievements do not return this in the api.  
->  
+>
 >> **Boolean `hidden`**  
 >> Whether or not the achievement is a secret (hidden) achievement  
->  
+>
 >> **String `icon`**  
 >> The full url to the unlocked icon image  
->  
+>
 >> **String `iconLocked`**  
 >> The full url to the locked icon image, seems to be standard that this is just the unlocked version in gray-scale color  
->  
->  
 
 ### Example
 

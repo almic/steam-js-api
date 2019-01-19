@@ -1,4 +1,7 @@
-{
+let csgo = {}
+
+csgo.appID = 730
+csgo.structure = {
     "kills": 42799,             // total_kills
     "deaths": 33530,            // total_deaths
     "time": 1773767,            // total_time_played (seconds)
@@ -31,8 +34,8 @@
             "won": 4179,        // total_gg_matches_won
             "played": 5125      // total_gg_matches_played
         },
-        "won": 42               // total_progressive_matches_won
-        "score": 3379           // total_gun_game_contribution_score
+        "won": 42,              // total_progressive_matches_won
+        "score": 3379,          // total_gun_game_contribution_score
         "lastScore": 0          // last_match_gg_contribution_score
     },
     "shots": 711328,            // total_shots_fired
@@ -446,3 +449,8 @@
         "revenges": 0           // last_match_revenges
     }
 }
+
+// MY OWN RESPONSE, EXAMPLE ONLY
+csgo.example = {"name":"ValveTestApp260","count":214,"stats":{"kills":42959,"deaths":33612,"time":1780338,"bombs":{"planted":1056,"defused":295},"rounds":{"won":17840,"pistol":580,"played":28765},"damage":6068789,"money":63585608,"rescues":502,"knife":612,"grenade":141,"gun":{"glock":{"kills":1110,"shots":28008,"hits":5590},"deagle":{"kills":2714,"shots":21090,"hits":5930},"dualies":{"kills":309,"shots":5068,"hits":1309},"fiveseven":{"kills":884,"shots":10505,"hits":2929},"xm1014":{"kills":456,"shots":16518,"hits":3427},"mac10":{"kills":439,"shots":12850,"hits":2663},"ump45":{"kills":1008,"shots":20663,"hits":4639},"p90":{"kills":1251,"shots":39499,"hits":7401},"awp":{"kills":4651,"shots":13214,"hits":5119},"ak47":{"kills":8934,"shots":145820,"hits":29079},"aug":{"kills":749,"shots":10921,"hits":2746},"famas":{"kills":600,"shots":12934,"hits":2815},"g3sg1":{"kills":387,"shots":3338,"hits":719},"m249":{"kills":360,"shots":10843,"hits":1447},"p2000":{"kills":2170,"shots":35007,"hits":8679},"p250":{"hits":4538,"kills":1150,"shots":17763},"sg553":{"kills":1585,"shots":25719,"hits":5248},"scar20":{"hits":970,"kills":539,"shots":3626},"ssg08":{"shots":4444,"hits":1535,"kills":852},"mp7":{"shots":15532,"hits":3700,"kills":642},"mp9":{"kills":298,"shots":8060,"hits":1915},"nova":{"hits":4063,"kills":577,"shots":20228},"negev":{"hits":5118,"kills":1333,"shots":63896},"sawedoff":{"shots":8072,"hits":1571,"kills":259},"bizon":{"shots":13350,"hits":3108,"kills":467},"tec9":{"kills":737,"shots":12279,"hits":2683},"mag7":{"shots":12682,"hits":3013,"kills":448},"m4a1":{"kills":6491,"shots":110824,"hits":25856},"galil":{"kills":504,"shots":10343,"hits":2090},"taser":{"kills":86,"shots":227}},"headshots":17482,"backfire":1662,"map":{"italy":{"rounds":{"won":256,"played":287}},"office":{"rounds":{"won":216,"played":399}},"aztec":{"rounds":{"won":158,"played":165}},"cobble":{"rounds":{"won":182,"played":355}},"dust2":{"rounds":{"won":3039,"played":7291}},"dust":{"rounds":{"won":133,"played":151}},"inferno":{"rounds":{"won":482,"played":985}},"nuke":{"rounds":{"won":197,"played":271}},"train":{"rounds":{"won":191,"played":319},"matches":{"won":7}},"assault":{"rounds":{"played":4}},"lake":{"rounds":{"played":104,"won":44},"matches":{"won":12}},"safehouse":{"rounds":{"played":65,"won":37},"matches":{"won":11}},"sugarcane":{"rounds":{"played":35,"won":33},"matches":{"won":3}},"stmarc":{"rounds":{"played":98,"won":44},"matches":{"won":8}},"bank":{"rounds":{"played":8,"won":8},"matches":{"won":5}},"shortTrain":{"rounds":{"played":293,"won":235},"matches":{"won":89}},"house":{"rounds":{"won":5}},"vertigo":{"rounds":{"won":6,"played":9}},"monastery":{"rounds":{"won":2,"played":5}},"shoots":{"rounds":{"played":48,"won":35},"matches":{"won":14}},"baggage":{"rounds":{"played":10,"won":7},"matches":{"won":7}}},"donated":1370,"windows":121,"flashKill":524,"knifeFight":177,"snipers":2953,"dominations":1284,"brutality":1591,"revenges":435,"hits":148302,"shots":713446,"last":{"winsT":9,"winsCT":12,"wins":16,"players":10,"kills":29,"deaths":13,"mvps":5,"weapon":{"id":7,"shots":118,"hits":34,"kills":12},"damage":3735,"spending":43050,"dominations":0,"revenges":0,"score":55,"rounds":21},"mvps":4136,"demolition":{"bombs":{"planted":40,"defused":15},"won":4147},"gungame":{"rounds":{"won":6058,"played":6682},"matches":{"won":4179,"played":5127},"won":42,"score":3379,"lastScore":0},"matches":{"won":4715,"played":6068},"score":292742,"burns":215,"unknown":{"GI.lesson.csgo_instr_explain_buymenu":16,"GI.lesson.csgo_instr_explain_buyarmor":0,"GI.lesson.csgo_instr_explain_plant_bomb":0,"GI.lesson.csgo_instr_explain_bomb_carrier":1,"GI.lesson.bomb_sites_A":0,"GI.lesson.defuse_planted_bomb":0,"GI.lesson.csgo_instr_explain_follow_bomber":0,"GI.lesson.csgo_instr_explain_pickup_bomb":0,"GI.lesson.csgo_instr_explain_prevent_bomb_pickup":0,"GI.lesson.Csgo_cycle_weapons_kb":16,"GI.lesson.csgo_instr_explain_zoom":16,"GI.lesson.csgo_instr_explain_reload":16,"GI.lesson.tr_explain_plant_bomb":0,"GI.lesson.bomb_sites_B":0,"GI.lesson.version_number":16,"GI.lesson.find_planted_bomb":1,"GI.lesson.csgo_hostage_lead_to_hrz":0,"GI.lesson.csgo_instr_rescue_zone":0,"GI.lesson.csgo_instr_explain_inspect":32}}}
+
+module.exports = csgo

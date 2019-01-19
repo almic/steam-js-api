@@ -38,34 +38,32 @@ Get information about games the user has played within the last 2 weeks.
 
 > **Integer `count`**  
 > Number of returned games  
->  
+>
 > **Array `games`**  
 > Array of objects containing information about recently played games  
 >> **String `name`**  
 >> Full name of the game  
->  
+>
 >> **Integer `appid`**  
 >> Steam internal app id, always unique  
->  
+>
 >> **Integer `playtime`**  
 >> Total game playtime in minutes  
->  
+>
 >> **Integer `playtime_recent`**  
 >> Game playtime in minutes over the last 2 weeks  
->  
+>
 >> **String `url_store`**  
 >> Basic url to store page, url is not canonical (name is not in url)  
->  
+>
 >> **String `url_store_header`**  
 >> Basic url to header image for Steam store page, url stays the same but the resulting image can change frequently  
->  
+>
 >> **String `url_app_logo`**  
 >> Url to app logo, seems to always be 184x69 pixels and never changes  
->  
+>
 >> **String `url_app_icon`**  
 >> Url to app icon, seems to always be 32x32 pixels and never changes  
->  
->  
 
 ### Example
 
@@ -140,34 +138,32 @@ Despite the Web API claiming that free-to-play games are excluded by default, an
 
 > **Integer `count`**  
 > Number of returned games  
->  
+>
 > **Array `games`**  
 > Array of objects containing information about owned games  
 >> **String `name`**  
 >> Full name of the game, only returned if `moreInfo` is `true`  
->  
+>
 >> **Integer `appid`**  
 >> Steam internal app id, always unique  
->  
+>
 >> **Integer `playtime`**  
 >> Total game playtime in minutes  
->  
+>
 >> **Integer `playtime_recent`**  
 >> Game playtime in minutes over the last 2 weeks  
->  
+>
 >> **String `url_store`**  
 >> Basic url to store page, url is not canonical (name is not in url)  
->  
+>
 >> **String `url_store_header`**  
 >> Basic url to header image for Steam store page, url stays the same but the resulting image can change frequently, only returned if `moreInfo` is `true`  
->  
+>
 >> **String `url_app_logo`**  
 >> Url to app logo, seems to always be 184x69 pixels and never changes, only returned if `moreInfo` is `true`  
->  
+>
 >> **String `url_app_icon`**  
 >> Url to app icon, seems to always be 32x32 pixels and never changes, only returned if `moreInfo` is `true`  
->  
->  
 
 ### Example
 
@@ -228,7 +224,6 @@ Get the current Steam Level of the user, and absolutely nothing more.
 
 > **Integer `level`**  
 > Steam level of the user  
->  
 
 ### Example
 
@@ -267,49 +262,45 @@ Get all badges the user currently has, and some detailed level information.
 
 > **Integer `level`**  
 > Steam level of the user  
->  
+>
 > **Integer `xp`**  
 > Total XP the Steam user has  
->  
+>
 > **Integer `level_xp`**  
 > The XP requirement for the user's current Steam level  
->  
+>
 > **Integer `next_level_xp`**  
 > The XP requirement for the next Steam level  
->  
+>
 > **Object `badges`**  
 > Badges by types  
 >> **Object `game`**  
 >> Game badges listed by appids  
 >>> **Integer `appid`**  
 >>> Steam internal app id, always unique  
->>  
+>>
 >>> **Integer `level`**  
 >>> Level of the badge, could be any positive integer, or 0 if only the foil badge was unlocked  
->>  
+>>
 >>> **Integer `earned`**  
 >>> Time the badge was initially level 1, in seconds since the epoch, could be 0 if only the foil badge was unlocked  
->>  
+>>
 >>> **Integer `xp`**  
 >>> Amount of XP the badge is worth, could be 0 if only the foil badge was unlocked  
->>  
+>>
 >>> **Integer `scarcity`**  
 >>> The total number of Steam users with a badge level equal to or higher than this badge level, could be 0 if only the foil badge was unlocked  
->>  
+>>
 >>> **Object `foil`**  
 >>> The foil badge information, could be 0 if the user has not unlocked the foil version. Contains the `level`, `earned`, `xp` and `scarcity` properties  
->>  
->  
+>
 >> **Object `event`**  
 >> Limited time event badges, listed by event tag names. Other than the new `name` property, the badges are identical in structure to game badges  
 >>> **String `name`**  
 >>> Full name of the badge  
->>  
->  
+>
 >> **Object `special`**  
 >> Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appid` or `foil` property  
->  
->  
 
 ### Example
 
@@ -415,17 +406,15 @@ Returns the badge progress for specific task-based badges.
 > Object of quests, listed by quest ids  
 >> **String `name`**  
 >> Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest ids to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!  
->  
+>
 >> **Boolean `completed`**  
 >> Whether or not the task has been completed  
->  
->  
+>
 > **Integer `count`**  
 > Number of quests for this badge  
->  
+>
 > **Integer `completed`**  
 > Number of completed quests for this badge  
->  
 
 ### Example
 

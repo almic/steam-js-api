@@ -334,15 +334,15 @@
         },
         "total_shots_hkp2000": {
             "name": "gun.p2000.shots",
-            "desc": "P2000 shots"
+            "desc": "P2000 & USP-S shots"
         },
         "total_hits_hkp2000": {
             "name": "gun.p2000.hits",
-            "desc": "P2000 hits"
+            "desc": "P2000 & USP-S hits"
         },
         "total_kills_hkp2000": {
             "name": "gun.p2000.kills",
-            "desc": "P2000 kills"
+            "desc": "P2000 & USP-S kills"
         },
         "total_shots_p250": {
             "name": "gun.p250.shots",
@@ -490,15 +490,15 @@
         },
         "total_shots_m4a1": {
             "name": "gun.m4a1.shots",
-            "desc": "M4 shots"
+            "desc": "M4A4 & M4A1-S shots"
         },
         "total_hits_m4a1": {
             "name": "gun.m4a1.hits",
-            "desc": "M4 hits"
+            "desc": "M4A4 & M4A1-S hits"
         },
         "total_kills_m4a1": {
             "name": "gun.m4a1.kills",
-            "desc": "M4 kills"
+            "desc": "M4A4 & M4A1-S kills"
         },
         "total_shots_galilar": {
             "name": "gun.galil.shots",

@@ -10,6 +10,7 @@ Game statistics related APIs; achievements, scores, stats, etc.
 | [GetNumberOfCurrentPlayers](#GetNumberOfCurrentPlayers) | The current number of online players for a specific game. |
 | [GetPlayerAchievements](#GetPlayerAchievements) | Get game achievement completion stats for a player. |
 | [GetSchemaForGame](#GetSchemaForGame) | Retrieve detailed information about the stats and achievements for a game. |
+| [GetUserStatsForGame](#GetUserStatsForGame) | Get game stats for a user. |
 
 <br />
 
@@ -278,6 +279,64 @@ This would display an object that looks a lot like this one:
             "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/7e5b3420b69b9077e7d068dc6f9c646725577599.jpg",
             "iconLocked": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/264710/680214ffd7727865ea404b897aecbc0f667a9377.jpg"
         }
+    }
+}
+```
+
+## GetUserStatsForGame
+<sub>[[to top of page]](#ISteamUserStats)</sub>
+
+Get game stats for a user. These are internally defined by the game developer, and they are responsible for actually updating the stats. Also, Steam lags behind when stats are updated, so you simply can't rely on these stats updating in a timely manner. Trust me, I'm speaking from experience on this.
+
+Please know that certain games have a custom object structure defined, so you need to check these pages for the data point names, rather than what the Steam API says:
+
+* [Counter-Strike: Global Offensive](Stats-CSGO)
+### Syntax
+`getStats(steamID, appid)`
+### Parameters
+
+`steamID` *required*
+> Type: `String`  
+>  
+> Steam ID of the user, as a string
+
+`appid` *required*
+> Type: `Integer`  
+>  
+> Steam internal app id, can also be a string
+
+
+### Result
+
+> **String `name`**  
+> Full name of the game  
+>
+> **Integer `count`**  
+> Total number of stats returned, will likely be less than the number defined in the game schema  
+>
+> **Object `stats`**  
+> Stats listed by their original Web API name. **NOTICE!** Some games have custom object definitions, bulleted above.  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.getStats('76561198099490962', 264710).then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "name": "Subnautica",
+    "count": 2,
+    "stats": {
+        "s1_AllTimeDepth": 84,
+        "s2_HasTank": 1
     }
 }
 ```

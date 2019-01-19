@@ -964,6 +964,43 @@
                     }
                 }
             }
+        },
+        "GetUserStatsForGame": {
+            "desc": "Get game stats for a user. These are internally defined by the game developer, and they are responsible for actually updating the stats. Also, Steam lags behind when stats are updated, so you simply can't rely on these stats updating in a timely manner. Trust me, I'm speaking from experience on this.\r\n\r\nPlease know that certain games have a custom object structure defined, so you need to check these pages for the data point names, rather than what the Steam API says:\r\n\r\n* [Counter-Strike: Global Offensive](Stats-CSGO)",
+            "function": "getStats",
+            "parameters": {
+                "steamID": {
+                    "type": "String",
+                    "desc": "Steam ID of the user, as a string"
+                },
+                "appid": {
+                    "type": "Integer",
+                    "desc": "Steam internal app id, can also be a string"
+                }
+            },
+            "result": {
+                "name": {
+                    "type": "String",
+                    "desc": "Full name of the game"
+                },
+                "count": {
+                    "type": "Integer",
+                    "desc": "Total number of stats returned, will likely be less than the number defined in the game schema"
+                },
+                "stats": {
+                    "type": "Object",
+                    "desc": "Stats listed by their original Web API name. **NOTICE!** Some games have custom object definitions, bulleted above."
+                }
+            },
+            "example_call": "getStats('76561198099490962', 264710)",
+            "example_data": {
+                "name": "Subnautica",
+                "count": 2,
+                "stats": {
+                    "s1_AllTimeDepth": 84,
+                    "s2_HasTank": 1
+                }
+            }
         }
     },
     "Special": {

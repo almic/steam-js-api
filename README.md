@@ -129,6 +129,7 @@ All supported interfaces are listed here. If you can't find one that you want, p
 * [GetNumberOfCurrentPlayers](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetNumberOfCurrentPlayers)
 * [GetPlayerAchievements](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetPlayerAchievements)
 * [GetSchemaForGame](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetSchemaForGame)
+* [GetUserStatsForGame](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetUserStatsForGame)
 
 ## Special
 These are custom functions that don't use the traditional Steam Web API stuff. As such, they might change in functionality at some point in the future. But I doubt it, Volvo has barely touched the Web API for a number of years now, so this stuff should work as long as everything else in this list does.

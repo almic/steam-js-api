@@ -28,9 +28,9 @@
                             "type": "String",
                             "desc": "Full name of the game"
                         },
-                        "appid": {
+                        "appID": {
                             "type": "Integer",
-                            "desc": "Steam internal app id, always unique"
+                            "desc": "Steam internal app ID, always unique"
                         },
                         "playtime": {
                             "type": "Integer",
@@ -65,7 +65,7 @@
                 "games": [
                     {
                         "name": "Counter-Strike: Global Offensive",
-                        "appid": 730,
+                        "appID": 730,
                         "playtime": 61040,
                         "playtime_recent": 264,
                         "url_store": "https://store.steampowered.com/app/730",
@@ -75,7 +75,7 @@
                     },
                     {
                         "name": "Call of Duty: World at War",
-                        "appid": 10090,
+                        "appID": 10090,
                         "playtime": 817,
                         "playtime_recent": 24,
                         "url_store": "https://store.steampowered.com/app/10090",
@@ -118,9 +118,9 @@
                             "type": "String",
                             "desc": "Full name of the game, only returned if `moreInfo` is `true`"
                         },
-                        "appid": {
+                        "appID": {
                             "type": "Integer",
-                            "desc": "Steam internal app id, always unique"
+                            "desc": "Steam internal app ID, always unique"
                         },
                         "playtime": {
                             "type": "Integer",
@@ -155,7 +155,7 @@
                 "games": [
                     {
                         "name": "Subnautica",
-                        "appid": 264710,
+                        "appID": 264710,
                         "playtime": 224,
                         "playtime_recent": 0,
                         "url_store": "https://store.steampowered.com/app/264710",
@@ -165,7 +165,7 @@
                     },
                     {
                         "name": "Counter-Strike: Global Offensive",
-                        "appid": 730,
+                        "appID": 730,
                         "playtime": 61040,
                         "playtime_recent": 264,
                         "url_store": "https://store.steampowered.com/app/730",
@@ -228,11 +228,11 @@
                     "object": {
                         "game": {
                             "type": "Object",
-                            "desc": "Game badges listed by appids",
+                            "desc": "Game badges listed by app IDs",
                             "object": {
-                                "appid": {
+                                "appID": {
                                     "type": "Integer",
-                                    "desc": "Steam internal app id, always unique"
+                                    "desc": "Steam internal app ID, always unique"
                                 },
                                 "level": {
                                     "type": "Integer",
@@ -268,7 +268,7 @@
                         },
                         "special": {
                             "type": "Object",
-                            "desc": "Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appid` or `foil` property"
+                            "desc": "Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appID` or `foil` property"
                         }
                     }
                 }
@@ -282,7 +282,7 @@
                 "badges": {
                     "game": {
                         "730": {
-                            "appid": 730,
+                            "appID": 730,
                             "level": 5,
                             "earned": 1466352436,
                             "xp": 500,
@@ -290,7 +290,7 @@
                             "foil": 0
                         },
                         "506670": {
-                            "appid": 506670,
+                            "appID": 506670,
                             "level": 5,
                             "earned": 1495724426,
                             "xp": 500,
@@ -301,7 +301,7 @@
                     "event": {
                         "summer-2016": {
                             "name": "2016: Summer Sale",
-                            "appid": 480730,
+                            "appID": 480730,
                             "level": 1,
                             "earned": 1467080364,
                             "xp": 100,
@@ -310,7 +310,7 @@
                         },
                         "awards-2017": {
                             "name": "2017: Steam Awards",
-                            "appid": 762800,
+                            "appID": 762800,
                             "level": 22,
                             "earned": 1517712529,
                             "xp": 2200,
@@ -354,11 +354,11 @@
             "result": {
                 "quests": {
                     "type": "Object",
-                    "desc": "Object of quests, listed by quest ids",
+                    "desc": "Object of quests, listed by quest IDs",
                     "object": {
                         "name": {
                             "type": "String",
-                            "desc": "Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest ids to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!"
+                            "desc": "Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest IDs to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!"
                         },
                         "completed": {
                             "type": "Boolean",
@@ -503,7 +503,7 @@
                         },
                         "lastBan": {
                             "type": "Integer",
-                            "desc": "Number of days since the last ban was given to the account, a value of `0` indicates the account recieved a ban *today*"
+                            "desc": "Number of days since the last ban was given to the account, a value of `0` indicates the account received a ban *today*"
                         }
                     }
                 }
@@ -590,13 +590,13 @@
                             "type": "Boolean",
                             "desc": "If the user is currently in a game"
                         },
-                        "appid": {
+                        "appID": {
                             "type": "Integer",
-                            "desc": "If `inGame` is true, then this is the app id of the game being played. If `inGame` is true and this value is 0, then the account is playing a non-Steam game."
+                            "desc": "If `inGame` is true, then this is the app ID of the game being played. If `inGame` is true and this value is 0, then the account is playing a non-Steam game."
                         },
                         "appName": {
                             "type": "String",
-                            "desc": "If `inGame` is true, then this is most likely the name of the game being played. If `appid` is 0, this is the \"extra game info\" from the non-Steam game, and may not be an accurate representation of the true game name."
+                            "desc": "If `inGame` is true, then this is most likely the name of the game being played. If `appID` is 0, this is the \"extra game info\" from the non-Steam game, and may not be an accurate representation of the true game name."
                         },
                         "avatar": {
                             "type": "Object",
@@ -642,7 +642,7 @@
                                 },
                                 "cityCode": {
                                     "type": "Integer",
-                                    "desc": "The city code for the city, seems to be a completely unique id, otherwise this is not standardized and only for internal use"
+                                    "desc": "The city code for the city, seems to be a completely unique ID, otherwise this is not standardized and only for internal use"
                                 }
                             }
                         }
@@ -666,7 +666,7 @@
                         "community": true,
                         "group": "103582791435315066",
                         "inGame": true,
-                        "appid": 730,
+                        "appID": 730,
                         "appName": "Counter-Strike: Global Offensive",
                         "avatar": {
                             "small": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5.jpg",
@@ -697,7 +697,7 @@
             "result": {
                 "groups": {
                     "type": "Array",
-                    "desc": "Array of group id strings"
+                    "desc": "Array of group ID strings"
                 }
             },
             "example_call": "getUserGroups('76561198099490962')",
@@ -718,7 +718,7 @@
             }
         },
         "ResolveVanityURL": {
-            "desc": "Converts custom account and group names to an id. Please do not use the entire URL, instead extract the actual name from the custom url before calling this function. For Steam accounts, custom urls are `https://steamcommunity.com/id/{{VANITY NAME}}` and for groups is `https://steamcommunity.com/groups/{{VANITY NAME}}`\r\n\r\nDo not use the third type: game groups. From the surface it looks like official game groups are not accessible by normal methods, and only show up as outdated web pages with little to no content. Official game groups will probably be deprecated in due Valve time, or may be suddenly thrown at our faces. Either way, I wouldn't recommend using them at all right now, because like I said, you can't even access the group pages by normal methods.",
+            "desc": "Converts custom account and group names to an ID. Please do not use the entire URL, instead extract the actual name from the custom url before calling this function. For Steam accounts, custom urls are `https://steamcommunity.com/id/{{VANITY NAME}}` and for groups is `https://steamcommunity.com/groups/{{VANITY NAME}}`\r\n\r\nDo not use the third type: game groups. From the surface it looks like official game groups are not accessible by normal methods, and only show up as outdated web pages with little to no content. Official game groups will probably be deprecated in due Valve time, or may be suddenly thrown at our faces. Either way, I wouldn't recommend using them at all right now, because like I said, you can't even access the group pages by normal methods.",
             "function": "resolveName",
             "parameters": {
                 "name": {
@@ -734,7 +734,7 @@
             "result": {
                 "id": {
                     "type": "String",
-                    "desc": "The full Steam ID for users, or the group id for groups"
+                    "desc": "The full Steam ID for users, or the group ID for groups"
                 }
             },
             "example_call": "resolveName('almic')",
@@ -750,9 +750,9 @@
             "desc": "The percentage of app owners with the specific achievements. Not a substitute for actual achievements in the game, as some games have \"ghost\" achievements that can appear in this API, but are not visible in the real achievement list, no longer attainable, or even deleted after initial creation. You can safely assume that any achievements with a 0% unlock rate are \"ghost\" achievements, and should not use them for statistics.",
             "function": "getGlobalAchievements",
             "parameters": {
-                "appid": {
+                "appID": {
                     "type": "Integer",
-                    "desc": "Steam internal app id, can also be a string"
+                    "desc": "Steam internal app ID, can also be a string"
                 }
             },
             "result": {
@@ -781,9 +781,9 @@
             "desc": "The current number of online players for a specific game.",
             "function": "getCurrentPlayers",
             "parameters": {
-                "appid": {
+                "appID": {
                     "type": "Integer",
-                    "desc": "Steam internal app id, can also be a string"
+                    "desc": "Steam internal app ID, can also be a string"
                 }
             },
             "result": {
@@ -805,9 +805,9 @@
                     "type": "String",
                     "desc": "Steam ID of the user, as a string"
                 },
-                "appid": {
+                "appID": {
                     "type": "Integer",
-                    "desc": "Steam internal app id, can also be a string"
+                    "desc": "Steam internal app ID, can also be a string"
                 }
             },
             "result": {
@@ -862,9 +862,9 @@
             "desc": "Retrieve detailed information about the stats and achievements for a game. Keep in mind that Steam doesn't seem to publicly display any stats other than achievements, despite it being tracked. Thanks Volvo.",
             "function": "getGameSchema",
             "parameters": {
-                "appid": {
+                "appID": {
                     "type": "Integer",
-                    "desc": "Steam internal app id, can also be a string"
+                    "desc": "Steam internal app ID, can also be a string"
                 }
             },
             "result": {
@@ -973,9 +973,9 @@
                     "type": "String",
                     "desc": "Steam ID of the user, as a string"
                 },
-                "appid": {
+                "appID": {
                     "type": "Integer",
-                    "desc": "Steam internal app id, can also be a string"
+                    "desc": "Steam internal app ID, can also be a string"
                 }
             },
             "result": {
@@ -1011,11 +1011,11 @@
             "parameters": {
                 "appID": {
                     "type": "Integer",
-                    "desc": "Steam internal app id, can also be a string"
+                    "desc": "Steam internal app ID, can also be a string"
                 },
                 "items": {
                     "type": "Object/ Array of Objects",
-                    "desc": "An object or array of objects defining items. They must include a `class` id, and may optionally include an `instance` id to get more specific details about the item."
+                    "desc": "An object or array of objects defining items. They must include a `class` ID, and may optionally include an `instance` ID to get more specific details about the item."
                 }
             },
             "result": {
@@ -1165,7 +1165,7 @@
                                 },
                                 "appID": {
                                     "type": "Integer",
-                                    "desc": "Steam internal app id, can also be a string"
+                                    "desc": "Steam internal app ID, can also be a string"
                                 },
                                 "class": {
                                     "type": "String",
@@ -1292,18 +1292,18 @@
             "parameters": {
                 "id": {
                     "type": "String",
-                    "desc": "Group 64-bit id, short id, or vanity url name. The 64-bit ID is used in just about all places on the Steam site, the vanity name only appears as the URL, and the short id is only visible to group admins and through the [GetUserGroupList](ISteamUser#GetUserGroupList) API. All of these work just the same, however you should favor the 64-bit id over the short id and name when you can."
+                    "desc": "Group 64-bit ID, short ID, or vanity url name. The 64-bit ID is used in just about all places on the Steam site, the vanity name only appears as the URL, and the short ID is only visible to group admins and through the [GetUserGroupList](ISteamUser#GetUserGroupList) API. All of these work just the same, however you should favor the 64-bit ID over the short ID and name when you can."
                 },
                 "type": {
                     "type": "String",
-                    "desc": "Type of id for the group, supported values are `gid` and `group`. Use `gid` for the number ids, and `group` for the vanity url name.",
+                    "desc": "Type of ID for the group, supported values are `gid` and `group`. Use `gid` for the number IDs, and `group` for the vanity url name.",
                     "default": "gid"
                 }
             },
             "result": {
                 "gid": {
                     "type": "String",
-                    "desc": "Full group id number. Fun trivia, Steam seems to only use the last 32 bits internally. Check out the hexadecimal format of any gid!"
+                    "desc": "Full group ID number. Fun trivia, Steam seems to only use the last 32 bits internally. Check out the hexadecimal format of any gid!"
                 },
                 "name": {
                     "type": "String",

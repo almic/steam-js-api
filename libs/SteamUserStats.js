@@ -24,11 +24,11 @@ function addProp(o, s, v) {
     return o
 }
 
-function getGlobalAchievements(appid, callback) {
+function getGlobalAchievements(appID, callback) {
 
     function run(resolve, reject) {
 
-        request('ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2', {gameid: appid}, result => {
+        request('ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2', {gameid: appID}, result => {
             if (result.error) {
                 result = {error: result.error}
 
@@ -70,11 +70,11 @@ function getGlobalAchievements(appid, callback) {
     }
 }
 
-function getCurrentPlayers(appid, callback) {
+function getCurrentPlayers(appID, callback) {
 
     function run(resolve, reject) {
 
-        request('ISteamUserStats/GetNumberOfCurrentPlayers/v1', {appid}, result => {
+        request('ISteamUserStats/GetNumberOfCurrentPlayers/v1', {appid: appID}, result => {
             if (result.error) {
                 result = {error: result.error}
 

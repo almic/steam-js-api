@@ -21,13 +21,13 @@ Game statistics related APIs; achievements, scores, stats, etc.
 
 The percentage of app owners with the specific achievements. Not a substitute for actual achievements in the game, as some games have "ghost" achievements that can appear in this API, but are not visible in the real achievement list, no longer attainable, or even deleted after initial creation. You can safely assume that any achievements with a 0% unlock rate are "ghost" achievements, and should not use them for statistics.
 ### Syntax
-`getGlobalAchievements(appid)`
+`getGlobalAchievements(appID)`
 ### Parameters
 
-`appid` *required*
+`appID` *required*
 > Type: `Integer`  
 >  
-> Steam internal app id, can also be a string
+> Steam internal app ID, can also be a string
 
 
 ### Result
@@ -70,13 +70,13 @@ This would display an object that looks a lot like this one:
 
 The current number of online players for a specific game.
 ### Syntax
-`getCurrentPlayers(appid)`
+`getCurrentPlayers(appID)`
 ### Parameters
 
-`appid` *required*
+`appID` *required*
 > Type: `Integer`  
 >  
-> Steam internal app id, can also be a string
+> Steam internal app ID, can also be a string
 
 
 ### Result
@@ -107,7 +107,7 @@ This would display an object that looks a lot like this one:
 
 Get game achievement completion stats for a player.
 ### Syntax
-`getAchievements(steamID, appid)`
+`getAchievements(steamID, appID)`
 ### Parameters
 
 `steamID` *required*
@@ -115,10 +115,10 @@ Get game achievement completion stats for a player.
 >  
 > Steam ID of the user, as a string
 
-`appid` *required*
+`appID` *required*
 > Type: `Integer`  
 >  
-> Steam internal app id, can also be a string
+> Steam internal app ID, can also be a string
 
 
 ### Result
@@ -180,13 +180,13 @@ This would display an object that looks a lot like this one:
 
 Retrieve detailed information about the stats and achievements for a game. Keep in mind that Steam doesn't seem to publicly display any stats other than achievements, despite it being tracked. Thanks Volvo.
 ### Syntax
-`getGameSchema(appid)`
+`getGameSchema(appID)`
 ### Parameters
 
-`appid` *required*
+`appID` *required*
 > Type: `Integer`  
 >  
-> Steam internal app id, can also be a string
+> Steam internal app ID, can also be a string
 
 
 ### Result
@@ -292,7 +292,7 @@ Please know that certain games have a custom object structure defined, so you ne
 
 * [Counter-Strike: Global Offensive](Stats-CSGO)
 ### Syntax
-`getStats(steamID, appid)`
+`getStats(steamID, appID)`
 ### Parameters
 
 `steamID` *required*
@@ -300,10 +300,10 @@ Please know that certain games have a custom object structure defined, so you ne
 >  
 > Steam ID of the user, as a string
 
-`appid` *required*
+`appID` *required*
 > Type: `Integer`  
 >  
-> Steam internal app id, can also be a string
+> Steam internal app ID, can also be a string
 
 
 ### Result

@@ -44,8 +44,8 @@ Get information about games the user has played within the last 2 weeks.
 >> **String `name`**  
 >> Full name of the game  
 >
->> **Integer `appid`**  
->> Steam internal app id, always unique  
+>> **Integer `appID`**  
+>> Steam internal app ID, always unique  
 >
 >> **Integer `playtime`**  
 >> Total game playtime in minutes  
@@ -84,7 +84,7 @@ This would display an object that looks a lot like this one:
     "games": [
         {
             "name": "Counter-Strike: Global Offensive",
-            "appid": 730,
+            "appID": 730,
             "playtime": 61040,
             "playtime_recent": 264,
             "url_store": "https://store.steampowered.com/app/730",
@@ -94,7 +94,7 @@ This would display an object that looks a lot like this one:
         },
         {
             "name": "Call of Duty: World at War",
-            "appid": 10090,
+            "appID": 10090,
             "playtime": 817,
             "playtime_recent": 24,
             "url_store": "https://store.steampowered.com/app/10090",
@@ -144,8 +144,8 @@ Despite the Web API claiming that free-to-play games are excluded by default, an
 >> **String `name`**  
 >> Full name of the game, only returned if `moreInfo` is `true`  
 >
->> **Integer `appid`**  
->> Steam internal app id, always unique  
+>> **Integer `appID`**  
+>> Steam internal app ID, always unique  
 >
 >> **Integer `playtime`**  
 >> Total game playtime in minutes  
@@ -184,7 +184,7 @@ This would display an object that looks a lot like this one:
     "games": [
         {
             "name": "Subnautica",
-            "appid": 264710,
+            "appID": 264710,
             "playtime": 224,
             "playtime_recent": 0,
             "url_store": "https://store.steampowered.com/app/264710",
@@ -194,7 +194,7 @@ This would display an object that looks a lot like this one:
         },
         {
             "name": "Counter-Strike: Global Offensive",
-            "appid": 730,
+            "appID": 730,
             "playtime": 61040,
             "playtime_recent": 264,
             "url_store": "https://store.steampowered.com/app/730",
@@ -275,9 +275,9 @@ Get all badges the user currently has, and some detailed level information.
 > **Object `badges`**  
 > Badges by types  
 >> **Object `game`**  
->> Game badges listed by appids  
->>> **Integer `appid`**  
->>> Steam internal app id, always unique  
+>> Game badges listed by app IDs  
+>>> **Integer `appID`**  
+>>> Steam internal app ID, always unique  
 >>
 >>> **Integer `level`**  
 >>> Level of the badge, could be any positive integer, or 0 if only the foil badge was unlocked  
@@ -300,7 +300,7 @@ Get all badges the user currently has, and some detailed level information.
 >>> Full name of the badge  
 >
 >> **Object `special`**  
->> Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appid` or `foil` property  
+>> Steam specific badges, each with a very unique way of earning/ leveling, listed by tag names. Identical to event badges, but they have no `appID` or `foil` property  
 
 ### Example
 
@@ -324,7 +324,7 @@ This would display an object that looks a lot like this one:
     "badges": {
         "game": {
             "730": {
-                "appid": 730,
+                "appID": 730,
                 "level": 5,
                 "earned": 1466352436,
                 "xp": 500,
@@ -332,7 +332,7 @@ This would display an object that looks a lot like this one:
                 "foil": 0
             },
             "506670": {
-                "appid": 506670,
+                "appID": 506670,
                 "level": 5,
                 "earned": 1495724426,
                 "xp": 500,
@@ -343,7 +343,7 @@ This would display an object that looks a lot like this one:
         "event": {
             "summer-2016": {
                 "name": "2016: Summer Sale",
-                "appid": 480730,
+                "appID": 480730,
                 "level": 1,
                 "earned": 1467080364,
                 "xp": 100,
@@ -352,7 +352,7 @@ This would display an object that looks a lot like this one:
             },
             "awards-2017": {
                 "name": "2017: Steam Awards",
-                "appid": 762800,
+                "appID": 762800,
                 "level": 22,
                 "earned": 1517712529,
                 "xp": 2200,
@@ -403,9 +403,9 @@ Returns the badge progress for specific task-based badges.
 ### Result
 
 > **Object `quests`**  
-> Object of quests, listed by quest ids  
+> Object of quests, listed by quest IDs  
 >> **String `name`**  
->> Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest ids to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!  
+>> Always 'unknown'. This will eventually contain the description of the task once a map is created to connect quest IDs to their actual tasks. You can support development of this feature by finding the `quests.json` file inside the `json` directory in the repository code!  
 >
 >> **Boolean `completed`**  
 >> Whether or not the task has been completed  

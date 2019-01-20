@@ -80,7 +80,7 @@ Get a list of the most recent trades. This only returns trades connected to the 
 >>> Number of these items being received, will only be more than 1 if the item type is a currency (like gems)  
 >>
 >>> **Integer `appID`**  
->>> Steam internal app id, can also be a string  
+>>> Steam internal app ID, can also be a string  
 >>
 >>> **String `class`**  
 >>> Unique class ID for the item, often enough to uniquely identify an item  

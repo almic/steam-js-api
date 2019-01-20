@@ -56,7 +56,7 @@ function getRecentlyPlayedGames(steamID, count, callback) {
                         data.count++
                         data.games[index] = {
                             name: game.name,
-                            appid: game.appid,
+                            appID: game.appid,
                             playtime: game.playtime_forever,
                             playtime_recent: game.playtime_2weeks,
                             url_store: urls.storePage(game.appid),
@@ -154,7 +154,7 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
                         if (!appIDs || appIDs && appIDs.includes(game.appid)) {
                             data.games[data.count] = {
                                 name: game.name || undefined,
-                                appid: game.appid,
+                                appID: game.appid,
                                 playtime: game.playtime_forever,
                                 playtime_recent: game.playtime_2weeks || 0,
                                 url_store: urls.storePage(game.appid)
@@ -282,7 +282,7 @@ function getBadges(steamID, callback) {
                                 // Foil version, update incase normal already added
                                 data.badges.event[event.tag] = badgeUpdate(data.badges.event[event.tag], {
                                     name: event.name,
-                                    appid: badge.appid,
+                                    appID: badge.appid,
                                     level: 0,
                                     earned: 0,
                                     xp: 0,
@@ -299,7 +299,7 @@ function getBadges(steamID, callback) {
                                 // Normal version, update incase foil already added
                                 data.badges.event[event.tag] = badgeUpdate(data.badges.event[event.tag], {
                                     name: event.name,
-                                    appid: badge.appid,
+                                    appID: badge.appid,
                                     level: badge.level,
                                     earned: badge.completion_time,
                                     xp: badge.xp,
@@ -312,7 +312,7 @@ function getBadges(steamID, callback) {
                             if (badge.border_color) {
                                 // Foil version, update
                                 data.badges.game[badge.appid] = badgeUpdate(data.badges.game[badge.appid], {
-                                    appid: badge.appid,
+                                    appID: badge.appid,
                                     level: 0,
                                     earned: 0,
                                     xp: 0,
@@ -327,7 +327,7 @@ function getBadges(steamID, callback) {
                             } else {
                                 // Normal version, update
                                 data.badges.game[badge.appid] = badgeUpdate(data.badges.game[badge.appid], {
-                                    appid: badge.appid,
+                                    appID: badge.appid,
                                     level: badge.level,
                                     earned: badge.completion_time,
                                     xp: badge.xp,

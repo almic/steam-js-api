@@ -25,12 +25,12 @@ The Steam Web API goes through each item one at a time, and stops giving results
 `appID` *required*
 > Type: `Integer`  
 >  
-> Steam internal app id, can also be a string
+> Steam internal app ID, can also be a string
 
 `items` *required*
 > Type: `Object/ Array of Objects`  
 >  
-> An object or array of objects defining items. They must include a `class` id, and may optionally include an `instance` id to get more specific details about the item.
+> An object or array of objects defining items. They must include a `class` ID, and may optionally include an `instance` ID to get more specific details about the item.
 
 
 ### Result

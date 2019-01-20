@@ -23,19 +23,19 @@ Retrieve detailed information about a community group. Like player summaries but
 `id` *required*
 > Type: `String`  
 >  
-> Group 64-bit id, short id, or vanity url name. The 64-bit ID is used in just about all places on the Steam site, the vanity name only appears as the URL, and the short id is only visible to group admins and through the [GetUserGroupList](ISteamUser#GetUserGroupList) API. All of these work just the same, however you should favor the 64-bit id over the short id and name when you can.
+> Group 64-bit ID, short ID, or vanity url name. The 64-bit ID is used in just about all places on the Steam site, the vanity name only appears as the URL, and the short ID is only visible to group admins and through the [GetUserGroupList](ISteamUser#GetUserGroupList) API. All of these work just the same, however you should favor the 64-bit ID over the short ID and name when you can.
 
 `type`
 > Type: `String`  
 > Default: `gid`  
 >  
-> Type of id for the group, supported values are `gid` and `group`. Use `gid` for the number ids, and `group` for the vanity url name.
+> Type of ID for the group, supported values are `gid` and `group`. Use `gid` for the number IDs, and `group` for the vanity url name.
 
 
 ### Result
 
 > **String `gid`**  
-> Full group id number. Fun trivia, Steam seems to only use the last 32 bits internally. Check out the hexadecimal format of any gid!  
+> Full group ID number. Fun trivia, Steam seems to only use the last 32 bits internally. Check out the hexadecimal format of any gid!  
 >
 > **String `name`**  
 > Unique group name, locked on group creation. This is NOT THE VANITY URL, and as such DOES NOT WORK FOR GETTING GROUP INFO.  

@@ -10,7 +10,7 @@ Returns more detailed information about user profiles; summaries, bans, friends.
 | [GetPlayerBans](#GetPlayerBans) | Retrieves ban information on the provided Steam IDs. |
 | [GetPlayerSummaries](#GetPlayerSummaries) | Get basic community profile information from the Steam IDs. |
 | [GetUserGroupList](#GetUserGroupList) | All the groups the account is a member of, this includes all game-related groups as well as community made groups. |
-| [ResolveVanityURL](#ResolveVanityURL) | Converts custom account and group names to an id. |
+| [ResolveVanityURL](#ResolveVanityURL) | Converts custom account and group names to an ID. |
 
 <br />
 
@@ -124,7 +124,7 @@ Retrieves ban information on the provided Steam IDs. Notice that is PLURAL. You 
 >> Number of Game bans on the account. Game bans are not VAC bans, they are manually given to a player by the developer of the game they got banned on.  
 >
 >> **Integer `lastBan`**  
->> Number of days since the last ban was given to the account, a value of `0` indicates the account recieved a ban *today*  
+>> Number of days since the last ban was given to the account, a value of `0` indicates the account received a ban *today*  
 
 ### Example
 
@@ -213,11 +213,11 @@ Get basic community profile information from the Steam IDs. Notice that is PLURA
 >> **Boolean `inGame`**  
 >> If the user is currently in a game  
 >
->> **Integer `appid`**  
->> If `inGame` is true, then this is the app id of the game being played. If `inGame` is true and this value is 0, then the account is playing a non-Steam game.  
+>> **Integer `appID`**  
+>> If `inGame` is true, then this is the app ID of the game being played. If `inGame` is true and this value is 0, then the account is playing a non-Steam game.  
 >
 >> **String `appName`**  
->> If `inGame` is true, then this is most likely the name of the game being played. If `appid` is 0, this is the "extra game info" from the non-Steam game, and may not be an accurate representation of the true game name.  
+>> If `inGame` is true, then this is most likely the name of the game being played. If `appID` is 0, this is the "extra game info" from the non-Steam game, and may not be an accurate representation of the true game name.  
 >
 >> **Object `avatar`**  
 >> Holds the various urls for the avatar sizes  
@@ -248,7 +248,7 @@ Get basic community profile information from the Steam IDs. Notice that is PLURA
 >>> The state code for the state, for some countries this is the official abbreviation (i.e. Alaska state code is `AK`) but for most this is just a random internal code  
 >>
 >>> **Integer `cityCode`**  
->>> The city code for the city, seems to be a completely unique id, otherwise this is not standardized and only for internal use  
+>>> The city code for the city, seems to be a completely unique ID, otherwise this is not standardized and only for internal use  
 
 ### Example
 
@@ -280,7 +280,7 @@ This would display an object that looks a lot like this one:
             "community": true,
             "group": "103582791435315066",
             "inGame": true,
-            "appid": 730,
+            "appID": 730,
             "appName": "Counter-Strike: Global Offensive",
             "avatar": {
                 "small": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d92bde555a21e7e5074b5cdb8ed733e088cad1c5.jpg",
@@ -317,7 +317,7 @@ All the groups the account is a member of, this includes all game-related groups
 ### Result
 
 > **Array `groups`**  
-> Array of group id strings  
+> Array of group ID strings  
 
 ### Example
 
@@ -353,7 +353,7 @@ This would display an object that looks a lot like this one:
 ## ResolveVanityURL
 <sub>[[to top of page]](#ISteamUser)</sub>
 
-Converts custom account and group names to an id. Please do not use the entire URL, instead extract the actual name from the custom url before calling this function. For Steam accounts, custom urls are `https://steamcommunity.com/id/{{VANITY NAME}}` and for groups is `https://steamcommunity.com/groups/{{VANITY NAME}}`
+Converts custom account and group names to an ID. Please do not use the entire URL, instead extract the actual name from the custom url before calling this function. For Steam accounts, custom urls are `https://steamcommunity.com/id/{{VANITY NAME}}` and for groups is `https://steamcommunity.com/groups/{{VANITY NAME}}`
 
 Do not use the third type: game groups. From the surface it looks like official game groups are not accessible by normal methods, and only show up as outdated web pages with little to no content. Official game groups will probably be deprecated in due Valve time, or may be suddenly thrown at our faces. Either way, I wouldn't recommend using them at all right now, because like I said, you can't even access the group pages by normal methods.
 ### Syntax
@@ -375,7 +375,7 @@ Do not use the third type: game groups. From the surface it looks like official 
 ### Result
 
 > **String `id`**  
-> The full Steam ID for users, or the group id for groups  
+> The full Steam ID for users, or the group ID for groups  
 
 ### Example
 

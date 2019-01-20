@@ -1,4 +1,4 @@
-# IPlayerServices
+# IPlayerService
 
 Specifically playtime, owned games, badges, and Steam level. For player summaries, bans and friend list, go to [ISteamUser](ISteamUser)
 
@@ -15,7 +15,7 @@ Specifically playtime, owned games, badges, and Steam level. For player summarie
 <br />
 
 ## GetRecentlyPlayedGames
-<sub>[[to top of page]](#IPlayerServices)</sub>
+<sub>[[to top of page]](#IPlayerService)</sub>
 
 Get information about games the user has played within the last 2 weeks.
 ### Syntax
@@ -107,7 +107,7 @@ This would display an object that looks a lot like this one:
 ```
 
 ## GetOwnedGames
-<sub>[[to top of page]](#IPlayerServices)</sub>
+<sub>[[to top of page]](#IPlayerService)</sub>
 
 Retrieve a list of all games the user has ever bought or installed (free-to-play). This list is seemingly not sorted in any way at all. This will likely not match the user's current library, as some may have installed a free-to-play game, never played it, and then uninstalled it. Even then, that free-to-play game will forever be included as an "owned game."
 
@@ -207,7 +207,7 @@ This would display an object that looks a lot like this one:
 ```
 
 ## GetSteamLevel
-<sub>[[to top of page]](#IPlayerServices)</sub>
+<sub>[[to top of page]](#IPlayerService)</sub>
 
 Get the current Steam Level of the user, and absolutely nothing more.
 ### Syntax
@@ -245,7 +245,7 @@ This would display an object that looks a lot like this one:
 ```
 
 ## GetBadges
-<sub>[[to top of page]](#IPlayerServices)</sub>
+<sub>[[to top of page]](#IPlayerService)</sub>
 
 Get all badges the user currently has, and some detailed level information.
 ### Syntax
@@ -381,7 +381,7 @@ This would display an object that looks a lot like this one:
 ```
 
 ## GetCommunityBadgeProgress
-<sub>[[to top of page]](#IPlayerServices)</sub>
+<sub>[[to top of page]](#IPlayerService)</sub>
 
 Returns the badge progress for specific task-based badges.
 ### Syntax

@@ -1,5 +1,5 @@
 {
-    "IPlayerServices": {
+    "IPlayerService": {
         "desc": "Specifically playtime, owned games, badges, and Steam level. For player summaries, bans and friend list, go to [ISteamUser](ISteamUser)",
         "GetRecentlyPlayedGames": {
             "desc": "Get information about games the user has played within the last 2 weeks.",

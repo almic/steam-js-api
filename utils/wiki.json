@@ -401,7 +401,7 @@
         }
     },
     "ISteamUser": {
-        "desc": "Returns more detailed information about user profiles; summaries, bans, friends. For Steam level, badges, games, and playtime, go to [IPlayerServices](IPlayerServices)",
+        "desc": "Returns more detailed information about user profiles; summaries, bans, friends. For Steam level, badges, games, and playtime, go to [IPlayerService](IPlayerService)",
         "GetFriendList": {
             "desc": "Gets the friends of the Steam user, if public.",
             "function": "getFriendList",

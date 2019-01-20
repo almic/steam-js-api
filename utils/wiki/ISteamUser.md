@@ -1,6 +1,6 @@
 # ISteamUser
 
-Returns more detailed information about user profiles; summaries, bans, friends. For Steam level, badges, games, and playtime, go to [IPlayerServices](IPlayerServices)
+Returns more detailed information about user profiles; summaries, bans, friends. For Steam level, badges, games, and playtime, go to [IPlayerService](IPlayerService)
 
 <br />
 

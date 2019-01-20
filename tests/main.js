@@ -336,6 +336,56 @@ async function run() {
             assert.ok(data.stats.s2_HasTank, `Expected 's2_HasTank' to be in stats object, result was ${util.inspect(data.stats)}`)
         })
 
+        await test('getTradeHistory', async function () {
+            api.setKey(key)
+
+            let result = await api.getTradeHistory(3, false, true)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.strictEqual(data.count, 3, `Expected to have 3 trades, result was ${data.count}`)
+            assert.ok(data.hasMore, `Expected 'hasMore' to be true, result was ${data.hasMore}`)
+            assert.ok(data.trades, `Expected 'truthy' trades array, result was ${util.inspect(data)}`)
+            assert.ok(data.trades[0], `Expected first object in trades array, result was ${util.inspect(data.trades)}`)
+            assert.ok(data.trades[0].id, `Expected 'id' in first trade object, result was ${util.inspect(data.trades[0])}`)
+            assert.ok(data.trades[0].other, `Expected 'other' in first trade object, result was ${util.inspect(data.trades[0])}`)
+        })
+
+        await test('getItemInfo', async function () {
+            api.setKey(key)
+
+            let items = [
+                {class: '2419118169', instance: '188530170'},
+                {class: '2735394074'}
+            ]
+
+            let result = await api.getItemInfo(730, items)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+            let data = result.data
+
+            assert.strictEqual(data.count, 2, `Expected to have 2 items, result was ${data.count}`)
+            assert.ok(data.items, `Expected 'truthy' items object, result was ${data.hasMore}`)
+
+            for (index in items) {
+                let item = items[index]
+                let name = item.class + (item.instance ? '_' + item.instance : '')
+
+                assert.ok(data.items[name], `Expected to find '${name}' in items, result was ${util.inspect(data.items)}`)
+
+                item = data.items[name]
+
+                assert.ok(item.name, `Expected 'name' in item '${name}', result was ${util.inspect(item)}`)
+                assert.ok(item.nameColor, `Expected 'nameColor' in item '${name}', result was ${util.inspect(item)}`)
+                assert.ok(item.icon, `Expected 'icon' in item '${name}', result was ${util.inspect(item)}`)
+            }
+        })
+
     } catch (e) {
         console.error(e)
     }

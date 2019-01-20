@@ -1003,6 +1003,286 @@
             }
         }
     },
+    "ISteamEconomy": {
+        "desc": "Steam economy item related stuff. Be sure to look at [IEconService](IEconService) for trading stuff.",
+        "GetAssetClassInfo": {
+            "desc": "Access item specific details by `class` and `instance` IDs. You can pass any objects that have a `class` ID, and you can use `instance` IDs for more specific details on a certain item. Items returned from [GetTradeHistory](ISteamEconomy#GetTradeHistory) can be passed directly to this function!\r\n\r\nThe Steam Web API goes through each item one at a time, and stops giving results as soon as an item can't be located. I.e.: You pass 10 items, and all items except the 4th item are valid, however because the 4th failed, Steam returns immediately and only 3 items are in the response.\r\n\r\n*NOTE:* If you only pass a single item, the result will be that item object itself, rather than being an object with a `count` and `items` object.",
+            "function": "getItemInfo",
+            "parameters": {
+                "appID": {
+                    "type": "Integer",
+                    "desc": "Steam internal app id, can also be a string"
+                },
+                "items": {
+                    "type": "Object/ Array of Objects",
+                    "desc": "An object or array of objects defining items. They must include a `class` id, and may optionally include an `instance` id to get more specific details about the item."
+                }
+            },
+            "result": {
+                "count": {
+                    "type": "Integer",
+                    "desc": "Total number of items returned. If this is less than the number passed, then one of the items failed. **Only included if more than one item was requested.**"
+                },
+                "items": {
+                    "type": "Object",
+                    "desc": "Item objects listed by their `class` ID. If an `instance` ID was passed for a certain item, then that name is `{{class}}_{{instance}}`. **Only included if more than one item was requested.**",
+                    "object": {
+                        "name": {
+                            "type": "String",
+                            "desc": "Short name of the item"
+                        },
+                        "nameColor": {
+                            "type": "String",
+                            "desc": "Hexadecimal color that the name should be shown as"
+                        },
+                        "type": {
+                            "type": "String",
+                            "desc": "Specific type of the item. Can be used for categorizing items."
+                        },
+                        "marketName": {
+                            "type": "String",
+                            "desc": "Name shown in the market, exact search name"
+                        },
+                        "marketHash": {
+                            "type": "String",
+                            "desc": "URL form of the market name"
+                        },
+                        "marketUrl": {
+                            "type": "String",
+                            "desc": "Full URL to the market page for this kind of item"
+                        },
+                        "tradable": {
+                            "type": "Boolean",
+                            "desc": "Whether this kind of item is tradable"
+                        },
+                        "marketable": {
+                            "type": "Boolean",
+                            "desc": "Whether this kind of item is marketable"
+                        },
+                        "commodity": {
+                            "type": "Boolean",
+                            "desc": "Whether this kind of item is a commodity, meaning all items are technically identical"
+                        },
+                        "tradeRestriction": {
+                            "type": "Integer",
+                            "desc": "Number of days this item will not be tradable after buying from the market or receiving in a trade"
+                        },
+                        "icon": {
+                            "type": "String",
+                            "desc": "URL to an icon for this item. A size can be appended to the end like `200x200` to get a specific size image, where the smallest dimensions will match."
+                        }
+                    }
+                }
+            },
+            "example_call": "getItemInfo(730, {class: '2735394074'})",
+            "example_data": {
+                "name": "AUG | Stymphalian",
+                "nameColor": "D2D2D2",
+                "type": "Classified Rifle",
+                "marketName": "AUG | Stymphalian (Factory New)",
+                "marketHash": "AUG | Stymphalian (Factory New)",
+                "marketUrl": "https://steamcommunity.com/market/listings/undefined/AUG | Stymphalian (Factory New)",
+                "tradable": true,
+                "marketable": true,
+                "commodity": false,
+                "tradeRestriction": 7,
+                "icon": "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot6-iFABz7PLddgJR-MW7hIiKm_71PYTTn3lV-_p9g-7J4bP5iUazrl1sa23zd4KQJlQ_YlCB-la8xuu8h5S5vMzJwXpi7HUl4H2LnRLkhxhNcKUx0ob1nNaW/"
+            }
+        }
+    },
+    "IEconService": {
+        "desc": "Trading specific interface. Be sure to look at [ISteamEconomy](ISteamEconomy) for item specific stuff.",
+        "GetTradeHistory": {
+            "desc": "Get a list of the most recent trades. This only returns trades connected to the account using the API key. Since you have to have a Steam account to get an API key, the trades will only be ones for the account connected.",
+            "function": "getTradeHistory",
+            "parameters": {
+                "trades": {
+                    "type": "Integer",
+                    "desc": "Maximum number of trades to return. Steam limits you to 500 trades at a time, and if `moreInfo` is true, this drops to 100 trades at a time. The library will automatically apply this limit for you if you go over it.",
+                    "default": 10
+                },
+                "moreInfo": {
+                    "type": "Boolean",
+                    "desc": "Whether to retrieved more details about each item, specifically everything that [GetAssetClassInfo](ISteamEconomy#GetAssetClassInfo) returns, but without the extra calls",
+                    "default": false
+                },
+                "includeTotal": {
+                    "type": "Boolean",
+                    "desc": "Whether to return the total number of successful trades the account has in the history. If `includeFailed` is true, this will be the total of all trades created.",
+                    "default": false
+                },
+                "includeFailed": {
+                    "type": "Boolean",
+                    "desc": "Whether to include failed trades in the results",
+                    "default": false
+                },
+                "fromTime": {
+                    "type": "Number",
+                    "desc": "Timestamp (seconds since epoch) to search for trades, any trades made at or before this time are returned. Value of `0` is invalid and will be ignored.",
+                    "default": 0
+                }
+            },
+            "result": {
+                "hasMore": {
+                    "type": "Boolean",
+                    "desc": "If there are more trades available after the last trade returned in this call"
+                },
+                "count": {
+                    "type": "Integer",
+                    "desc": "Number of trade objects returned, could be smaller than the amount requested if all trades matching the criteria have been returned"
+                },
+                "total": {
+                    "type": "Integer",
+                    "desc": "Total number of trades associated with the account. Only returned if `includeTotal` is true."
+                },
+                "trades": {
+                    "type": "Array",
+                    "desc": "Array of trade objects",
+                    "object": {
+                        "id": {
+                            "type": "String",
+                            "desc": "The unique trade ID for this trade, is guaranteed to be unique"
+                        },
+                        "status": {
+                            "type": "Integer",
+                            "desc": "The status of this trade"
+                        },
+                        "other": {
+                            "type": "String",
+                            "desc": "The Steam ID of the other account in the trade"
+                        },
+                        "created": {
+                            "type": "Integer",
+                            "desc": "Time the trade was created, in seconds since the epoch"
+                        },
+                        "received": {
+                            "type": "Array",
+                            "desc": "Array of item objects being received in the trade",
+                            "object": {
+                                "amount": {
+                                    "type": "Integer",
+                                    "desc": "Number of these items being received, will only be more than 1 if the item type is a currency (like gems)"
+                                },
+                                "appID": {
+                                    "type": "Integer",
+                                    "desc": "Steam internal app id, can also be a string"
+                                },
+                                "class": {
+                                    "type": "String",
+                                    "desc": "Unique class ID for the item, often enough to uniquely identify an item"
+                                },
+                                "instance": {
+                                    "type": "String",
+                                    "desc": "Unique instance ID for the item, truly identifies an item when combined with the class ID"
+                                },
+                                "assetID": {
+                                    "type": "String",
+                                    "desc": "Steam internal item ID, used to identify items during a trade, and is renewed every time the item changes inventories"
+                                },
+                                "newAssetID": {
+                                    "type": "String",
+                                    "desc": "The new asset ID of the item after trading, can be used to add this specific item to future trades"
+                                },
+                                "details": {
+                                    "type": "Object",
+                                    "desc": "Additional details for the item, only returned if `moreInfo` is true",
+                                    "object": {
+                                        "name": {
+                                            "type": "String",
+                                            "desc": "Short name of the item"
+                                        },
+                                        "nameColor": {
+                                            "type": "String",
+                                            "desc": "Hexadecimal color that the name should be shown as"
+                                        },
+                                        "type": {
+                                            "type": "String",
+                                            "desc": "Specific type of the item. Can be used for categorizing items."
+                                        },
+                                        "marketName": {
+                                            "type": "String",
+                                            "desc": "Name shown in the market, exact search name"
+                                        },
+                                        "marketHash": {
+                                            "type": "String",
+                                            "desc": "URL form of the market name"
+                                        },
+                                        "marketUrl": {
+                                            "type": "String",
+                                            "desc": "Full URL to the market page for this kind of item"
+                                        },
+                                        "tradable": {
+                                            "type": "Boolean",
+                                            "desc": "Whether this kind of item is tradable"
+                                        },
+                                        "marketable": {
+                                            "type": "Boolean",
+                                            "desc": "Whether this kind of item is marketable"
+                                        },
+                                        "commodity": {
+                                            "type": "Boolean",
+                                            "desc": "Whether this kind of item is a commodity, meaning all items are technically identical"
+                                        },
+                                        "tradeRestriction": {
+                                            "type": "Integer",
+                                            "desc": "Number of days this item will not be tradable after buying from the market or receiving in a trade"
+                                        },
+                                        "icon": {
+                                            "type": "String",
+                                            "desc": "URL to an icon for this item. A size can be appended to the end like `200x200` to get a specific size image, where the smallest dimensions will match."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "given": {
+                            "type": "Array",
+                            "desc": "Array of item objects being given in the trade, structurally identical to `received` array above"
+                        }
+                    }
+                }
+            },
+            "example_call": "getTradeHistory(1, true)",
+            "example_data": {
+                "hasMore": true,
+                "count": 1,
+                "total": 397,
+                "trades": [
+                    {
+                        "id": "2167811088932369944",
+                        "status": 3,
+                        "other": "76561198190833690",
+                        "created": 1537325181,
+                        "received": [],
+                        "given": [
+                            {
+                                "amount": 1,
+                                "appID": 730,
+                                "class": "3016071886",
+                                "instance": "236997301",
+                                "assetID": "14850090609",
+                                "newAssetID": "14857676921",
+                                "details": {
+                                    "name": "London 2018 Dust II Souvenir Package",
+                                    "nameColor": "D2D2D2",
+                                    "type": "Base Grade Container",
+                                    "marketName": "London 2018 Dust II Souvenir Package",
+                                    "marketHash": "London 2018 Dust II Souvenir Package",
+                                    "marketUrl": "https://steamcommunity.com/market/listings/730/London 2018 Dust II Souvenir Package",
+                                    "tradable": true,
+                                    "marketable": true,
+                                    "commodity": false,
+                                    "currency": false,
+                                    "tradeRestriction": 7,
+                                    "icon": "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsX1J6IQtZ5Or0czhwwfzFfgJG6eOygZOfxbmlN7qGzzpV7MMj2u3Hod2i3VewqhI5Nzryd4KQIQc5ZQmD-gfswbzum9bi61mnJtm8/"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
     "Special": {
         "desc": "Custom functions that don't use the traditional Steam Web API stuff. As such, they are likely to change in functionality at some point in the future. For now these are safe to use in production, but be warned!",
         "GetGroupInfo": {

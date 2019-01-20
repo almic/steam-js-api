@@ -3,7 +3,9 @@ const https = require('https')
 var urls = {
     appImages: (id, img) => { return `https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${id}/${img}.jpg` },
     storePage: (id) => { return `https://store.steampowered.com/app/${id}` },
-    storeImg: (id) => { return `https://steamcdn-a.akamaihd.net/steam/apps/${id}/header.jpg` }
+    storeImg: (id) => { return `https://steamcdn-a.akamaihd.net/steam/apps/${id}/header.jpg` },
+    econImg: (id, size) => { return `https://steamcommunity-a.akamaihd.net/economy/image/${id}/${size}` },
+    econUrl: (appid, name) => { return `https://steamcommunity.com/market/listings/${appid}/${name}` }
 }
 
 function validateSteamID(steamID) {

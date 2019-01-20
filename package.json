@@ -1,6 +1,6 @@
 {
   "name": "steam-js-api",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Simple Javascript API wrapper for Steam Web API and CSGO.",
   "main": "app.js",
   "scripts": {

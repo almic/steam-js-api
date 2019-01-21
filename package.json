@@ -1,6 +1,6 @@
 {
   "name": "steam-js-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple Javascript API wrapper for Steam Web API and CSGO.",
   "main": "app.js",
   "scripts": {
@@ -22,5 +22,7 @@
     "url": "https://github.com/almic/steam-js-api/issues"
   },
   "homepage": "https://github.com/almic/steam-js-api#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "dotenv": "^6.2.0"
+  }
 }

@@ -3,7 +3,8 @@ const api = require ('./../app.js')
 const assert = require('assert')
 const util = require('util')
 
-const key = require('./../env.json').key
+require('dotenv').config()
+const key = process.env.key
 const steamID = '76561198099490962'
 
 let count = 0
@@ -55,10 +56,10 @@ async function run() {
 
             for (index in result.data.games) {
                 let game = result.data.games[index]
-                if (!appIDs.includes(game.appid)) {
-                    throw new assert.AssertionError({message: `Expected app id ${game.appid} to be one of ${appIDs}`, actual: false, expected: true})
+                if (!appIDs.includes(game.appID)) {
+                    throw new assert.AssertionError({message: `Expected app ID ${game.appID} to be one of ${appIDs}`, actual: false, expected: true})
                 }
-                assert.ok(game.name, `Expected name for game ${game.appid}, got ${JSON.stringify(game.name)} instead`)
+                assert.ok(game.name, `Expected name for game ${game.appID}, got ${JSON.stringify(game.name)} instead`)
             }
         })
 
@@ -88,12 +89,12 @@ async function run() {
             let badges = player.badges
 
             assert.ok(badges.game, `Expected 'truthy' game object, result was ${util.inspect(badges)}`)
-            assert.ok(badges.game[730], `Expected app id '730' to be in game object, result was ${util.inspect(badges.game)}`)
-            assert.strictEqual(badges.game[730].appid, 730, `Expected app id '730' to be in the '730' object, result was ${util.inspect(badges.game[730])}`)
+            assert.ok(badges.game[730], `Expected app ID '730' to be in game object, result was ${util.inspect(badges.game)}`)
+            assert.strictEqual(badges.game[730].appID, 730, `Expected app ID '730' to be in the '730' object, result was ${util.inspect(badges.game[730])}`)
 
             assert.ok(badges.event, `Expected 'truthy' event object, result was ${util.inspect(badges)}`)
             assert.ok(badges.event['winter-2018'], `Expected 'winter-2018' to be in event object, result was ${util.inspect(badges.event)}`)
-            assert.strictEqual(badges.event['winter-2018'].appid, 991980, `Expected app id '991980' to be in 'winter-2018' object, result was ${util.inspect(badges.event['winter-2018'])}`)
+            assert.strictEqual(badges.event['winter-2018'].appID, 991980, `Expected app ID '991980' to be in 'winter-2018' object, result was ${util.inspect(badges.event['winter-2018'])}`)
 
             assert.ok(badges.special, `Expected 'truthy' special object, result was ${util.inspect(badges)}`)
             assert.ok(badges.special.years, `Expected 'years' to be in special object, result was ${util.inspect(badges.special)}`)
@@ -128,7 +129,7 @@ async function run() {
             assert.ok(data.count, `Expected positive friend count, result was ${util.inspect(data)}`)
             assert.ok(data.friends, `Expected 'truthy' friends array, result was ${util.inspect(data)}`)
             assert.ok(data.friends[0], `Expected first friend in array, result was ${util.inspect(data.friends)}`)
-            assert.ok(data.friends[0].steamID, `Expected steam id for first friend, result was ${util.inspect(data.friends[0])}`)
+            assert.ok(data.friends[0].steamID, `Expected steam ID for first friend, result was ${util.inspect(data.friends[0])}`)
         })
 
         await test('getPlayerBans', async function () {
@@ -175,7 +176,7 @@ async function run() {
             assert.ok(player.community, `Expected value 'community' to be true in player object, result was ${util.inspect(player)}`)
             assert.ok(player.group, `Expected value 'group' to be truthy in player object, result was ${util.inspect(player)}`)
             assert.strictEqual(typeof player.inGame, 'boolean', `Expected value 'inGame' to be a Boolean in player object, result was ${util.inspect(player)}`)
-            assert.strictEqual(typeof player.appid, 'number', `Expected value 'appid' to be a Number in player object, result was ${util.inspect(player)}`)
+            assert.strictEqual(typeof player.appID, 'number', `Expected value 'appID' to be a Number in player object, result was ${util.inspect(player)}`)
             assert.strictEqual(typeof player.appName, 'string', `Expected value 'appName' to be a String in player object, result was ${util.inspect(player)}`)
             assert.ok(player.avatar, `Expected value 'avatar' in player object, result was ${util.inspect(player)}`)
             assert.ok(player.avatar.small, `Expected value 'avatar.small' in player object, result was ${util.inspect(player.avatar)}`)
@@ -201,7 +202,7 @@ async function run() {
             let data = result.data
 
             assert.ok(data.groups, `Expected 'truthy' groups array, result was ${util.inspect(data)}`)
-            assert.ok(data.groups[0], `Expected 'truthy' first group id, result was ${util.inspect(data)}`)
+            assert.ok(data.groups[0], `Expected 'truthy' first group ID, result was ${util.inspect(data)}`)
         })
 
         await test('resolveName', async function () {

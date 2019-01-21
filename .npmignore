@@ -6,4 +6,5 @@ json/locations.json
 json/locations.js
 json/stats.json
 
-env.json
+.env
+.travis.yml

@@ -1,7 +1,15 @@
 # steam-js-api
-A simple and clean API wrapper for the Steamworks Web API, specializing in providing great documentation and straight-forward results. The Steamworks Web API is very inconsistent, this wrapper fixes that by normalizing parameters and responses into predictable formats.
+[![Version](https://img.shields.io/github/release/almic/steam-js-api.svg?label=version)](https://github.com/almic/steam-js-api/releases)
+[![Build Status](https://travis-ci.org/almic/steam-js-api.svg?branch=master)](https://travis-ci.org/almic/steam-js-api)
+[![Downloads](https://img.shields.io/npm/dw/steam-js-api.svg)](https://npmjs.com/package/steam-js-api)
 
-This project was initially created to access specific parts of the Steamworks Web API, and as such it doesn't yet offer every single interface right now. However, the full public Steamworks Web API will be added in future releases.
+```
+npm install steam-js-api
+```
+
+A simple and clean API wrapper for the Steamworks Web API, specializing in providing great documentation and straight-forward results. The Steamworks Web API is very inconsistent, this wrapper fixes that by normalizing parameters and responses into predictable, more usable formats.
+
+The project is still growing, but it includes the most important parts from the Steamworks Web API. However, the full public Steamworks Web API will be added in future releases. Plans for implementing a full trading and inventory system are also on the horizon.
 
 ### Table of Contents
 
@@ -15,6 +23,8 @@ This project was initially created to access specific parts of the Steamworks We
     * **[IPlayerService](#iplayerservice)**
     * **[ISteamUser](#isteamuser)**
     * **[ISteamUserStats](#isteamuserstats)**
+    * **[IEconService](#ieconservice)**
+    * **[ISteamEconomy](#isteameconomy)**
     * **[Special](#special)**
 4. **[FAQ](#faq)**
 5. **[License](#license)**
@@ -111,6 +121,7 @@ api.request('ISteamNews/GetNewsForApp/v2', {appid: '730'}, res => {
 All supported interfaces are listed here. If you can't find one that you want, please use the above example to get the basic JSON response until the interface is officially supported. Almost all supported interfaces have unique object structures to allow easier access to data. You can find out the exact structure by copying the examples and running them, or by checking the [wiki](https://github.com/almic/steam-js-api/wiki).
 
 ## IPlayerService
+Specifically playtime, owned games, badges, and Steam level.
 * [GetBadges](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetBadges)
 * [GetCommunityBadgeProgress](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetCommunityBadgeProgress)
 * [GetOwnedGames](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetOwnedGames)
@@ -118,6 +129,7 @@ All supported interfaces are listed here. If you can't find one that you want, p
 * [GetSteamLevel](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetSteamLevel)
 
 ## ISteamUser
+Returns more detailed information about user profiles; summaries, bans, friends.
 * [GetFriendList](https://github.com/almic/steam-js-api/wiki/ISteamUser#GetFriendList)
 * [GetPlayerBans](https://github.com/almic/steam-js-api/wiki/ISteamUser#GetPlayerBans)
 * [GetPlayerSummaries](https://github.com/almic/steam-js-api/wiki/ISteamUser#GetPlayerSummaries)
@@ -125,11 +137,21 @@ All supported interfaces are listed here. If you can't find one that you want, p
 * [ResolveVanityURL](https://github.com/almic/steam-js-api/wiki/ISteamUser#ResolveVanityURL)
 
 ## ISteamUserStats
+Game statistics related APIs; achievements, scores, stats, etc.
 * [GetGlobalAchievement...](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetGlobalAchievementPercentagesForApp)
 * [GetNumberOfCurrentPlayers](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetNumberOfCurrentPlayers)
 * [GetPlayerAchievements](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetPlayerAchievements)
 * [GetSchemaForGame](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetSchemaForGame)
 * [GetUserStatsForGame](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetUserStatsForGame)
+
+## IEconService
+Trading specific interface.
+* [GetTradeHistory](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeHistory)
+
+## ISteamEconomy
+Steam economy item related stuff.
+* [GetAssetClassInfo](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetClassInfo)
+
 
 ## Special
 These are custom functions that don't use the traditional Steam Web API stuff. As such, they might change in functionality at some point in the future. But I doubt it, Volvo has barely touched the Web API for a number of years now, so this stuff should work as long as everything else in this list does.
@@ -151,6 +173,11 @@ These are custom functions that don't use the traditional Steam Web API stuff. A
 >     items = res.data.newsitems
 > })
 > ```
+
+### What is the goal?
+> The main goal of the project is to improve the existing Steamworks Web API, essentially by reformatting it and making it easier to work with. The existing documentation is lacking in many areas, and this project aims to fix it.
+>
+> Another big goal is to keep everything simple and focused into one library; avoiding dependencies. In sacrificing some initial development time, the library is much smaller and easier to build upon.
 
 ### Extra Files/ Scripts?
 > For the real attentive people, this repository has some scripts I wrote myself to streamline some development tasks. Obviously, these aren't included in the installed NPM package. Feel free to use them if you want, they come under the exact same license as everything else.

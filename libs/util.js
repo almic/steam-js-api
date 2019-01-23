@@ -26,6 +26,10 @@ function doRequest(uri, resolve, reject) {
         }
         if (statusCode !== 200) {
             response.error = `Request failed with status code ${statusCode}.`
+
+            if (statusCode === 503) {
+                response.error += ' Steam may be down temporarily, you should try again later.'
+            }
         } else if (!isJson && !isXml) {
             response.error = `Invalid content type, expected 'application/json' or 'text/xml' but received ${contentType}.`
         }

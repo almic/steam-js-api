@@ -387,6 +387,23 @@ async function run() {
             }
         })
 
+        await test('getGameItemPrices', async function () {
+            api.setKey(key)
+
+            let result = await api.getGameItemPrices(730)
+
+            assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+            assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+            let data = result.data
+            assert.ok(data.count, `Expected positive item count, result was ${util.inspect(data)}`)
+            assert.ok(data.items, `Expected 'truthy' items object, result was ${util.inspect(data)}`)
+            assert.ok(data.items[0], `Expected first item in object, result was ${util.inspect(data.items)}`)
+            let item = data.items[0]
+            assert.ok(item.prices, `Expected 'prices' object in item, result was ${util.inspect(item)}`)
+            assert.ok(item.name, `Expected 'name' in item, result was ${util.inspect(item)}`)
+            assert.ok(item.class, `Expected 'class' in item, result was ${util.inspect(item)}`)
+            assert.ok(item.date, `Expected 'date' in item, result was ${util.inspect(item)}`)
+        })
     } catch (e) {
         console.error(e)
     }

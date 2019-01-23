@@ -41,7 +41,8 @@ const EconService = require('./libs/EconService.js')
 api.getTradeHistory = EconService.getTradeHistory
 
 const SteamEconomy = require('./libs/SteamEconomy.js')
-api.getItemInfo = SteamEconomy.getItemInfo
+api.getItemInfo       = SteamEconomy.getItemInfo
+api.getGameItemPrices = SteamEconomy.getGameItemPrices
 
 const Special = require('./libs/Special.js')
 api.getGroupInfo = Special.getGroupInfo

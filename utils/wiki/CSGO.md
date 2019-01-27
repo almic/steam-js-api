@@ -15,14 +15,14 @@ And to make things even simpler, you may be able to do `const api = require('ste
 ### Functions Available
 Use these like you normally would, but don't pass the `appID` parameter.
 #### ISteamUserStats
-* [getGlobalAchievements(callback)](SteamUserStats#getGlobalAchievements)
-* [getCurrentPlayers(callback)](SteamUserStats#getCurrentPlayers)
-* [getAchievements(steamID, callback)](SteamUserStats#getAchievements)
-* [getGameSchema(callback)](SteamUserStats#getGameSchema)
-* [getStats(steamID, callback)](SteamUserStats#getStats)
+* [getGlobalAchievements(callback)](ISteamUserStats#GetGlobalAchievementPercentagesForApp)
+* [getCurrentPlayers(callback)](ISteamUserStats#GetNumberOfCurrentPlayers)
+* [getAchievements(steamID, callback)](ISteamUserStats#GetPlayerAchievements)
+* [getGameSchema(callback)](ISteamUserStats#GetSchemaForGame)
+* [getStats(steamID, callback)](ISteamUserStats#GetUserStatsForGame)
 #### ISteamEconomy
-* [getItemInfo(callback)](SteamEconomy#getItemInfo)
-* [getGameItemPrices(callback)](SteamEconomy#getGameItemPrices)
+* [getItemInfo(callback)](ISteamEconomy#GetAssetClassInfo)
+* [getGameItemPrices(callback)](ISteamEconomy#GetAssetPrices)
 
 <br />
 

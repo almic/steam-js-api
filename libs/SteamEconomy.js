@@ -152,7 +152,7 @@ function getGameItemPrices(appID, currencyFilter, callback) {
                 result = result.data.result
                 let data = {
                     count: 0,
-                    items: {}
+                    items: []
                 }
 
                 for (index in result.assets) {

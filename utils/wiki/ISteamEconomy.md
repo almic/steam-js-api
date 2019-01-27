@@ -7,6 +7,7 @@ Steam economy item related stuff. Be sure to look at [IEconService](IEconService
 | Method | Description |
 | :--- | :--- |
 | [GetAssetClassInfo](#GetAssetClassInfo) | Access item specific details by `class` and `instance` IDs. |
+| [GetAssetPrices](#GetAssetPrices) | Find prices of purchasable in-game items. |
 
 <br />
 
@@ -99,6 +100,111 @@ This would display an object that looks a lot like this one:
     "commodity": false,
     "tradeRestriction": 7,
     "icon": "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot6-iFABz7PLddgJR-MW7hIiKm_71PYTTn3lV-_p9g-7J4bP5iUazrl1sa23zd4KQJlQ_YlCB-la8xuu8h5S5vMzJwXpi7HUl4H2LnRLkhxhNcKUx0ob1nNaW/"
+}
+```
+
+## GetAssetPrices
+<sub>[[to top of page]](#ISteamEconomy)</sub>
+
+Find prices of purchasable in-game items. Only works for economy appIDs, calling this with games that have no in-game purchasable items will certainly result in errors.
+### Syntax
+`getGameItemPrices(appID[, currencyFilter])`
+### Parameters
+
+`appID` *required*
+> Type: `Integer`  
+>  
+> Steam internal app ID, can also be a string
+
+`currencyFilter`
+> Type: `String`  
+> Default: `false`  
+>  
+> The 3-letter currency code to return, for example 'USD' or 'JPY'. Boolean `false` or empty string returns all prices.
+
+
+### Result
+
+> **Integer `count`**  
+> Number of items returned  
+>
+> **Array `items`**  
+> Array of item objects  
+>> **String `class`**  
+>> Unique class ID for the item, often enough to uniquely identify an item  
+>
+>> **String `name`**  
+>> Not actually the name of the item, but you can use the `class` in a call to `getItemInfo()` to get a reliable name  
+>
+>> **String `date`**  
+>> Likely meant for the game, such as creating limited time offers or such. Seems to be a string conversion from a unix timestamp, as sometimes the date of the epoch appears here, signalling a unix timestamp of `0`, which for all intents and purposes is a useless value.  
+>
+>> **Object `prices`**  
+>> Prices listed by the 3-letter currency code, all prices are in the smallest division of the currency. For example, USD is represented by cents, so a value of `299` really means `$2.99`. **Notice:** sometimes the invalid `Unknown` currency appears, you should ignore that.  
+>
+>> **Object `pricesOriginal`**  
+>> **May not be defined**. The "original" prices of the items, used in-game to show discounted prices. If you are representing this visually, you should check that the "original" price is actually less than the current price, as most of the time the "original" and current price are actually the same.  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.getGameItemPrices(730).then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "count": 3,
+    "items": [
+        {
+            "class": "3106078545",
+            "name": "1375",
+            "date": "2018-11-29",
+            "prices": {
+                "USD": 249,
+                "GBP": 199,
+                "EUR": 220,
+                "RUB": 17000,
+                "BRL": 979,
+                "Unknown": 0,
+                "JPY": 27500
+            }
+        },
+        {
+            "class": "2948967440",
+            "name": "1374",
+            "date": "2018-06-07",
+            "prices": {
+                "USD": 249,
+                "GBP": 199,
+                "EUR": 220,
+                "RUB": 17000,
+                "BRL": 979,
+                "Unknown": 0,
+                "JPY": 27500
+            }
+        },
+        {
+            "class": "2727231383",
+            "name": "1373",
+            "date": "2017-12-20",
+            "prices": {
+                "USD": 249,
+                "GBP": 199,
+                "EUR": 220,
+                "RUB": 17000,
+                "BRL": 979,
+                "Unknown": 0,
+                "JPY": 27500
+            }
+        }
+    ]
 }
 ```
 

@@ -1,6 +1,56 @@
 const {urls, request} = require('./util.js')
 const {requireKey} = require('./../app.js')
 
+function buildAssetArray(assets, details) {
+    if (!Array.isArray(assets) || assets.length === 0)
+        return []
+
+    let l = []
+    for (a in assets) {
+        let it = assets[a]
+        l[a] = {
+            amount: Number(it.amount),
+            appID: it.appid,
+            class: it.classid,
+            instance: it.instanceid,
+            assetID: it.assetid,
+            newAssetID: it.new_assetid,
+        }
+        // Add details
+        if (details) {
+            l[a].details = details[`${it.appid}_${it.classid}_${it.instanceid}`] || {}
+        }
+    }
+    // Sort array by appID, class
+    l.sort((a,b)=>(a.appID>b.appID)?1:(b.appID>a.appID)?-1:(a.class>b.class)?1:(b.class>a.class)?-1:0)
+    return l
+}
+
+function buildDescriptions(descriptions) {
+    if (!Array.isArray(descriptions) || descriptions.length === 0)
+        return {}
+
+    let desc = {}
+    for (index in descriptions) {
+        let d = descriptions[index]
+        desc[`${d.appid}_${d.classid}_${d.instanceid}`] = {
+            name: d.name,
+            nameColor: d.name_color,
+            type: d.type,
+            marketName: d.market_name,
+            marketHash: d.market_hash_name,
+            marketUrl: urls.econUrl(d.appid, d.market_hash_name),
+            tradable: d.tradable,
+            marketable: d.marketable,
+            commodity: d.commodity,
+            currency: d.currency,
+            tradeRestriction: d.market_tradable_restriction,
+            icon: urls.econImg(d.icon_url_large || d.icon_url, '')
+        }
+    }
+    return desc
+}
+
 // There is a "start_after_tradeid" parameter, but Volvo was stupid and it can only ever remove
 // that specific trade from the start of the list. And it REQUIRES the "start_after_time" to work!!!
 // So thanks, Volvo.
@@ -76,39 +126,20 @@ function getTradeHistory(trades, moreInfo, includeTotal, includeFailed, fromTime
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
                 result = result.data.response
-                let data = {
-                    hasMore: result.more,
-                    count: 0
-                }
-
-                if (includeTotal && typeof result.total_trades === 'number')
-                    data.total = result.total_trades
-
-                data.trades = []
-
-                // Build list of descriptions first, if applicable
-                let desc = {}
-                if (moreInfo && result.descriptions && result.descriptions.length > 0) {
-                    for (index in result.descriptions) {
-                        let d = result.descriptions[index]
-                        desc[`${d.appid}_${d.classid}_${d.instanceid}`] = {
-                            name: d.name,
-                            nameColor: d.name_color,
-                            type: d.type,
-                            marketName: d.market_name,
-                            marketHash: d.market_hash_name,
-                            marketUrl: urls.econUrl(d.appid, d.market_hash_name),
-                            tradable: d.tradable,
-                            marketable: d.marketable,
-                            commodity: d.commodity,
-                            currency: d.currency,
-                            tradeRestriction: d.market_tradable_restriction,
-                            icon: urls.econImg(d.icon_url_large || d.icon_url, '')
-                        }
-                    }
-                }
 
                 if (result.trades && result.trades.length > 0) {
+                    let data = {
+                        hasMore: result.more,
+                        count: 0
+                    }
+
+                    if (includeTotal && typeof result.total_trades === 'number')
+                        data.total = result.total_trades
+
+                    data.trades = []
+
+                    let desc = buildDescriptions(result.descriptions)
+
                     for (index in result.trades) {
                         let t = result.trades[index]
                         data.trades[data.count] = {
@@ -116,67 +147,22 @@ function getTradeHistory(trades, moreInfo, includeTotal, includeFailed, fromTime
                             status: t.status,
                             other: t.steamid_other,
                             created: t.time_init,
-                            received: [],
-                            given: []
+                            received: buildAssetArray(t.assets_received, desc),
+                            given: buildAssetArray(t.assets_given, desc)
                         }
-
-                        // Build received and given sorted list
-                        let r = []
-                        let g = []
-                        if (t.assets_received && t.assets_received.length > 0) {
-                            for (a in t.assets_received) {
-                                let it = t.assets_received[a]
-                                r[a] = {
-                                    amount: Number(it.amount),
-                                    appID: it.appid,
-                                    class: it.classid,
-                                    instance: it.instanceid,
-                                    assetID: it.assetid,
-                                    newAssetID: it.new_assetid,
-                                }
-                                // Add details
-                                if (moreInfo) {
-                                    r[a].details = desc[`${it.appid}_${it.classid}_${it.instanceid}`] || {}
-                                }
-                            }
-                            // Sort array by appID, class
-                            r.sort((a,b)=>(a.appID>b.appID)?1:(b.appID>a.appID)?-1:(a.class>b.class)?1:(b.class>a.class)?-1:0)
-                        }
-
-                        if (t.assets_given && t.assets_given.length > 0) {
-                            for (b in t.assets_given) {
-                                let it = t.assets_given[b]
-                                g[b] = {
-                                    amount: Number(it.amount),
-                                    appID: it.appid,
-                                    class: it.classid,
-                                    instance: it.instanceid,
-                                    assetID: it.assetid,
-                                    newAssetID: it.new_assetid,
-                                }
-                                // Add details
-                                if (moreInfo) {
-                                    g[b].details = desc[`${it.appid}_${it.classid}_${it.instanceid}`] || {}
-                                }
-                            }
-                            // Sort array by appID, class
-                            g.sort((a,b)=>(a.appID>b.appID)?1:(b.appID>a.appID)?-1:(a.class>b.class)?1:(b.class>a.class)?-1:0)
-                        }
-
-                        data.trades[data.count].received = r
-                        data.trades[data.count].given = g
-
                         data.count++
                     }
+                    resolve({data})
+                    return
+                } else {
+                    result = {error: 'No trade data returned. Data may have still been returned.', data: result}
                 }
-
-                resolve({data})
             } else {
                 result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
-
-                if (reject) reject(result)
-                else resolve(result)
             }
+
+            if (reject) reject(result)
+            else resolve(result)
         })
     }
 
@@ -189,14 +175,73 @@ function getTradeHistory(trades, moreInfo, includeTotal, includeFailed, fromTime
     }
 }
 
-// Due to dumb Volvo, it doesn't seem that any other interfaces work. Trust me, I tried.
-// It's impossible to get specific trade offers using the web api, somehow they broke it.
-// Sorry but the best way to work around this is to track trades yourself and save them to a DB
-// You can also call this with 500 trades at a time, no descriptions, until you find the trade,
-// and if you need descriptions then make another call with the same fromTime as the trade time.
+// Due to dumb Volvo, the API to get individual trade details is not in the official documentation,
+// but instead tucked away in another API. Thanks Volvo.
+function getTradeOffer(tradeID, moreInfo, callback) {
+
+    if (typeof moreInfo === 'function') {
+        callback = moreInfo
+        moreInfo = false
+    }
+
+    moreInfo = Number(Boolean(moreInfo))
+
+    function run(resolve, reject) {
+        let _key = requireKey()
+
+        request('IEconService/GetTradeStatus/v1', {key: _key, tradeid: tradeID, get_descriptions: moreInfo}, result => {
+            if (result.error) {
+                result = {error: result.error}
+
+                if (reject) reject(result)
+                else resolve(result)
+
+                return
+            }
+
+            if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
+                result = result.data.response
+
+                if (result.trades && result.trades[0]) {
+                    let data = {}
+                    let desc = buildDescriptions(result.descriptions)
+
+                    let t = result.trades[0]
+                    data = {
+                        id: t.tradeid,
+                        status: t.status,
+                        other: t.steamid_other,
+                        created: t.time_init,
+                        received: buildAssetArray(t.assets_received, desc),
+                        given: buildAssetArray(t.assets_given, desc)
+                    }
+
+                    resolve({data})
+                } else {
+                    result = {error: 'No trade data returned. Data may have still been returned.', data: result}
+                }
+            } else {
+                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+            }
+
+            if (reject) reject(result)
+            else resolve(result)
+        })
+    }
+
+    if (typeof callback === 'function') {
+        run(callback)
+    } else {
+        return new Promise((resolve, reject) => {
+            run(resolve, reject)
+        })
+    }
+}
+
 
 const lib = {}
 
 lib.getTradeHistory = getTradeHistory
+lib.getTradeOffer   = getTradeOffer
 
 module.exports = lib

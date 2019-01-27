@@ -39,6 +39,7 @@ api.getStats              = SteamUserStats.getStats
 
 const EconService = require('./libs/EconService.js')
 api.getTradeHistory = EconService.getTradeHistory
+api.getTradeOffer   = EconService.getTradeOffer
 
 const SteamEconomy = require('./libs/SteamEconomy.js')
 api.getItemInfo       = SteamEconomy.getItemInfo

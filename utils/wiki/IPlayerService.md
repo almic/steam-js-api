@@ -422,7 +422,7 @@ Returns the badge progress for specific task-based badges.
 const api = require('steam-js-api')
 api.setKey('{{YOUR KEY}}')
 
-api.getBadges('76561198099490962', 'community').then(result => {
+api.getBadgeProgress('76561198099490962', 'community').then(result => {
     console.log(result.data)
 }).catch(console.error)
 ```

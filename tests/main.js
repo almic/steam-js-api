@@ -353,6 +353,24 @@ async function run() {
         assert.ok(data.trades[0].other, `Expected 'other' in first trade object, result was ${util.inspect(data.trades[0])}`)
     })
 
+    await test('getTradeOffer', async function () {
+        api.setKey(key)
+
+        let result = await api.getTradeOffer('2167811088932369944', true)
+
+        assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+        assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+        let data = result.data
+
+        assert.strictEqual(data.id, '2167811088932369944', `Expected to have 'tradeID' be '2167811088932369944', result was ${util.inspect(data)}`)
+        assert.strictEqual(data.status, 3, `Expected to have 'status' be '3', result was ${util.inspect(data)}`)
+        assert.strictEqual(data.other, '76561198190833690', `Expected to have 'other' be '76561198190833690', result was ${util.inspect(data)}`)
+        assert.strictEqual(data.created, 1537325181, `Expected to have 'created' be '1537325181', result was ${util.inspect(data)}`)
+        assert.strictEqual(data.given[0].class, '3016071886', `Expected to have first given item 'class' be '3016071886', result was ${util.inspect(data)}`)
+        assert.strictEqual(data.given[0].details.name, 'London 2018 Dust II Souvenir Package', `Expected to have first given item 'name' be 'London 2018 Dust II Souvenir Package', result was ${util.inspect(data)}`)
+    })
+
     await test('getItemInfo', async function () {
         api.setKey(key)
 
@@ -392,11 +410,15 @@ async function run() {
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
         let data = result.data
+
         assert.ok(data.count, `Expected positive item count, result was ${util.inspect(data)}`)
         assert.ok(data.items, `Expected 'truthy' items object, result was ${util.inspect(data)}`)
         assert.ok(data.items[0], `Expected first item in object, result was ${util.inspect(data.items)}`)
+
         let item = data.items[0]
+
         assert.ok(item.prices, `Expected 'prices' object in item, result was ${util.inspect(item)}`)
         assert.ok(item.name, `Expected 'name' in item, result was ${util.inspect(item)}`)
         assert.ok(item.class, `Expected 'class' in item, result was ${util.inspect(item)}`)

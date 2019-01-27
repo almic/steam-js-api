@@ -7,6 +7,7 @@ Trading specific interface. Be sure to look at [ISteamEconomy](ISteamEconomy) fo
 | Method | Description |
 | :--- | :--- |
 | [GetTradeHistory](#GetTradeHistory) | Get a list of the most recent trades. |
+| [GetTradeStatus](#GetTradeStatus) | Get details on a single trade offer. |
 
 <br />
 
@@ -181,6 +182,131 @@ This would display an object that looks a lot like this one:
                     }
                 }
             ]
+        }
+    ]
+}
+```
+
+## GetTradeStatus
+<sub>[[to top of page]](#IEconService)</sub>
+
+Get details on a single trade offer.
+### Syntax
+`getTradeOffer(tradeID[, moreInfo])`
+### Parameters
+
+`tradeID` *required*
+> Type: `String`  
+>  
+> Unique trade offer ID
+
+`moreInfo`
+> Type: `Boolean`  
+> Default: `false`  
+>  
+> Whether to return item descriptions
+
+
+### Result
+
+> **String `id`**  
+> The unique trade ID for this trade, is guaranteed to be unique  
+>
+> **Integer `status`**  
+> The status of this trade  
+>
+> **String `other`**  
+> The Steam ID of the other account in the trade  
+>
+> **Integer `created`**  
+> Time the trade was created, in seconds since the epoch  
+>
+> **Array `received`**  
+> Array of item objects being received in the trade  
+>> **Integer `amount`**  
+>> Number of these items being received, will only be more than 1 if the item type is a currency (like gems)  
+>
+>> **Integer `appID`**  
+>> Steam internal app ID, can also be a string  
+>
+>> **String `class`**  
+>> Unique class ID for the item, often enough to uniquely identify an item  
+>
+>> **String `instance`**  
+>> Unique instance ID for the item, truly identifies an item when combined with the class ID  
+>
+>> **String `assetID`**  
+>> Steam internal item ID, used to identify items during a trade, and is renewed every time the item changes inventories  
+>
+>> **String `newAssetID`**  
+>> The new asset ID of the item after trading, can be used to add this specific item to future trades  
+>
+>> **Object `details`**  
+>> Additional details for the item, only returned if `moreInfo` is true  
+>>> **String `name`**  
+>>> Short name of the item  
+>>
+>>> **String `nameColor`**  
+>>> Hexadecimal color that the name should be shown as  
+>>
+>>> **String `type`**  
+>>> Specific type of the item. Can be used for categorizing items.  
+>>
+>>> **String `marketName`**  
+>>> Name shown in the market, exact search name  
+>>
+>>> **String `marketHash`**  
+>>> URL form of the market name  
+>>
+>>> **String `marketUrl`**  
+>>> Full URL to the market page for this kind of item  
+>>
+>>> **Boolean `tradable`**  
+>>> Whether this kind of item is tradable  
+>>
+>>> **Boolean `marketable`**  
+>>> Whether this kind of item is marketable  
+>>
+>>> **Boolean `commodity`**  
+>>> Whether this kind of item is a commodity, meaning all items are technically identical  
+>>
+>>> **Integer `tradeRestriction`**  
+>>> Number of days this item will not be tradable after buying from the market or receiving in a trade  
+>>
+>>> **String `icon`**  
+>>> URL to an icon for this item. A size can be appended to the end like `200x200` to get a specific size image, where the smallest dimensions will match.  
+>
+> **Array `given`**  
+> Array of item objects being given in the trade, structurally identical to `received` array above  
+
+### Example
+
+```javascript
+const api = require('steam-js-api')
+api.setKey('{{YOUR KEY}}')
+
+api.getTradeOffer('2167811088932369944').then(result => {
+    console.log(result.data)
+}).catch(console.error)
+```
+
+This would display an object that looks a lot like this one:
+
+```json
+{
+    "id": "2167811088932369944",
+    "status": 3,
+    "other": "76561198190833690",
+    "created": 1537325181,
+    "received": [],
+    "given": [
+        {
+            "amount": 1,
+            "appID": 730,
+            "class": "3016071886",
+            "instance": "236997301",
+            "assetID": "14850090609",
+            "newAssetID": "14857676921"
         }
     ]
 }

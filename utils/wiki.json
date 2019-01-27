@@ -1604,5 +1604,301 @@
                 }
             }
         }
+    },
+    "CSGO": {
+        "desc": "A collection of Counter-Strike: Global Offensive related interfaces and functions. These functions all lie in the `CSGO` object of the module, so double-check the examples before trying to use these! Some functions that have an `appID` parameter have shortcuts in the `CSGO` object. For example:\r\n\r\n```javascript\r\n// instead of:\r\napi.getStats('76561198099490962', 730)\r\n\r\n// you can just do:\r\napi.CSGO.getStats('76561198099490962')\r\n```\r\n\r\nAnd to make things even simpler, you may be able to do `const api = require('steam-js-api').CSGO` if you only need these CSGO functions.\r\n\r\n### Functions Available\r\nUse these like you normally would, but don't pass the `appID` parameter.\r\n#### ISteamUserStats\r\n* [getGlobalAchievements(callback)](SteamUserStats#getGlobalAchievements)\r\n* [getCurrentPlayers(callback)](SteamUserStats#getCurrentPlayers)\r\n* [getAchievements(steamID, callback)](SteamUserStats#getAchievements)\r\n* [getGameSchema(callback)](SteamUserStats#getGameSchema)\r\n* [getStats(steamID, callback)](SteamUserStats#getStats)\r\n#### ISteamEconomy\r\n* [getItemInfo(callback)](SteamEconomy#getItemInfo)\r\n* [getGameItemPrices(callback)](SteamEconomy#getGameItemPrices)",
+        "GetGameMapsPlaytime": {
+            "desc": "Grab relative playtime percentages for maps. Right now this only shows the last bit of data from the most recent operation, but I suspect Valve will soon add all maps to this API. By soon, I mean *Valve-time* soon.\r\n\r\nI suggest you pay careful attention to the result of this call, and plan for the object structure to change without notice. The raw data is added only as a fallback should Valve make big changes to this API, and you should build any implementation to support the raw fallback data should the custom object fail to build. As a precaution, this function will log a message to the console if it ever fails due to this, however the raw data should always be returned regardless.",
+            "function": "CSGO.getMapPlaytime",
+            "parameters": {
+                "interval": {
+                    "type": "String",
+                    "desc": "The interval to return data for, can be `day`, `week`, or `month`",
+                    "default": "day"
+                },
+                "gameMode": {
+                    "type": "String",
+                    "desc": "Which specific game mode should the data be from, can be `competitive` or `casual`",
+                    "default": "competitive"
+                },
+                "mapGroup": {
+                    "type": "String",
+                    "desc": "The specific map group to return. At the moment this can ***only*** be `operation`. If you plan on using this function to track data, I suggest you plan around this default changing or no longer working, as Valve will likely be adding more options to this in the future.",
+                    "default": "operation"
+                }
+            },
+            "result": {
+                "start": {
+                    "type": "Integer",
+                    "desc": "The time the data started aggregating, in seconds since the epoch"
+                },
+                "maps": {
+                    "type": "Object",
+                    "desc": "All maps by internal map name, i.e. `de_dust2`, with the values being their relative playtime percentage. **NOTE:** This may stop working without notice, and you should fallback to the below `raw` data in case this object fails to populate."
+                },
+                "raw": {
+                    "type": "Array",
+                    "desc": "Raw data from the API. The format is a defined list of \"key headers\" and a list of \"rows\", which this object mimics."
+                }
+            },
+            "example_call": "CSGO.getMapPlaytime('week', 'casual', 'operation')",
+            "example_data": {
+                "start": 1509926400,
+                "maps": {
+                    "cs_agency": 0.38292873923257637,
+                    "cs_insertion": 0.19107282693813626,
+                    "de_blackgold": 0.04463586530931871,
+                    "de_austria": 0.20438527799530148,
+                    "de_lite": 0.028191072826938134,
+                    "de_shipped": 0.10415035238841033,
+                    "de_thrill": 0.04463586530931871
+                },
+                "raw": [
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "cs_agency",
+                        "RelativePercentage": 38.29287392325764
+                    },
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "cs_insertion",
+                        "RelativePercentage": 19.107282693813627
+                    },
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "de_blackgold",
+                        "RelativePercentage": 4.463586530931871
+                    },
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "de_austria",
+                        "RelativePercentage": 20.43852779953015
+                    },
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "de_lite",
+                        "RelativePercentage": 2.8191072826938135
+                    },
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "de_shipped",
+                        "RelativePercentage": 10.415035238841034
+                    },
+                    {
+                        "IntervalStartTimeStamp": 1509926400,
+                        "MapName": "de_thrill",
+                        "RelativePercentage": 4.463586530931871
+                    }
+                ]
+            }
+        },
+        "GetGameServersStatus": {
+            "desc": "Current status of various CSGO systems and servers. This is cached internally, so this only updates every minute or so. You should wait at least one minute between calls, and check every couple seconds until the `timestamp` changes.",
+            "function": "CSGO.getServerStatus",
+            "parameters": {},
+            "result": {
+                "version": {
+                    "type": "Integer",
+                    "desc": "Internal game version number, looks more like a build number"
+                },
+                "timestamp": {
+                    "type": "Integer",
+                    "desc": "Time the data was updated, in seconds since the epoch"
+                },
+                "time": {
+                    "type": "String",
+                    "desc": "String representation of the `timestamp`"
+                },
+                "logon": {
+                    "type": "String",
+                    "desc": "Status of the logon service. Could potentially be `online`, `delayed` or `offline`."
+                },
+                "inventory": {
+                    "type": "String",
+                    "desc": "Status of the community inventory service. Could potentially be `online`, `delayed` or `offline`."
+                },
+                "perfectWorld": {
+                    "type": "Object",
+                    "desc": "Perfect World service information",
+                    "object": {
+                        "logon": {
+                            "type": "String",
+                            "desc": "Status of the logon service. Could potentially be `online`, `delayed` or `offline`."
+                        },
+                        "logonLatency": {
+                            "type": "String",
+                            "desc": "Speed of the logon service. The only known value is `normal`."
+                        },
+                        "purchase": {
+                            "type": "String",
+                            "desc": "Likely the status of in-game purchases, but that is just a theory... A GAME THEORY- I'm sorry."
+                        },
+                        "purchaseLatency": {
+                            "type": "String",
+                            "desc": "Speed of in-game purchases. The only known value is `normal`."
+                        }
+                    }
+                },
+                "matchmaking": {
+                    "type": "Object",
+                    "desc": "Matchmaking information",
+                    "object": {
+                        "status": {
+                            "type": "String",
+                            "desc": "Status of matchmaking. The only known value is `normal`."
+                        },
+                        "players": {
+                            "type": "Integer",
+                            "desc": "Number of currently online players with CSGO open"
+                        },
+                        "servers": {
+                            "type": "Integer",
+                            "desc": "Number of online servers, I believe this includes community hosted servers, correct me if I'm wrong though!"
+                        },
+                        "searching": {
+                            "type": "Integer",
+                            "desc": "Players currently searching for a game, I believe this only includes competitive lobbies, correct me if I'm wrong though!"
+                        },
+                        "searchTime": {
+                            "type": "Integer",
+                            "desc": "Average wait-time to find a game. I do not know how this is actually calculated, tell me if you know!"
+                        }
+                    }
+                },
+                "servers": {
+                    "type": "Object",
+                    "desc": "Server/ Datacenter information, listed by region name",
+                    "object": {
+                        "capacity": {
+                            "type": "String",
+                            "desc": "Server type, can be `full` or `high`"
+                        },
+                        "load": {
+                            "type": "String",
+                            "desc": "Current server load, can be `idle`, `low`, `medium` or `high`"
+                        }
+                    }
+                }
+            },
+            "example_call": "CSGO.getServerStatus()",
+            "example_data": {
+                "version": 13674,
+                "timestamp": 1548562114,
+                "time": "Sat Jan 26 20:08:34 2019",
+                "logon": "normal",
+                "inventory": "delayed",
+                "perfectWorld": {
+                    "logon": "online",
+                    "logonLatency": "normal",
+                    "purchase": "online",
+                    "purchaseLatency": "normal"
+                },
+                "matchmaking": {
+                    "status": "normal",
+                    "players": 246247,
+                    "servers": 163438,
+                    "searching": 7801,
+                    "searchTime": 130
+                },
+                "servers": {
+                    "Peru": {
+                        "capacity": "high",
+                        "load": "low"
+                    },
+                    "EU West": {
+                        "capacity": "full",
+                        "load": "idle"
+                    },
+                    "EU East": {
+                        "capacity": "full",
+                        "load": "idle"
+                    },
+                    "Poland": {
+                        "capacity": "full",
+                        "load": "idle"
+                    },
+                    "India East": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "Hong Kong": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "Spain": {
+                        "capacity": "high",
+                        "load": "idle"
+                    },
+                    "Chile": {
+                        "capacity": "full",
+                        "load": "high"
+                    },
+                    "US Southwest": {
+                        "capacity": "high",
+                        "load": "low"
+                    },
+                    "US Southeast": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "India": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "EU North": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "Emirates": {
+                        "capacity": "high",
+                        "load": "idle"
+                    },
+                    "US Northwest": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "South Africa": {
+                        "capacity": "full",
+                        "load": "idle"
+                    },
+                    "Brazil": {
+                        "capacity": "full",
+                        "load": "medium"
+                    },
+                    "US Northeast": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "US Northcentral": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "Japan": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "Singapore": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "Australia": {
+                        "capacity": "full",
+                        "load": "low"
+                    },
+                    "China Shanghai": {
+                        "capacity": "high",
+                        "load": "low"
+                    },
+                    "China Tianjin": {
+                        "capacity": "high",
+                        "load": "low"
+                    },
+                    "China Guangzhou": {
+                        "capacity": "high",
+                        "load": "low"
+                    }
+                }
+            }
+        }
     }
 }

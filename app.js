@@ -48,6 +48,9 @@ api.getGameItemPrices = SteamEconomy.getGameItemPrices
 const Special = require('./libs/Special.js')
 api.getGroupInfo = Special.getGroupInfo
 
+// Game specific interfaces
+api.CSGO = require('./libs/730_CSGO.js')
+
 const {request, validateSteamID} = require('./libs/util.js')
 api.request         = request
 api.validateSteamID = validateSteamID

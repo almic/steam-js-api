@@ -425,6 +425,58 @@ async function run() {
         assert.ok(item.date, `Expected 'date' in item, result was ${util.inspect(item)}`)
     })
 
+    await test('CSGO.getMapPlaytime', async function () {
+        api.setKey(key)
+
+        let result = await api.CSGO.getMapPlaytime('week')
+
+        assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+        assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+        let data = result.data
+
+        assert.ok(data.start, `Expected positive start time, result was ${util.inspect(data)}`)
+        assert.ok(data.maps, `Expected 'truthy' maps object, result was ${util.inspect(data)}`)
+        assert.ok(Array.isArray(data.raw), `Expected array 'raw', result was ${util.inspect(data)}`)
+
+        let c = 0
+        for (map in data.maps) {
+            assert.ok(data.maps[map], `Expected map '${map}' to have relative percentage value, result was ${util.inspect(data)}`)
+            c++
+        }
+
+        assert.ok(c, `Expected positive number of maps, result was ${util.inspect(data)}`)
+        assert.strictEqual(data.raw.length, c, `Expected 'raw' array to have similar length as maps in 'maps' object, result was ${util.inspect(data)}`)
+
+        console.log(util.inspect(data, 0, null, 1))
+    })
+
+    await test('CSGO.getServerStatus', async function () {
+        api.setKey(key)
+
+        let result = await api.CSGO.getServerStatus()
+
+        assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+        assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+        let data = result.data
+
+        assert.ok(data.version, `Expected positive 'version', result was ${util.inspect(data)}`)
+        assert.ok(data.timestamp, `Expected positive 'timestamp', result was ${util.inspect(data)}`)
+        assert.ok(data.time, `Expected 'time' value, result was ${util.inspect(data)}`)
+        assert.ok(data.logon, `Expected 'logon' value, result was ${util.inspect(data)}`)
+        assert.ok(data.inventory, `Expected 'inventory' value, result was ${util.inspect(data)}`)
+        assert.ok(data.perfectWorld, `Expected 'perfectWorld' object, result was ${util.inspect(data)}`)
+        assert.ok(data.perfectWorld.logon, `Expected 'logon' in perfectWorld object, result was ${util.inspect(data.perfectWorld)}`)
+        assert.ok(data.matchmaking, `Expected 'matchmaking' object, result was ${util.inspect(data)}`)
+        assert.ok(data.matchmaking.status, `Expected 'status' in matchmaking object, result was ${util.inspect(data.matchmaking)}`)
+        assert.ok(data.servers, `Expected 'servers' object, result was ${util.inspect(data)}`)
+        assert.ok(data.servers['Japan'], `Expected 'Japan' in servers object, result was ${util.inspect(data.servers)}`)
+        assert.ok(data.servers['US Northcentral'], `Expected 'US Northcentral' in servers object, result was ${util.inspect(data.servers)}`)
+        assert.ok(data.servers['US Northcentral'].capacity, `Expected 'capacity' in US Northcentral object, result was ${util.inspect(data.servers['US Northcentral'])}`)
+
+        console.log(util.inspect(data, 0, null, 1))
+    })
 }
 
 let duration = process.uptime()

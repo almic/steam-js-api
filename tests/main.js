@@ -447,8 +447,6 @@ async function run() {
 
         assert.ok(c, `Expected positive number of maps, result was ${util.inspect(data)}`)
         assert.strictEqual(data.raw.length, c, `Expected 'raw' array to have similar length as maps in 'maps' object, result was ${util.inspect(data)}`)
-
-        console.log(util.inspect(data, 0, null, 1))
     })
 
     await test('CSGO.getServerStatus', async function () {
@@ -474,8 +472,6 @@ async function run() {
         assert.ok(data.servers['Japan'], `Expected 'Japan' in servers object, result was ${util.inspect(data.servers)}`)
         assert.ok(data.servers['US Northcentral'], `Expected 'US Northcentral' in servers object, result was ${util.inspect(data.servers)}`)
         assert.ok(data.servers['US Northcentral'].capacity, `Expected 'capacity' in US Northcentral object, result was ${util.inspect(data.servers['US Northcentral'])}`)
-
-        console.log(util.inspect(data, 0, null, 1))
     })
 }
 

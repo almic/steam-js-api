@@ -9,7 +9,7 @@ npm install steam-js-api
 
 A simple and clean API wrapper for the Steamworks Web API, specializing in providing great documentation and straight-forward results. The Steamworks Web API is very inconsistent, this wrapper fixes that by normalizing parameters and responses into predictable, more usable formats.
 
-The project is still growing, but it includes the most important parts from the Steamworks Web API. However, the full public Steamworks Web API will be added in future releases. Plans for implementing a full trading and inventory system are also on the horizon.
+The project includes the most important parts from the Steamworks Web API, and is still growing. The full public Steamworks Web API will be added in future releases. Plans for implementing a full trading and inventory system are also on the horizon.
 
 ### Table of Contents
 
@@ -26,6 +26,7 @@ The project is still growing, but it includes the most important parts from the 
     * **[IEconService](#ieconservice)**
     * **[ISteamEconomy](#isteameconomy)**
     * **[Special](#special)**
+    * **[CSGO](#csgo)**
 4. **[FAQ](#faq)**
 5. **[License](#license)**
 
@@ -147,15 +148,21 @@ Game statistics related APIs; achievements, scores, stats, etc.
 ## IEconService
 Trading specific interface.
 * [GetTradeHistory](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeHistory)
+* [GetTradeStatus](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeStatus)
 
 ## ISteamEconomy
 Steam economy item related stuff.
 * [GetAssetClassInfo](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetClassInfo)
-
+* [GetAssetPrices](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetPrices)
 
 ## Special
 These are custom functions that don't use the traditional Steam Web API stuff. As such, they might change in functionality at some point in the future. But I doubt it, Volvo has barely touched the Web API for a number of years now, so this stuff should work as long as everything else in this list does.
 * [GetGroupInfo](https://github.com/almic/steam-js-api/wiki/Special#GetGroupInfo)
+
+## CSGO
+Counter-Strike: Global Offensive specific functions, all in a `CSGO` object as part of the module. This also includes wrappers for functions from [ISteamUserStats](#isteamuserstats) and [ISteamEconomy](#isteameconomy) to allow for more readable code. See the [CSGO](https://github.com/almic/steam-js-api/wiki/CSGO) wiki page for more information about this submodule.
+* [GetGameMapsPlaytime](https://github.com/almic/steam-js-api/wiki/CSGO#GetGameMapsPlaytime)
+* [GetGameServersStatus](https://github.com/almic/steam-js-api/wiki/CSGO#GetGameServersStatus)
 
 # FAQ
 

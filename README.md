@@ -1,5 +1,6 @@
 # steam-js-api
 [![Version](https://img.shields.io/github/release/almic/steam-js-api.svg?label=version)](https://github.com/almic/steam-js-api/releases)
+[![Node.js CI](https://github.com/almic/steam-js-api/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/almic/steam-js-api/actions/workflows/node.js.yml)
 [![Build Status](https://travis-ci.org/almic/steam-js-api.svg?branch=master)](https://travis-ci.org/almic/steam-js-api)
 [![Downloads](https://img.shields.io/npm/dw/steam-js-api.svg)](https://npmjs.com/package/steam-js-api)
 

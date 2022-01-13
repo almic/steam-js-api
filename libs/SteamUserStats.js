@@ -30,7 +30,6 @@ function getGlobalAchievements(appID, callback) {
 
         request('ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2', {gameid: appID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -39,21 +38,21 @@ function getGlobalAchievements(appID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('achievementpercentages')){
-                result = result.data.achievementpercentages
+                let achievements = result.data.achievementpercentages.achievements
 
                 let data = {
                     achievements: {}
                 }
 
-                for (index in result.achievements) {
-                    let a = result.achievements[index]
+                for (index in achievements) {
+                    let a = achievements[index]
 
                     data.achievements[a.name] = a.percent
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -76,7 +75,6 @@ function getCurrentPlayers(appID, callback) {
 
         request('ISteamUserStats/GetNumberOfCurrentPlayers/v1', {appid: appID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -85,15 +83,15 @@ function getCurrentPlayers(appID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let reponse = result.data.response
 
                 let data = {
-                    players: result.player_count
+                    players: reponse.player_count
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -124,7 +122,6 @@ function getAchievements(steamID, appID, callback) {
 
         request('ISteamUserStats/GetPlayerAchievements/v1', {key: _key, steamid: steamID, appid: appID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -133,16 +130,16 @@ function getAchievements(steamID, appID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('playerstats')){
-                result = result.data.playerstats
+                let playerstats = result.data.playerstats
 
                 let data = {
-                    name: result.gameName,
+                    name: playerstats.gameName,
                     count: 0,
                     achievements: {}
                 }
 
-                for (index in result.achievements) {
-                    let a = result.achievements[index]
+                for (index in playerstats.achievements) {
+                    let a = playerstats.achievements[index]
 
                     data.achievements[a.apiname] = {
                         unlocked: Boolean(a.achieved),
@@ -154,7 +151,7 @@ function getAchievements(steamID, appID, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -178,7 +175,6 @@ function getGameSchema(appID, callback) {
 
         request('ISteamUserStats/GetSchemaForGame/v2', {key: _key, appid: appID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -187,20 +183,18 @@ function getGameSchema(appID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('game')){
-                result = result.data.game
+                let game = result.data.game
 
                 let data = {
-                    name: result.gameName,
+                    name: game.gameName,
                     statCount: 0,
                     achievementCount: 0,
                     stats: {},
                     achievements: {}
                 }
 
-                result = result.availableGameStats
-
-                for (index in result.stats) {
-                    let s = result.stats[index]
+                for (index in game.availableGameStats.stats) {
+                    let s = game.availableGameStats.stats[index]
 
                     data.stats[s.name] = {
                         displayName: s.displayName,
@@ -210,8 +204,8 @@ function getGameSchema(appID, callback) {
                     data.statCount++
                 }
 
-                for (index in result.achievements) {
-                    let a = result.achievements[index]
+                for (index in game.availableGameStats.achievements) {
+                    let a = game.availableGameStats.achievements[index]
 
                     data.achievements[a.name] = {
                         displayName: a.displayName,
@@ -226,7 +220,7 @@ function getGameSchema(appID, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -257,7 +251,6 @@ function getStats(steamID, appID, callback) {
 
         request('ISteamUserStats/GetUserStatsForGame/v2', {key: _key, steamid: steamID, appid: appID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -266,18 +259,18 @@ function getStats(steamID, appID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('playerstats')){
-                result = result.data.playerstats
+                let playerstats = result.data.playerstats
 
                 let data = {
-                    name: result.gameName,
+                    name: playerstats.gameName,
                     count: 0,
                     stats: {}
                 }
 
                 if (STATS.hasOwnProperty(appID)) {
                     // Custom structure defined
-                    for (index in result.stats) {
-                        let s = result.stats[index]
+                    for (index in playerstats.stats) {
+                        let s = playerstats.stats[index]
                         if (STATS[appID][s.name]) {
                             // Custom, add data
                             data.stats = addProp(data.stats, STATS[appID][s.name].name.split('.'), s.value)
@@ -292,8 +285,8 @@ function getStats(steamID, appID, callback) {
                     }
                 } else {
                     // No custom structure defined, use basic structure
-                    for (index in result.stats) {
-                        let s = result.stats[index]
+                    for (index in playerstats.stats) {
+                        let s = playerstats.stats[index]
                         data.stats[s.name] = s.value
                         data.count++
                     }
@@ -301,7 +294,7 @@ function getStats(steamID, appID, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)

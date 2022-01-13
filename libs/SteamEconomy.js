@@ -1,6 +1,39 @@
 const {urls, request} = require('./util.js')
 const {requireKey} = require('./../app.js')
 
+function buildItems(appID, items) {
+    let data = {
+        count: 0,
+        items: {}
+    }
+
+    for (let i in items) {
+        if (i == 'success' || i == 'error') continue
+        let item = items[i]
+        let info = {
+            name: item.name,
+            nameColor: item.name_color,
+            type: item.type,
+            marketName: item.market_name,
+            marketHash: item.market_hash_name,
+            // TODO: remove this line
+            marketUrl: urls.econUrl(appID, item.market_hash_name),
+            tradable: Boolean(Number(item.tradable)),
+            marketable: Boolean(Number(item.marketable)),
+            commodity: Boolean(Number(item.commodity)),
+            tradeRestriction: Number(item.market_tradable_restriction),
+            icon: urls.econImg(item.icon_url_large || item.icon_url, '')
+        }
+        if (info.marketable) {
+            info.marketUrl = urls.econUrl(appID, item.market_hash_name)
+        }
+        data.items[`${item.classid}${(item.instanceid) ? '_' + item.instanceid : ''}`] = info
+        data.count++
+    }
+
+    return data
+}
+
 function getItemInfo(appID, items, callback) {
 
     if (!Array.isArray(items)) {
@@ -29,7 +62,6 @@ function getItemInfo(appID, items, callback) {
 
         request('ISteamEconomy/GetAssetClassInfo/v1', req, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -38,15 +70,13 @@ function getItemInfo(appID, items, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('result')){
-                result = result.data.result
-                let data = {
-                    count: 0,
-                    items: {}
-                }
+                let response = result.data.result
+                let data = {}
 
                 if (items.length == 1) {
-                    if (result.error) {
-                        result = {error: `Error from Steam: ${result.error}`}
+                    if (response.error) {
+                        result.steamError = reponse.error
+                        result.error = `Error from Steam, data may still have been returned: ${reponse.error}`
 
                         if (reject) reject(result)
                         else resolve(result)
@@ -54,56 +84,28 @@ function getItemInfo(appID, items, callback) {
                         return
                     }
 
-                    for (item in result) {
-                        if (item == 'success') continue
-                        item = result[item]
-                        data = {
-                            name: item.name,
-                            nameColor: item.name_color,
-                            type: item.type,
-                            marketName: item.market_name,
-                            marketHash: item.market_hash_name,
-                            marketUrl: urls.econUrl(item.appid, item.market_hash_name),
-                            tradable: Boolean(Number(item.tradable)),
-                            marketable: Boolean(Number(item.marketable)),
-                            commodity: Boolean(Number(item.commodity)),
-                            tradeRestriction: Number(item.market_tradable_restriction),
-                            icon: urls.econImg(item.icon_url_large || item.icon_url, '')
-                        }
-                        break
-                    }
+                    data = buildItems(appID, response).items[`${items[0].class}${(items[0].instance) ? '_' + items[0].instance : ''}`]
+
                 } else {
-                    for (item in result) {
-                        if (item == 'success' || item == 'error') continue
-                        item = result[item]
-                        data.items[`${item.classid}${(item.instanceid) ? '_' + item.instanceid : ''}`] = {
-                            name: item.name,
-                            nameColor: item.name_color,
-                            type: item.type,
-                            marketName: item.market_name,
-                            marketHash: item.market_hash_name,
-                            marketUrl: urls.econUrl(item.appid, item.market_hash_name),
-                            tradable: Boolean(Number(item.tradable)),
-                            marketable: Boolean(Number(item.marketable)),
-                            commodity: Boolean(Number(item.commodity)),
-                            tradeRestriction: Number(item.market_tradable_restriction),
-                            icon: urls.econImg(item.icon_url_large || item.icon_url, '')
-                        }
-                        data.count++
-                    }
+                    data = buildItems(appID, response)
                 }
 
                 if (result.error) {
-                    if (data.count > 0) {
-                        resolve({error: `Data returned. Error from Steam: ${result.error}`, data})
+                    if (data.hasOwnProperty('count') && data.count > 0) {
+                        result.error = `Data returned. Error from Steam: ${result.error}`
+                        result.data = data
+                        resolve(result)
                     } else {
-                        reject({error: `Error from Steam: ${result.error}`})
+                        result.error = `Error from Steam, data may still have been returned: ${result.error}`
+
+                        if (reject) reject(result)
+                        else resolve(result)
                     }
                 } else {
                     resolve({data})
                 }
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -140,7 +142,6 @@ function getGameItemPrices(appID, currencyFilter, callback) {
 
         request('ISteamEconomy/GetAssetPrices/v1', {key: _key, appid: appID, currency: currencyFilter}, result => {
             if (result.error) {
-                result = {error: result.error, data: result}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -149,14 +150,14 @@ function getGameItemPrices(appID, currencyFilter, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('result')){
-                result = result.data.result
+                let response = result.data.result
                 let data = {
                     count: 0,
                     items: []
                 }
 
-                for (index in result.assets) {
-                    let a = result.assets[index]
+                for (index in response.assets) {
+                    let a = response.assets[index]
 
                     data.items[data.count] = {
                         class: a.classid,
@@ -175,7 +176,7 @@ function getGameItemPrices(appID, currencyFilter, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)

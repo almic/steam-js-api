@@ -77,7 +77,6 @@ function getMapPlaytime(interval, gameMode, mapGroup, callback) {
 
         request('ICSGOServers_730/GetGameMapsPlaytime/v1', {key: _key, interval, gamemode: gameMode, mapgroup: mapGroup}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -86,7 +85,7 @@ function getMapPlaytime(interval, gameMode, mapGroup, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('result')){
-                result = result.data.result
+                let response = result.data.result
                 let data = {start: 0, maps: {}, raw:[]}
 
                 // So here's the deal, the way Valve has created this API is super self-describing.
@@ -100,30 +99,31 @@ function getMapPlaytime(interval, gameMode, mapGroup, callback) {
 
                 // Build custom object first
                 try {
-                    data.start = result.Rows[0][0] // use first interval; they're all the same anyway
-                    for (index in result.Rows) {
-                        let r = result.Rows[index]
+                    data.start = response.Rows[0][0] // use first interval; they're all the same anyway
+                    for (index in response.Rows) {
+                        let r = response.Rows[index]
                         data.maps[r[1]] = (r[2] / 100) // convert to actual percentage
                     }
                 } catch (e) {
                     // This will likely result in crashes on the caller's end if they don't already
                     // have checks in place. The least I can do is to inform them before the whole
                     // app crashes. If they do have checks and fallbacks, good!
+                    //throw new Error('API structure has changed. This is critical. Please inform the library developer of \'steam-js-api\'.', { cause: e })
                     console.log('API structure has changed. This is critical. Please inform the library developer. If there are any more errors besides this in the console, the app developer should implement fixes immediately.')
                 }
 
                 // Build raw data
-                for (a in result.Rows) {
-                    let r = result.Rows[a]
+                for (a in response.Rows) {
+                    let r = response.Rows[a]
                     data.raw[a] = {}
                     for (b in r) {
-                        data.raw[a][result.Keys[b]] = r[b]
+                        data.raw[a][response.Keys[b]] = r[b]
                     }
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -150,7 +150,6 @@ function getServerStatus(callback) {
 
         request('ICSGOServers_730/GetGameServersStatus/v1', {key: _key}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -159,33 +158,33 @@ function getServerStatus(callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('result')){
-                result = result.data.result
+                let response = result.data.result
 
                 let data = {
-                    version: result.app.version,
-                    timestamp: result.app.timestamp,
-                    time: result.app.time,
-                    logon: result.services.SessionsLogon,
-                    inventory: result.services.SteamCommunity,
+                    version: response.app.version,
+                    timestamp: response.app.timestamp,
+                    time: response.app.time,
+                    logon: response.services.SessionsLogon,
+                    inventory: response.services.SteamCommunity,
                     perfectWorld: {
-                        logon: result.perfectworld.logon.availability,
-                        logonLatency: result.perfectworld.logon.latency,
-                        purchase: result.perfectworld.purchase.availability,
-                        purchaseLatency: result.perfectworld.purchase.latency
+                        logon: response.perfectworld.logon.availability,
+                        logonLatency: response.perfectworld.logon.latency,
+                        purchase: response.perfectworld.purchase.availability,
+                        purchaseLatency: response.perfectworld.purchase.latency
                     },
                     matchmaking: {
-                        status: result.matchmaking.scheduler,
-                        players: result.matchmaking.online_players,
-                        servers: result.matchmaking.online_servers,
-                        searching: result.matchmaking.searching_players,
-                        searchTime: result.matchmaking.search_seconds_avg
+                        status: response.matchmaking.scheduler,
+                        players: response.matchmaking.online_players,
+                        servers: response.matchmaking.online_servers,
+                        searching: response.matchmaking.searching_players,
+                        searchTime: response.matchmaking.search_seconds_avg
                     },
-                    servers: result.datacenters
+                    servers: response.datacenters
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)

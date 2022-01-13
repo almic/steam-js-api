@@ -32,7 +32,6 @@ function getGroupInfo(id, type, callback) {
 
         doRequest(`https://steamcommunity.com/${type}/${id}/memberslistxml/?xml=1`, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -41,30 +40,30 @@ function getGroupInfo(id, type, callback) {
             }
 
             if (typeof result.data === 'string'){
-                result = result.data
+                let response = result.data
 
-                let counts = result.match(/<memberCount>([0-9]*?)<\/memberCount>/g) || ['','']
+                let counts = response.match(/<memberCount>([0-9]*?)<\/memberCount>/g) || ['','']
 
                 let data = {
-                    gid: (result.match(/<groupID64>([0-9]*?)<\/groupID64>/) || {1:0})[1],
-                    name: (result.match(/<groupName><!\[CDATA\[(.*?)\]\]><\/groupName>/) || {1:false})[1],
-                    vanityName: (result.match(/<groupURL><!\[CDATA\[(.*?)\]\]><\/groupURL>/) || {1:false})[1],
-                    summary: (result.match(/<summary><!\[CDATA\[(.*?)\]\]><\/summary>/) || {1:false})[1],
+                    gid: (response.match(/<groupID64>([0-9]*?)<\/groupID64>/) || {1:0})[1],
+                    name: (response.match(/<groupName><!\[CDATA\[(.*?)\]\]><\/groupName>/) || {1:false})[1],
+                    vanityName: (response.match(/<groupURL><!\[CDATA\[(.*?)\]\]><\/groupURL>/) || {1:false})[1],
+                    summary: (response.match(/<summary><!\[CDATA\[(.*?)\]\]><\/summary>/) || {1:false})[1],
                     members: Number((counts[0].match(/<memberCount>([0-9]*?)<\/memberCount>/) || {1:0})[1]) || 0,
                     membersReal: Number((counts[1].match(/<memberCount>([0-9]*?)<\/memberCount>/) || {1:0})[1]) || 0,
-                    membersOnline: Number((result.match(/<membersOnline>([0-9]*?)<\/membersOnline>/) || {1:0})[1]) || 0,
-                    membersGame: Number((result.match(/<membersInGame>([0-9]*?)<\/membersInGame>/) || {1:0})[1]) || 0,
-                    membersChat: Number((result.match(/<membersInChat>([0-9]*?)<\/membersInChat>/) || {1:0})[1]) || 0,
+                    membersOnline: Number((response.match(/<membersOnline>([0-9]*?)<\/membersOnline>/) || {1:0})[1]) || 0,
+                    membersGame: Number((response.match(/<membersInGame>([0-9]*?)<\/membersInGame>/) || {1:0})[1]) || 0,
+                    membersChat: Number((response.match(/<membersInChat>([0-9]*?)<\/membersInChat>/) || {1:0})[1]) || 0,
                     logo: {
-                        small: (result.match(/<avatarIcon><!\[CDATA\[(.*?)\]\]><\/avatarIcon>/) || {1:false})[1],
-                        medium: (result.match(/<avatarMedium><!\[CDATA\[(.*?)\]\]><\/avatarMedium>/) || {1:false})[1],
-                        large: (result.match(/<avatarFull><!\[CDATA\[(.*?)\]\]><\/avatarFull>/) || {1:false})[1]
+                        small: (response.match(/<avatarIcon><!\[CDATA\[(.*?)\]\]><\/avatarIcon>/) || {1:false})[1],
+                        medium: (response.match(/<avatarMedium><!\[CDATA\[(.*?)\]\]><\/avatarMedium>/) || {1:false})[1],
+                        large: (response.match(/<avatarFull><!\[CDATA\[(.*?)\]\]><\/avatarFull>/) || {1:false})[1]
                     }
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)

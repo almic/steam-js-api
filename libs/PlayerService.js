@@ -1,5 +1,6 @@
 const {urls, validateSteamID, request} = require('./util.js')
 const {requireKey} = require('./../app.js')
+const util = require('util')
 
 const BADGES = require('./../json/badges.json')
 
@@ -38,7 +39,6 @@ function getRecentlyPlayedGames(steamID, count, callback) {
 
         request('IPlayerService/GetRecentlyPlayedGames/v1', {key: _key, steamid: steamID, count}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -47,12 +47,12 @@ function getRecentlyPlayedGames(steamID, count, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
                 let data = { count: 0, games: [] }
 
-                if (result.total_count > 0 && Array.isArray(result.games)) {
-                    for (index in result.games) {
-                        let game = result.games[index]
+                if (response.total_count > 0 && Array.isArray(response.games)) {
+                    for (index in response.games) {
+                        let game = response.games[index]
                         data.count++
                         data.games[index] = {
                             name: game.name,
@@ -71,7 +71,7 @@ function getRecentlyPlayedGames(steamID, count, callback) {
                     resolve({data})
                 }
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -136,7 +136,6 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
 
         request('IPlayerService/GetOwnedGames/v1', req, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -145,12 +144,12 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
                 let data = { count: 0, games: [] }
 
-                if (result.game_count > 0 && Array.isArray(result.games)) {
-                    for (index in result.games) {
-                        let game = result.games[index]
+                if (response.game_count > 0 && Array.isArray(response.games)) {
+                    for (index in response.games) {
+                        let game = response.games[index]
                         if (!appIDs || appIDs && appIDs.includes(game.appid)) {
                             data.games[data.count] = {
                                 name: game.name || undefined,
@@ -176,7 +175,7 @@ function getOwnedGames(steamID, appIDs, moreInfo, callback) {
                     resolve({data})
                 }
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -207,7 +206,6 @@ function getSteamLevel(steamID, callback) {
 
         request('IPlayerService/GetSteamLevel/v1', {key: _key, steamid: steamID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -218,7 +216,7 @@ function getSteamLevel(steamID, callback) {
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
                 resolve({data: {level: result.data.response.player_level}})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -249,7 +247,6 @@ function getBadges(steamID, callback) {
 
         request('IPlayerService/GetBadges/v1', {key: _key, steamid: steamID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -258,12 +255,12 @@ function getBadges(steamID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
                 let data = {
-                    level: result.player_level,
-                    xp: result.player_xp,
-                    level_xp: result.player_xp_needed_current_level,
-                    next_level_xp: result.player_xp + result.player_xp_needed_to_level_up,
+                    level: response.player_level,
+                    xp: response.player_xp,
+                    level_xp: response.player_xp_needed_current_level,
+                    next_level_xp: response.player_xp + response.player_xp_needed_to_level_up,
                     badges: {
                         game: {},
                         event: {},
@@ -271,8 +268,8 @@ function getBadges(steamID, callback) {
                     }
                 }
 
-                for (index in result.badges) {
-                    let badge = result.badges[index]
+                for (index in response.badges) {
+                    let badge = response.badges[index]
 
                     if (badge.hasOwnProperty('appid')) {
                         if (BADGES.event.hasOwnProperty(badge.appid)) {
@@ -339,19 +336,21 @@ function getBadges(steamID, callback) {
                     } else {
                         // Special Steam badge
                         let special = BADGES.special[badge.badgeid]
-                        data.badges.special[special.tag] = {
-                            name: special.name,
-                            level: badge.level,
-                            earned: badge.completion_time,
-                            xp: badge.xp,
-                            scarcity: badge.scarcity
+                        if (special) {
+                            data.badges.special[special.tag] = {
+                                name: special.name,
+                                level: badge.level,
+                                earned: badge.completion_time,
+                                xp: badge.xp,
+                                scarcity: badge.scarcity
+                            }
                         }
                     }
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -414,7 +413,6 @@ function getBadgeProgress(steamID, badgeID, callback) {
 
         request('IPlayerService/GetCommunityBadgeProgress/v1', {key: _key, steamid: steamID, badgeid: badgeID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -423,7 +421,7 @@ function getBadgeProgress(steamID, badgeID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
 
                 let data = {
                     quests: {},
@@ -431,9 +429,10 @@ function getBadgeProgress(steamID, badgeID, callback) {
                     completed: 0
                 }
 
-                for (index in result.quests) {
-                    let quest = result.quests[index]
+                for (index in response.quests) {
+                    let quest = response.quests[index]
                     data.quests[quest.questid] = {
+                        // TODO: map these ids to names
                         name: 'unknown',
                         completed: quest.completed
                     }
@@ -444,7 +443,7 @@ function getBadgeProgress(steamID, badgeID, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)

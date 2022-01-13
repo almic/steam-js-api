@@ -1,7 +1,11 @@
 {
   "name": "steam-js-api",
   "version": "1.0.0",
-  "description": "Simple Javascript API wrapper for Steam Web API and CSGO.",
+  "description": "A wrapper for Steam Web API, with additional CSGO functionality.",
+  "engines": {
+    "node": ">=7.7"
+  },
+  "engineStrict": true,
   "main": "app.js",
   "scripts": {
     "test": "node tests/main.js"
@@ -14,6 +18,7 @@
     "steam",
     "web",
     "api",
+    "steam-api",
     "csgo"
   ],
   "author": "almic",

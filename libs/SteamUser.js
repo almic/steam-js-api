@@ -27,7 +27,6 @@ function getFriendList(steamID, sorted, callback) {
 
         request('ISteamUser/GetFriendList/v1', {key: _key, steamid: steamID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -36,7 +35,7 @@ function getFriendList(steamID, sorted, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('friendslist')){
-                result = result.data.friendslist
+                let friendsList = result.data.friendslist
 
                 let data = {
                     count: 0
@@ -44,8 +43,8 @@ function getFriendList(steamID, sorted, callback) {
 
                 let fns = []
 
-                for (index in result.friends) {
-                    let f = result.friends[index]
+                for (index in friendsList.friends) {
+                    let f = friendsList.friends[index]
 
                     fns[index] = {
                         steamID: f.steamid,
@@ -59,7 +58,7 @@ function getFriendList(steamID, sorted, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -102,7 +101,6 @@ function getPlayerBans(steamIDs, callback) {
 
         request('ISteamUser/GetPlayerBans/v1', {key: _key, steamids: ids}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -111,15 +109,15 @@ function getPlayerBans(steamIDs, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('players')){
-                result = result.data
+                let players = result.data.players
 
                 let data = {
                     count: 0,
                     players: {}
                 }
 
-                for (index in result.players) {
-                    let p = result.players[index]
+                for (index in players) {
+                    let p = players[index]
 
                     // TODO: improve 'economy' ban message. A string is returned, and I don't know what possible values are
 
@@ -138,7 +136,7 @@ function getPlayerBans(steamIDs, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -181,7 +179,6 @@ function getPlayerSummaries(steamIDs, callback) {
 
         request('ISteamUser/GetPlayerSummaries/v2', {key: _key, steamids: ids}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -190,15 +187,15 @@ function getPlayerSummaries(steamIDs, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
 
                 let data = {
                     count: 0,
                     players: {}
                 }
 
-                for (index in result.players) {
-                    let p = result.players[index]
+                for (index in response.players) {
+                    let p = response.players[index]
 
                     data.players[p.steamid] = {
                         name: p.personaname,
@@ -235,7 +232,7 @@ function getPlayerSummaries(steamIDs, callback) {
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -266,7 +263,6 @@ function getUserGroups(steamID, callback) {
 
         request('ISteamUser/GetUserGroupList/v1', {key: _key, steamid: steamID}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -275,21 +271,21 @@ function getUserGroups(steamID, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
 
                 let data = {
                     groups: []
                 }
 
-                for (index in result.groups) {
-                    let g = result.groups[index]
+                for (index in response.groups) {
+                    let g = response.groups[index]
 
                     data.groups[index] = g.gid
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -340,7 +336,6 @@ function resolveName(name, type, callback) {
 
         request('ISteamUser/ResolveVanityURL/v1', {key: _key, vanityurl: name, url_type: type}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -349,15 +344,15 @@ function resolveName(name, type, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
 
                 let data = {
-                    id: (result.success === 1 ? result.steamid : false)
+                    id: (response.success === 1 ? response.steamid : false)
                 }
 
                 resolve({data})
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
 
                 if (reject) reject(result)
                 else resolve(result)

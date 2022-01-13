@@ -1,42 +1,71 @@
-const api = require ('./../app.js')
+// To run these tests yourself, you must set these values. Don't forget to create a `.env` file and put your API key there!
+const username = 'almic'
+const steamID = '76561198099490962'
+
+// Print results from API calls for debugging
+const debug = false
+
+// The response for getGameItemPrices() is so massive it typically floods the entire console, so it
+// has it's own debug logging. You must use a very long console window to view it, or have the
+// output go to a file!
+const debugGameItemPrices = false
+
+const api = require('./../app.js')
 
 const assert = require('assert')
 const util = require('util')
 
 require('dotenv').config()
 const key = process.env.key
-const steamID = '76561198099490962'
 
 let count = 0
 let passed = 0
 
 async function test(name, func) {
     count++
-    console.log('\x1b[33mRunning \x1b[36m%s\x1b[0m', name)
+    console.log(`\x1b[33mRunning \x1b[36m${name}\x1b[0m`)
     let duration = process.uptime()
     try {
         await func()
-        console.log(' \x1b[32mPassed \x1b[36m%s\x1b[32m (' + Math.floor((process.uptime() - duration) * 1000) + 'ms)\x1b[0m\n', name)
+        console.log(` \x1b[32mPassed \x1b[36m${name}\x1b[32m (${Math.floor((process.uptime() - duration) * 1000)}ms)\x1b[0m\n`)
         passed++
     } catch (e) {
-        console.error('   \x1b[31m%s\x1b[0m', `Test ${name} failed with error:`)
-        throw e
+        console.error(`   \x1b[31mTest \x1b[36m${name}\x1b[31m failed with error:\x1b[0m`)
+        if (e.hasOwnProperty("stack")) {
+            console.error(`\x1b[31m${e.stack}\x1b[0m`)
+        } else {
+            console.error(util.inspect(e, 0, null, 1))
+        }
     }
 }
 
 async function run() {
-    await test('Basic Request', async function() {
-        let {statusCode, headers, data, error} = await api.request('ISteamUser/ResolveVanityURL/v1', {key, vanityurl: 'almic'})
 
-        assert.strictEqual(statusCode, 200, `Status code ${statusCode}`)
-        assert.strictEqual(data.response.steamid, steamID, `Returned Steam ID '${data.response.steamid}' does not match expected '${steamID}'`)
-        assert.ok(data.response.success, `Success value not truthy, got ${data.response.success} instead`)
+    console.log(`\x1b[33mRunning tests on version \x1b[36m${process.version}\x1b[0m`)
+    console.log(`\x1b[33mDebug \x1b[36m${debug ? "ON" : "OFF"}\x1b[0m`)
+    if (debug && debugGameItemPrices)
+        console.log('\x1b[31mgetGameItemPrices() output is \x1b[36mON\x1b[31m, prepare for huge output.')
+    console.log()
+
+    await test('Basic Request', async function() {
+        let result = await api.request('ISteamUser/ResolveVanityURL/v1', {key, vanityurl: 'almic'})
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
+        assert.strictEqual(result.error, undefined, `Error received: ${result.error}`)
+        assert.strictEqual(result.statusCode, 200, `Status code ${result.statusCode}`)
+        assert.strictEqual(result.data.response.steamid, '76561198099490962', `Returned Steam ID '${result.data.response.steamid}' does not match expected '76561198099490962'`)
+        assert.ok(result.data.response.success, `Success value not truthy, got ${result.data.response.success} instead`)
     })
 
     await test('getRecentlyPlayedGames', async function() {
         api.setKey(key)
 
         let result = await api.getRecentlyPlayedGames(steamID)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error received: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -47,6 +76,9 @@ async function run() {
 
         let appIDs = [730, 4000, 220]
         let result = await api.getOwnedGames(steamID, appIDs, true)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error received: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -66,6 +98,9 @@ async function run() {
 
         let result = await api.getSteamLevel(steamID)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
         assert.ok(result.data.level, `Expected positive level, result was ${util.inspect(result.data)}`)
@@ -75,6 +110,9 @@ async function run() {
         api.setKey(key)
 
         let result = await api.getBadges(steamID)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -104,6 +142,9 @@ async function run() {
 
         let result = await api.getBadgeProgress(steamID, 'awards-2018')
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -118,6 +159,9 @@ async function run() {
         api.setKey(key)
 
         let result = await api.getFriendList(steamID, true)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -135,6 +179,9 @@ async function run() {
 
         let result = await api.getPlayerBans(steamID)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -150,6 +197,9 @@ async function run() {
         api.setKey(key)
 
         let result = await api.getPlayerSummaries(steamID)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -186,13 +236,16 @@ async function run() {
         assert.ok(player.location.city !== undefined, `Expected value 'location.city' to be defined in player object, result was ${util.inspect(player.location)}`)
         assert.ok(player.location.countryCode !== undefined, `Expected value 'location.countryCode' to be defined in player object, result was ${util.inspect(player.location)}`)
         assert.ok(player.location.stateCode !== undefined, `Expected value 'location.stateCode' to be defined in player object, result was ${util.inspect(player.location)}`)
-        assert.ok(player.location.cityCode !== undefined, `Expected value 'location.cityCode' to be defined in player object, result was ${util.inspect(player.location)}`)
+        assert.ok(player.location.cityCode == 69, `Expected value 'location.cityCode' to be 69 in player object, result was ${util.inspect(player.location)}`)
     })
 
     await test('getUserGroups', async function () {
         api.setKey(key)
 
         let result = await api.getUserGroups(steamID)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -206,7 +259,10 @@ async function run() {
     await test('resolveName', async function () {
         api.setKey(key)
 
-        let result = await api.resolveName('almic')
+        let result = await api.resolveName(username)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -218,6 +274,9 @@ async function run() {
 
     await test('getGroupInfo', async function () {
         let result = await api.getGroupInfo('103582791435315066')
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -242,6 +301,9 @@ async function run() {
     await test('getGlobalAchievements', async function () {
         let result = await api.getGlobalAchievements(730)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -253,6 +315,9 @@ async function run() {
 
     await test('getCurrentPlayers', async function () {
         let result = await api.getCurrentPlayers(730)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -266,6 +331,9 @@ async function run() {
         api.setKey(key)
 
         let result = await api.getAchievements(steamID, 264710)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -283,6 +351,9 @@ async function run() {
         api.setKey(key)
 
         let result = await api.getGameSchema(264710)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -305,6 +376,9 @@ async function run() {
 
         let result = await api.getStats(steamID, 730)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -323,6 +397,9 @@ async function run() {
 
         let result = await api.getStats(steamID, 264710)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -338,7 +415,10 @@ async function run() {
     await test('getTradeHistory', async function () {
         api.setKey(key)
 
-        let result = await api.getTradeHistory(3, false, true)
+        let result = await api.getTradeHistory(3, true, true)
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -358,6 +438,9 @@ async function run() {
 
         let result = await api.getTradeOffer('2167811088932369944', true)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -375,18 +458,22 @@ async function run() {
         api.setKey(key)
 
         let items = [
+            {class: '2220112458', instance: '480085569'},
             {class: '2419118169', instance: '188530170'},
             {class: '2735394074'}
         ]
 
         let result = await api.getItemInfo(730, items)
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
         let data = result.data
 
-        assert.strictEqual(data.count, 2, `Expected to have 2 items, result was ${data.count}`)
+        assert.strictEqual(data.count, 3, `Expected to have 3 items, result was ${data.count}`)
         assert.ok(data.items, `Expected 'truthy' items object, result was ${util.inspect(data)}`)
 
         for (index in items) {
@@ -403,10 +490,32 @@ async function run() {
         }
     })
 
+    await test('getItemInfo (single)', async function () {
+        api.setKey(key)
+
+        let result = await api.getItemInfo(730, [{class: '2316457557'}])
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
+        assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
+        assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
+
+        let data = result.data
+
+        assert.ok(data.name, `Expected 'name' in data, result was ${util.inspect(data)}`)
+        assert.ok(data.nameColor, `Expected 'nameColor' in data, result was ${util.inspect(data)}`)
+        assert.ok(data.icon, `Expected 'icon' in data, result was ${util.inspect(data)}`)
+
+    })
+
     await test('getGameItemPrices', async function () {
         api.setKey(key)
 
         let result = await api.getGameItemPrices(730)
+
+        if (debug && debugGameItemPrices)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -429,6 +538,9 @@ async function run() {
         api.setKey(key)
 
         let result = await api.CSGO.getMapPlaytime('week')
+
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
 
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
@@ -454,6 +566,9 @@ async function run() {
 
         let result = await api.CSGO.getServerStatus()
 
+        if (debug)
+            console.log(util.inspect(result, 0, null, 1))
+
         assert.strictEqual(result.error, undefined, `Error recieved: ${result.error}`)
         assert.ok(result.data, `Expected 'truthy' data object, result was ${util.inspect(result, 0, null, 1)}`)
 
@@ -473,12 +588,17 @@ async function run() {
         assert.ok(data.servers['US Northcentral'], `Expected 'US Northcentral' in servers object, result was ${util.inspect(data.servers)}`)
         assert.ok(data.servers['US Northcentral'].capacity, `Expected 'capacity' in US Northcentral object, result was ${util.inspect(data.servers['US Northcentral'])}`)
     })
+
 }
 
 let duration = process.uptime()
+
 run().then(_=> {
-    console.log('\x1b[36m%s\x1b[0m', `Ran ${count} tests, ${passed} passed. Run time ${Math.floor((process.uptime() - duration) * 1000)}ms`)
+    console.log(`\x1b[36mRan \x1b[33m${count}\x1b[36m tests, \x1b[33m${passed}\x1b[36m passed. Run time \x1b[33m${Math.floor((process.uptime() - duration) * 1000)}\x1b[36mms\x1b[0m`)
 }).catch(e => {
-    console.error('\x1b[31m%s\x1b[0m\n', e.stack || util.inspect(e))
+    console.error(`\x1b[31m${e.stack || util.inspect(e)}\x1b[0m\n`)
     throw new Error('Tests failed, abort.')
+}).then(_ => {
+    if (debug && debugGameItemPrices)
+        console.log('\x1b[36m%s\x1b[0m\n', "Too much output and can't see everything? Try setting `debugGameItemPrices` to false in tests/main.js, or send the output to a file.")
 })

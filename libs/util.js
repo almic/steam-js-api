@@ -21,6 +21,7 @@ function doRequest(uri, resolve, reject) {
         let isXml = /^text\/xml/.test(contentType)
 
         let response = {
+            request: {uri},
             statusCode,
             headers: result.headers
         }

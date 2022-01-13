@@ -33,12 +33,13 @@ function buildDescriptions(descriptions) {
     let desc = {}
     for (index in descriptions) {
         let d = descriptions[index]
-        desc[`${d.appid}_${d.classid}_${d.instanceid}`] = {
+        let item = {
             name: d.name,
             nameColor: d.name_color,
             type: d.type,
             marketName: d.market_name,
             marketHash: d.market_hash_name,
+            // TODO: remove this line
             marketUrl: urls.econUrl(d.appid, d.market_hash_name),
             tradable: d.tradable,
             marketable: d.marketable,
@@ -47,6 +48,10 @@ function buildDescriptions(descriptions) {
             tradeRestriction: d.market_tradable_restriction,
             icon: urls.econImg(d.icon_url_large || d.icon_url, '')
         }
+        if (item.marketable) {
+            item.marketUrl = urls.econUrl(d.appid, d.market_hash_name)
+        }
+        desc[`${d.appid}_${d.classid}_${d.instanceid}`] = item
     }
     return desc
 }
@@ -116,7 +121,6 @@ function getTradeHistory(trades, moreInfo, includeTotal, includeFailed, fromTime
 
         request('IEconService/GetTradeHistory/v1', req, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -125,23 +129,23 @@ function getTradeHistory(trades, moreInfo, includeTotal, includeFailed, fromTime
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
 
-                if (result.trades && result.trades.length > 0) {
+                if (response.trades && response.trades.length > 0) {
                     let data = {
-                        hasMore: result.more,
+                        hasMore: response.more,
                         count: 0
                     }
 
-                    if (includeTotal && typeof result.total_trades === 'number')
-                        data.total = result.total_trades
+                    if (includeTotal && typeof response.total_trades === 'number')
+                        data.total = response.total_trades
 
                     data.trades = []
 
-                    let desc = buildDescriptions(result.descriptions)
+                    let desc = buildDescriptions(response.descriptions)
 
-                    for (index in result.trades) {
-                        let t = result.trades[index]
+                    for (index in response.trades) {
+                        let t = response.trades[index]
                         data.trades[data.count] = {
                             id: t.tradeid,
                             status: t.status,
@@ -155,10 +159,10 @@ function getTradeHistory(trades, moreInfo, includeTotal, includeFailed, fromTime
                     resolve({data})
                     return
                 } else {
-                    result = {error: 'No trade data returned. Data may have still been returned.', data: result}
+                    result.error = 'No trade data returned. Data may have still been returned.'
                 }
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
             }
 
             if (reject) reject(result)
@@ -191,7 +195,6 @@ function getTradeOffer(tradeID, moreInfo, callback) {
 
         request('IEconService/GetTradeStatus/v1', {key: _key, tradeid: tradeID, get_descriptions: moreInfo}, result => {
             if (result.error) {
-                result = {error: result.error}
 
                 if (reject) reject(result)
                 else resolve(result)
@@ -200,13 +203,13 @@ function getTradeOffer(tradeID, moreInfo, callback) {
             }
 
             if (typeof result.data === 'object' && result.data.hasOwnProperty('response')){
-                result = result.data.response
+                let response = result.data.response
 
-                if (result.trades && result.trades[0]) {
+                if (response.trades && response.trades[0]) {
                     let data = {}
-                    let desc = buildDescriptions(result.descriptions)
+                    let desc = buildDescriptions(response.descriptions)
 
-                    let t = result.trades[0]
+                    let t = response.trades[0]
                     data = {
                         id: t.tradeid,
                         status: t.status,
@@ -218,10 +221,10 @@ function getTradeOffer(tradeID, moreInfo, callback) {
 
                     resolve({data})
                 } else {
-                    result = {error: 'No trade data returned. Data may have still been returned.', data: result}
+                    result.error = 'No trade data returned. Data may have still been returned.'
                 }
             } else {
-                result = {error: 'Unexpected response. Data may have still been returned.', data: result.data}
+                result.error = 'Unexpected response. Data may have still been returned.'
             }
 
             if (reject) reject(result)

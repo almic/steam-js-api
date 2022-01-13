@@ -144,7 +144,7 @@ api.getTradeHistory(1, true).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -290,7 +290,7 @@ api.getTradeOffer('2167811088932369944').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

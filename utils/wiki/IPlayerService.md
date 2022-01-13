@@ -76,7 +76,7 @@ api.getRecentlyPlayedGames('76561198099490962', 2).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -176,7 +176,7 @@ api.getOwnedGames('76561198099490962', [730, 264710], true).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -236,7 +236,7 @@ api.getSteamLevel('76561198099490962').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -313,7 +313,7 @@ api.getBadges('76561198099490962').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -427,7 +427,7 @@ api.getBadgeProgress('76561198099490962', 'community').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

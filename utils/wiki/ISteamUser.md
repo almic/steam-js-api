@@ -58,7 +58,7 @@ api.getFriendList('76561198099490962', true).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -137,7 +137,7 @@ api.getPlayerBans('76561198099490962').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -261,7 +261,7 @@ api.getPlayerSummaries('76561198099490962').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -330,7 +330,7 @@ api.getUserGroups('76561198099490962').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -388,7 +388,7 @@ api.resolveName('almic').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

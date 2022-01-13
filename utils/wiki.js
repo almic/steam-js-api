@@ -124,7 +124,7 @@ for (page in wiki) {
         data += `    console.log(result.data)\r\n`
         data += '}).catch(console.error)\r\n'
         data += '```\r\n\r\n'
-        data += 'This would display an object that looks a lot like this one:\r\n\r\n```json\r\n'
+        data += 'This would display an object that looks like this one:\r\n\r\n```json\r\n'
         data += JSON.stringify(section.example_data, null, 4)
         data += '\r\n```\r\n\r\n'
     }

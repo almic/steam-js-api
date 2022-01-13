@@ -45,7 +45,7 @@ api.getGlobalAchievements(730).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -94,7 +94,7 @@ api.getCurrentPlayers(730).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -148,7 +148,7 @@ api.getAchievements('76561198099490962', 264710).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -236,7 +236,7 @@ api.getGameSchema(264710).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -328,7 +328,7 @@ api.getStats('76561198099490962', 264710).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

@@ -85,7 +85,7 @@ api.getItemInfo(730, {class: '2735394074'}).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -156,7 +156,7 @@ api.getGameItemPrices(730).then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

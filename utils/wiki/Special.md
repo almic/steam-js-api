@@ -82,7 +82,7 @@ api.getGroupInfo('103582791435315066').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

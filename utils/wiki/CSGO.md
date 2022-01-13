@@ -12,6 +12,9 @@ api.CSGO.getStats('76561198099490962')
 
 And to make things even simpler, you may be able to do `const api = require('steam-js-api').CSGO` if you only need these CSGO functions.
 
+### Stats
+Keep in mind that stats for CSGO have a custom result structure, defined by the `json/stats.json` file. To see this exact structure, refer to the [Stats-CSGO](https://github.com/almic/steam-js-api/wiki/Stats-CSGO) wiki page. Currently this is the only game with such a custom result structure, but adding your own is fairly simple and only requires adding your custom scheme to the `json/stats.json` file, then compressing it using some json minifier and saving it to `json/stats-min.json`.
+
 ### Functions Available
 Use these like you normally would, but don't pass the `appID` parameter.
 #### ISteamUserStats
@@ -84,7 +87,7 @@ api.CSGO.getMapPlaytime('week', 'casual', 'operation').then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {
@@ -214,7 +217,7 @@ api.CSGO.getServerStatus().then(result => {
 }).catch(console.error)
 ```
 
-This would display an object that looks a lot like this one:
+This would display an object that looks like this one:
 
 ```json
 {

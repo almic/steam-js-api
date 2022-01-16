@@ -50,6 +50,8 @@ const api = require('./steam-js-api/app.js')
 
 The official documentation can be found in the [Github Wiki](https://github.com/almic/steam-js-api/wiki). Everything is listed by the Web API interface that it uses, along with a short description of what information you can get from it. Everything is perfectly organized, as all things should be.
 
+Counter-Strike: Global Offensive (CSGO) has a special stat format, making use of a scheme defined in `json/stats.json`. For information about this, see the [Stats-CSGO](https://github.com/almic/steam-js-api/wiki/Stats-CSGO) wiki page.
+
 ### Usage
 
 You can use every function like a Promise or with a callback. If no callback is given, then the function returns a Promise. Anytime a Steam ID is used, the module internally verifies the ID **before** making the request, and **will return an error** if the Steam ID isn't valid.
@@ -135,6 +137,11 @@ api.request('ISteamNews/GetNewsForApp/v2', {appid: '730'}, res => {
 
 All supported interfaces are listed here. If you can't find one that you want, please use the above example to get the basic JSON response until the interface is officially supported. Almost all supported interfaces have unique object structures to allow easier access to data. You can find out the exact structure by copying the examples and running them, or by checking the [wiki](https://github.com/almic/steam-js-api/wiki).
 
+## IEconService
+Trading specific interface.
+* [GetTradeHistory](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeHistory)
+* [GetTradeStatus](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeStatus)
+
 ## IPlayerService
 Specifically playtime, owned games, badges, and Steam level.
 * [GetBadges](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetBadges)
@@ -142,6 +149,11 @@ Specifically playtime, owned games, badges, and Steam level.
 * [GetOwnedGames](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetOwnedGames)
 * [GetRecentlyPlayedGames](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetRecentlyPlayedGames)
 * [GetSteamLevel](https://github.com/almic/steam-js-api/wiki/IPlayerServices#GetSteamLevel)
+
+## ISteamEconomy
+Steam economy item related stuff.
+* [GetAssetClassInfo](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetClassInfo)
+* [GetAssetPrices](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetPrices)
 
 ## ISteamUser
 Returns more detailed information about user profiles; summaries, bans, friends.
@@ -153,21 +165,11 @@ Returns more detailed information about user profiles; summaries, bans, friends.
 
 ## ISteamUserStats
 Game statistics related APIs; achievements, scores, stats, etc.
-* [GetGlobalAchievement...](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetGlobalAchievementPercentagesForApp)
+* [GetGlobalAchievementPercentagesForApp](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetGlobalAchievementPercentagesForApp)
 * [GetNumberOfCurrentPlayers](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetNumberOfCurrentPlayers)
 * [GetPlayerAchievements](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetPlayerAchievements)
 * [GetSchemaForGame](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetSchemaForGame)
 * [GetUserStatsForGame](https://github.com/almic/steam-js-api/wiki/ISteamUserStats#GetUserStatsForGame)
-
-## IEconService
-Trading specific interface.
-* [GetTradeHistory](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeHistory)
-* [GetTradeStatus](https://github.com/almic/steam-js-api/wiki/IEconService#GetTradeStatus)
-
-## ISteamEconomy
-Steam economy item related stuff.
-* [GetAssetClassInfo](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetClassInfo)
-* [GetAssetPrices](https://github.com/almic/steam-js-api/wiki/ISteamEconomy#GetAssetPrices)
 
 ## Special
 These are custom functions that don't use the traditional Steam Web API stuff. As such, they might change in functionality at some point in the future. But I doubt it, Volvo has barely touched the Web API for a number of years now, so this stuff should work as long as everything else in this list does.

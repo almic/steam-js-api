@@ -310,7 +310,7 @@ async function run() {
         let data = result.data
 
         assert.ok(data.achievements, `Expected 'truthy' achievements object, result was ${util.inspect(data)}`)
-        assert.ok(data.achievements.KILLING_SPREE, `Expected 'KILLING_SPREE' in achievements object, result was ${util.inspect(data.achievements)}`)
+        assert.ok(data.achievements.PLAY_CS2, `Expected 'PLAY_CS2' in achievements object, result was ${util.inspect(data.achievements)}`)
     })
 
     await test('getCurrentPlayers', async function () {
